@@ -1,0 +1,550 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* SeniorHub Color Palette */
+    --primary-purple: #6A0DAD;
+    /* ONLY for Logo */
+    --primary-purple-light: #8B2DBF;
+    --sage-green: #84a98c;
+    --sage-green-dark: #52796f;
+    --background-white: #ffffff;
+    --background-soft: #f8f9fa;
+    --text-dark: #1a1a1a;
+    --text-muted: #666666;
+    --border-color: #efefef;
+
+    /* Typography per requirements */
+    --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-size-base: 18px;
+    --font-size-heading: 32px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    color: var(--text-dark);
+    line-height: 1.6;
+    background-color: var(--background-soft);
+    overflow-x: hidden;
+}
+
+/* Header Styles */
+.header {
+    height: 60px;
+    background: var(--background-white);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-purple);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-container {
+    flex: 0 1 500px;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 24px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    background: #f1f1f1;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-bar:focus {
+    box-shadow: 0 0 0 2px rgba(106, 13, 173, 0.1);
+    background: white;
+    border-color: var(--primary-purple);
+}
+
+.clube-btn {
+    background-color: var(--sage-green);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.clube-btn:hover {
+    background-color: var(--sage-green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(132, 169, 140, 0.2);
+}
+
+/* 3-Column Layout Grid */
+.layout-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 300px;
+    gap: 32px;
+    padding: 92px 40px 40px;
+    /* 60px header + 32px padding */
+    min-height: 100vh;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Sidebar & Panels Styles */
+.sidebar,
+.right-panel {
+    position: sticky;
+    top: 92px;
+    height: calc(100vh - 132px);
+    overflow-y: auto;
+}
+
+.sidebar-nav {
+    list-style: none;
+}
+
+/* Icon Reliability Fix */
+.ph {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+    color: #333;
+    /* Default solid black-ish */
+}
+
+.sidebar-link i {
+    color: #000 !important;
+}
+
+.sidebar-item {
+    margin-bottom: 4px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    border-radius: 12px;
+    transition: background 0.2s;
+}
+
+.sidebar-link:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Clean Black Line Icons */
+.sidebar-link svg {
+    width: 22px;
+    height: 22px;
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+}
+
+/* Main Content Area */
+.main-content {
+    min-width: 0;
+    /* Prevents overflow in grid */
+}
+
+/* Apple Aesthetic Cards */
+.recipe-card,
+.info-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+    padding: 48px;
+    margin-bottom: 24px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+}
+
+.info-card {
+    padding: 24px;
+}
+
+.info-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--sage-green);
+}
+
+.info-card p {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.info-link {
+    color: var(--sage-green);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Recipe & News Card Premium Styling */
+.recipe-title,
+.news-title {
+    color: var(--sage-green);
+    font-size: var(--font-size-heading);
+    margin-bottom: 32px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.nossa-cozinha-box {
+    background: #fdfdfd;
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 40px;
+    border: 1px solid #f0f0f0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.01);
+}
+
+.section-title {
+    font-size: 18px;
+    color: var(--sage-green);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.check-list {
+    list-style: none;
+}
+
+.check-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+.check-item-icon {
+    color: var(--sage-green);
+    font-weight: bold;
+}
+
+.preparo-section h3 {
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--sage-green);
+}
+
+.preparo-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.step-card {
+    padding: 20px 24px;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.step-text {
+    font-size: 18px;
+    color: #334155;
+}
+
+.step-text strong {
+    color: var(--sage-green);
+}
+
+/* News Feed Specific Styles */
+.news-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.news-image {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    background: #eee;
+}
+
+.news-content {
+    padding: 40px;
+}
+
+.news-category {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #f1f8f1;
+    color: var(--sage-green);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.news-header-title {
+    font-size: 28px;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    line-height: 1.3;
+}
+
+/* Voting Poll Style */
+.voting-poll {
+    background: #f1f8f1;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--sage-green);
+    margin-bottom: 24px;
+}
+
+.voting-poll h3 {
+    color: var(--sage-green-dark);
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.voting-option {
+    display: block;
+    padding: 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+}
+
+.voting-option:hover {
+    border-color: var(--sage-green);
+    background: #f9fafb;
+}
+
+/* Banner Fechamento */
+.promo-banner {
+    background-color: #f1f8f1;
+    border: 1px solid var(--sage-green);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    margin-top: 48px;
+}
+
+.promo-banner h2 {
+    color: var(--sage-green-dark);
+    margin-bottom: 16px;
+}
+
+.promo-btn {
+    background-color: var(--sage-green);
+    color: white;
+    padding: 14px 40px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 24px;
+    transition: all 0.2s;
+}
+
+.promo-btn:hover {
+    background-color: var(--sage-green-dark);
+    box-shadow: 0 4px 12px rgba(132, 169, 140, 0.3);
+}
+
+/* Page Transitions (Slide Effect) */
+.slide-container {
+    position: relative;
+    width: 100%;
+}
+
+.slide-out-left {
+    position: absolute;
+    width: 100%;
+    transform: translateX(-100px);
+    opacity: 0;
+}
+
+.slide-in-right {
+    animation: slideInCustom 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideInCustom {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Modal Premium Styling (Glassmorphism) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-container {
+    background: white;
+    padding: 48px;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+}
+
+.modal-overlay.active .modal-container {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+/* Advertising Showcase Styles */
+.ad-showcase {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.5s ease;
+}
+
+.ad-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #f8f9fa;
+}
+
+.ad-content {
+    padding: 24px;
+    text-align: center;
+}
+
+.ad-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+}
+
+.ad-price {
+    font-size: 20px;
+    color: var(--sage-green);
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.ad-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--sage-green);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.ad-btn:hover {
+    background: var(--sage-green-dark);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scrollbar styling for a clean look */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+}

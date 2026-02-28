@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeniorHub | O Seu Portal de Autoridade 60+</title>
+    <link rel="stylesheet" href="index.css">
+    <!-- Phosphor Icons Stable -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" class="logo">SeniorHub</a>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Pesquisar por receitas, exercícios ou dicas...">
+        </div>
+        <a href="#" class="clube-btn" id="clube-trigger">Clube SeniorHub</a>
+    </header>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <nav>
+                <ul class="sidebar-nav">
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" onclick="location.reload()">
+                            <i class="ph ph-house" style="font-size: 22px;"></i>
+                            Início
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" onclick="loadRecipesFeed()">
+                            <i class="ph ph-apple-logo" style="font-size: 22px;"></i>
+                            Receitas
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="ph ph-barbell" style="font-size: 22px;"></i>
+                            Exercícios em Casa
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="ph ph-airplane-tilt" style="font-size: 22px;"></i>
+                            Guia de Viagens
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="ph ph-armchair" style="font-size: 22px;"></i>
+                            Conforto do Lar
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="app-root">
+            <div id="content-viewer" class="slide-container">
+                <!-- Data-driven News Feed will be injected here by app.js -->
+            </div>
+        </main>
+
+        <aside class="right-panel">
+            <div id="ad-showcase-root">
+                <!-- Automated Advertising Carousel will be injected here by app.js -->
+            </div>
+
+            <div class="info-card">
+                <h3>Clube de Benefícios</h3>
+                <p>Acesse descontos exclusivos em farmácias e lojas parceiras para membros do Clube SeniorHub.</p>
+                <a href="#" class="info-link">Ver Benefícios →</a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Engagement Modal (Clube SeniorHub) -->
+    <div class="modal-overlay" id="voting-modal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="toggleModal()">&times;</button>
+            <h2 style="color: var(--sage-green); margin-bottom: 16px;">Voto do Membro SeniorHub</h2>
+            <p style="margin-bottom: 32px;">Obrigado por ser parte da nossa comunidade! Qual tema você quer ver mais
+                notícias na próxima semana?</p>
+
+            <div class="voting-option" onclick="submitVote('Rec')">Novas Receitas Detox</div>
+            <div class="voting-option" onclick="submitVote('Alo')">Dicas de Alongamento</div>
+            <div class="voting-option" onclick="submitVote('Tec')">Tecnologia para Casa</div>
+            <div class="voting-option" onclick="submitVote('Via')">Destinos de Inverno</div>
+
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 24px;">Seu voto ajuda a construir o portal
+                dos seus sonhos.</p>
+        </div>
+    </div>
+
+    <script src="recipes.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
