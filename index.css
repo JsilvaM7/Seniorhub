@@ -32,7 +32,7 @@ body {
     font-size: var(--font-size-base);
     color: var(--text-dark);
     line-height: 1.6;
-    background-color: var(--background-soft);
+    background-color: #f5f7f9;
     overflow-x: hidden;
 }
 
@@ -77,9 +77,9 @@ body {
 }
 
 .search-bar:focus {
-    box-shadow: 0 0 0 2px rgba(106, 13, 173, 0.1);
+    box-shadow: 0 0 0 2px rgba(132, 169, 140, 0.2);
     background: white;
-    border-color: var(--primary-purple);
+    border-color: var(--sage-green);
 }
 
 .clube-btn {
@@ -209,7 +209,7 @@ body {
 /* Recipe & News Card Premium Styling */
 .recipe-title,
 .news-title {
-    color: var(--sage-green);
+    color: #374151;
     font-size: var(--font-size-heading);
     margin-bottom: 32px;
     font-weight: 700;
@@ -230,7 +230,7 @@ body {
 
 .section-title {
     font-size: 18px;
-    color: var(--sage-green);
+    color: #374151;
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -419,7 +419,7 @@ body {
 
 .news-header-title {
     font-size: 28px;
-    color: var(--text-dark);
+    color: #374151;
     margin-bottom: 16px;
     line-height: 1.3;
 }

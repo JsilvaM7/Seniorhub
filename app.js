@@ -31,7 +31,7 @@ function isLocked(id) {
 
 /* ── Navigation ─────────────────────────────────────────────────────────────── */
 function loadRecipesFeed() {
-    loadBookSummary(1);
+    loadRecipe(1);
 }
 
 function handleRecipeClick(id) {
@@ -83,7 +83,7 @@ function loadRecipe(id) {
     wrapper.className = 'recipe-card content-unroll';
 
     wrapper.innerHTML = isLocked(id)
-        ? renderLockedPreviewHTML(recipe)
+        ? renderPaywallHTML(getBookByRecipeId(id))
         : renderRecipeHTML(recipe);
 
     swapContent(viewer, wrapper);
@@ -152,14 +152,20 @@ function renderRecipeHTML(recipe) {
     const isLast = posInBook === 5;
 
     return `
-        <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
-                  color:var(--sage-green); margin-bottom:8px; cursor:pointer;"
-           onclick="loadBookSummary(${book.number})">
-            ← ${book.title}
-        </p>
-
-        <!-- 1. Recipe title -->
-        <h1 class="recipe-title" style="margin-bottom:16px;">${recipe.title}</h1>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; gap: 20px;">
+            <div>
+                <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+                          color:var(--sage-green); margin-bottom:8px; cursor:pointer;"
+                   onclick="loadBookSummary(${book.number})">
+                    ← ${book.title}
+                </p>
+                <!-- 1. Recipe title -->
+                <h1 class="recipe-title" style="margin-bottom:0; text-align:left;">${recipe.title}</h1>
+            </div>
+            <button onclick="loadBookSummary(${book.number})" style="background:none; border:none; cursor:pointer; color:var(--sage-green); display:flex; align-items:center; gap:6px; font-weight:600; font-size:15px; margin-top:4px;" title="Ver todas as receitas">
+                <i class="ph ph-list-dashes" style="font-size:20px;"></i> Sumário da Coleção
+            </button>
+        </div>
 
         <!-- 2. Prep time — immediate highlight -->
         <div style="display:inline-flex; align-items:center; gap:10px; background:#f1f8f1;
