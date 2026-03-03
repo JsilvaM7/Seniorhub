@@ -1,3 +1,38 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+// SUAS CREDENCIAIS DO FIREBASE AQUI
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "seu-projeto.firebaseapp.com",
+    projectId: "seu-projeto",
+    storageBucket: "seu-projeto.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Força persistência local para que o idoso nunca seja deslogado sem querer
+setPersistence(auth, browserLocalPersistence);
+
+/* ── State Tracking ─────────────────────────────────────────────────────────── */
+let livroAtual = null; // Guarda a chave do livro aberto (ex: 'energia')
+let isUserLoggedIn = false;
+
+onAuthStateChanged(auth, (user) => {
+    isUserLoggedIn = !!user;
+    // Se o usuário logou e a tela atual for um login/paywall, pode recarregar a tela atual (SPA)
+    // Isso garante que se o login for via background (reabertura), o UI se limpe
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     loadNewsFeed();
     initAdShowcase();
@@ -17,11 +52,9 @@ function submitVote(theme) {
     alert(`Voto registrado para: ${theme}! Obrigado por participar.`);
     toggleModal();
 }
-/* ── State Tracking ─────────────────────────────────────────────────────────── */
-let livroAtual = null; // Guarda a chave do livro aberto (ex: 'energia')
-
 /* ── Funnel helpers ─────────────────────────────────────────────────────────── */
 function isLocked(id) {
+    if (isUserLoggedIn) return false;
     // 5 free recipes per book; from recipe 6 onward the paywall kicks in
     return id > 5;
 }
@@ -138,6 +171,75 @@ function loadRecipe(id) {
 }
 
 
+/* ── Firebase Auth UI Injector ─────────────────────────────────────────────── */
+window.loadLoginScreen = function () {
+    const viewer = document.getElementById('content-viewer');
+    const wrapper = document.createElement('div');
+    wrapper.className = 'recipe-card';
+
+    wrapper.innerHTML = `
+        <div style="max-width:400px; margin: 0 auto; padding: 32px 16px; text-align:center;">
+            <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+                      color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
+               onclick="event.preventDefault(); loadBooksShowcase()">
+                ← Voltar para a Vitrine
+            </p>
+            <i class="ph ph-lock-key-open" style="font-size:48px; color:var(--sage-green); margin-bottom:16px;"></i>
+            <h2 style="font-size:26px; color:var(--sage-green-dark); margin-bottom:8px;">Acesso de Membro</h2>
+            <p style="font-size:16px; color:var(--text-muted); margin-bottom:32px; line-height:1.5;">
+                Insira seu e-mail e senha para desbloquear sua biblioteca digital instantaneamente.
+            </p>
+
+            <form id="firebase-login-form" style="display:flex; flex-direction:column; gap:16px;">
+                <input type="email" id="loginEmail" placeholder="Seu e-mail" required
+                       style="min-height: 48px; font-size: 18px; padding: 12px; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
+                
+                <input type="password" id="loginPassword" placeholder="Sua senha" required
+                       style="min-height: 48px; font-size: 18px; padding: 12px; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
+
+                <div id="loginErrorMsg" style="color: #dc2626; font-size: 14px; display: none; margin-top: -8px;"></div>
+
+                <button type="submit" class="promo-btn" style="min-height: 48px; font-size: 18px; padding: 12px; background: var(--sage-green); color: white; width: 100%; margin-top:8px;">
+                    Entrar e Acessar
+                </button>
+            </form>
+        </div>
+    `;
+
+    swapContent(viewer, wrapper);
+
+    // Attach form handler
+    document.getElementById('firebase-login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        const errMsg = document.getElementById('loginErrorMsg');
+        const btn = e.target.querySelector('button');
+
+        btn.innerText = "Verificando...";
+        btn.style.opacity = "0.7";
+        errMsg.style.display = "none";
+
+        signInWithEmailAndPassword(auth, email, pass)
+            .then(() => {
+                // Acesso Mágico! Fade-in da receita que o usuário tentou acessar antes
+                viewer.style.transition = "opacity 0.4s ease";
+                viewer.style.opacity = 0;
+                setTimeout(() => {
+                    // isUserLoggedIn já foi syncado pelo onAuthStateChanged
+                    loadRecipe(6); // Carrega a receita original (ou reinicia o funil)
+                    viewer.style.opacity = 1;
+                }, 400);
+            })
+            .catch((err) => {
+                btn.innerText = "Entrar e Acessar";
+                btn.style.opacity = "1";
+                errMsg.innerText = "E-mail ou senha inválidos. Tente novamente.";
+                errMsg.style.display = "block";
+            });
+    });
+}
+
 /* ── Swap helper (reusable slide-out + unroll-in) ───────────────────────────── */
 function swapContent(viewer, newEl) {
     // Scrola a tela para o topo do conteúdo de forma suave, mas rápida
@@ -253,6 +355,12 @@ function renderGlobalPaywallHTML() {
             <a href="#" class="promo-btn" style="background-color:var(--sage-green); color:white; font-size:17px; padding:16px 48px;">
                 Quero meu Livro em PDF →
             </a>
+            
+            <div style="margin-top:20px;">
+                <a href="#" onclick="event.preventDefault(); window.loadLoginScreen()" style="color:var(--sage-green); font-size:15px; text-decoration:underline; font-weight:600;">
+                    Já sou aluno? Acessar minha conta
+                </a>
+            </div>
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
                 ✓ Acesso imediato &nbsp;·&nbsp; ✓ PDF alta qualidade &nbsp;·&nbsp; ✓ 50 receitas exclusivas
             </p>
@@ -284,6 +392,12 @@ function renderPaywallHTML(book) {
             <a href="#" class="promo-btn next-recipe-btn" style="font-size:17px; padding:16px 48px; display:inline-block; margin-top:0;">
                 Quero meu Livro em PDF →
             </a>
+            
+            <div style="margin-top:20px;">
+                <a href="#" onclick="event.preventDefault(); window.loadLoginScreen()" style="color:var(--sage-green); font-size:15px; text-decoration:underline; font-weight:600;">
+                    Já sou aluno? Acessar minha conta
+                </a>
+            </div>
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
                 ✓ Pagamento seguro &nbsp;·&nbsp; ✓ PDF enviado por e-mail &nbsp;·&nbsp; ✓ 50 receitas completas
             </p>
