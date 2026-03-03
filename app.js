@@ -511,3 +511,19 @@ function renderAd() {
         </div>
     `;
 }
+
+/* ── Global Exports para Acesso do index.html (ES Module fix) ──────────────── */
+window.loadNewsFeed = loadNewsFeed;
+window.submitVote = submitVote;
+window.toggleModal = toggleModal;
+window.handleBookClick = handleBookClick;
+window.loadBookSummary = loadBookSummary;
+window.handleRecipeClick = handleRecipeClick;
+window.handleNewsClick = handleNewsClick;
+window.loadBooksShowcase = loadBooksShowcase;
+
+window.loadRecipesFeed = function () {
+    const viewer = document.getElementById('content-viewer');
+    if (viewer) viewer.innerHTML = '';
+    loadBooksShowcase();
+};
