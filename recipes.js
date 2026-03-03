@@ -1,8 +1,10 @@
-// ── Trilogia SeniorHub ──────────────────────────────────────────────────────
+// ── Biblioteca SeniorHub — 5 Livros ─────────────────────────────────────────
 const BOOKS = {
     1: { title: "Relíquias da Cozinha: Sabores que Atravessam Gerações", idRange: [1, 50] },
     2: { title: "Energia no Prato: Nutrição e Praticidade para o Dia a Dia", idRange: [51, 100] },
-    3: { title: "Prazer Sem Culpa: O Lado Doce da Vida com Saúde", idRange: [101, 150] }
+    3: { title: "Prazer Sem Culpa: O Lado Doce da Vida com Saúde", idRange: [101, 150] },
+    4: { title: "Sabores do Mar: Leveza e Nutrição para a Longevidade", idRange: [151, 200] },
+    5: { title: "Horta no Prato: O Melhor dos Vegetais na Cozinha Sênior", idRange: [201, 250] }
 };
 
 function getBookByRecipeId(id) {
@@ -282,4 +284,196 @@ const book3Names = [
 ];
 book3Names.forEach((name, i) => {
     recipes.push({ id: i + 101, bookId: 3, title: name, locked: true });
+});
+
+// ── Book 4: Full sample recipes (IDs 151–152) ────────────────────────────────
+recipes.push({
+    id: 151, bookId: 4, prepTime: "35 minutos",
+    title: "Filé de Robalo ao Molho de Alcaparras",
+    ingredients: ["2 filés de robalo (aprox. 200g cada)", "2 colheres de alcaparras lavadas", "Suco de 1 limão siciliano", "2 colheres de manteiga sem sal", "Ramos de tomilho fresco", "Sal e pimenta branca a gosto"],
+    utensils: ["Frigideira antiaderente grande", "Espátula de silicone", "Pincel culinário", "Travessa para servir", "Pequena panela para o molho"],
+    steps: [
+        "Retire os filés de robalo da geladeira 15 minutos antes de cozinhar para que cheguem à temperatura ambiente.",
+        "Seque muito bem cada filé com papel toalha — isso garante uma crosta dourada perfeita na frigideira.",
+        "Tempere com sal e pimenta branca de ambos os lados, pressionando levemente os temperos sobre o peixe.",
+        "Aqueça a frigideira antiaderente em fogo médio-alto por 2 minutos. Adicione um fio de azeite e espere brilhar.",
+        "Coloque os filés com a pele virada para baixo, pressionando levemente com a espátula nos primeiros 30 segundos.",
+        "Cozinhe por 4 a 5 minutos sem mexer, até a pele ficar crocante e dourada. Vire delicadamente com a espátula.",
+        "Cozinhe o outro lado por mais 2 a 3 minutos. O peixe estará pronto quando soltar lascas brancas ao toque.",
+        "Em uma panelinha separada, derreta a manteiga em fogo baixo. Adicione as alcaparras lavadas e o suco de limão.",
+        "Deixe o molho borbulhar delicadamente por 2 minutos, mexendo devagar para incorporar os sabores cítricos.",
+        "Transfira os filés para a travessa e regue generosamente com o molho dourado de manteiga e alcaparras.",
+        "Decore com os raminhos de tomilho fresco por cima de cada filé para perfumar o prato.",
+        "Sirva imediatamente acompanhado de legumes no vapor. Um prato digno de restaurante feito na sua cozinha!"
+    ]
+});
+recipes.push({
+    id: 152, bookId: 4, prepTime: "45 minutos",
+    title: "Moqueca de Camarão Leve com Leite de Coco",
+    ingredients: ["500g de camarão médio limpo", "1 lata de leite de coco light", "2 tomates maduros picados", "1 pimentão amarelo em tiras", "1 cebola grande em rodelas", "Coentro fresco a gosto", "Azeite de dendê (1 colher pequena)"],
+    utensils: ["Panela de barro ou panela funda", "Colher de pau", "Tábua de corte", "Faca afiada", "Tigela para marinar"],
+    steps: [
+        "Limpe os camarões retirando a cabeça, a casca e o fio intestinal. Lave bem em água corrente e escorra.",
+        "Marine os camarões por 10 minutos em suco de limão, pitada de sal e alho amassado para realçar o sabor.",
+        "Forre o fundo da panela de barro com rodelas de cebola, criando uma cama aromática para o ensopado.",
+        "Sobre a cebola, disponha as tiras de pimentão e os tomates picados em camadas uniformes.",
+        "Adicione os camarões marinados por cima das camadas de legumes sem mexer ainda.",
+        "Despeje o leite de coco light por igual sobre todos os ingredientes e adicione a colher de dendê.",
+        "Tampe a panela e leve ao fogo médio. Aguarde ferver sem mexer — cerca de 10 a 12 minutos.",
+        "Quando ferver, mexa delicadamente uma única vez para distribuir o calor. Reduza para fogo baixo.",
+        "Cozinhe por mais 8 minutos com a panela semitampada até os camarões ficarem rosados e curvinhos.",
+        "Prove o caldo e ajuste o sal. Se necessário, acrescente um pouquinho mais de leite de coco.",
+        "Finalize espalhando coentro fresco picado por cima — ele é a alma da moqueca brasileira.",
+        "Sirva direto na panela de barro com arroz branco e pirão. A refeição que abraça a alma!"
+    ]
+});
+
+// ── Book 4: Locked recipe stubs (IDs 153–200) ────────────────────────────────
+const book4Locked = [
+    "Salmão Assado com Crosta de Ervas e Limão",
+    "Bacalhau ao Forno com Batatas e Azeitonas",
+    "Ceviche de Tilápia com Maracujá",
+    "Atum Grelhado com Salsa de Abacate",
+    "Polvo Cozido com Azeite e Alho",       // 158
+    "Camarão no Alho e Óleo Saudável",
+    "Lula Grelhada com Molho de Ervas",
+    "Sardinha Assada com Legumes",
+    "Peixe Assado em Crosta de Sal Grosso",
+    "Espaguete de Abobrinha com Atum",       // 163
+    "Mexilhões ao Vapor com Vinho e Ervas",
+    "Filé de Pargo no Papillote",
+    "Sopa de Frutos do Mar Detox",
+    "Bacalhau Desfiado com Grão-de-Bico",
+    "Salada de Camarão com Manga Verde",     // 168
+    "Truta ao Forno com Limão e Alcaparras",
+    "Paella de Frutos do Mar Simplificada",
+    "Risoto de Camarão com Limão Siciliano",
+    "Filé de Linguado com Manteiga de Ervas",
+    "Sopa de Peixe Portuguesa",              // 173
+    "Camarão Empanado com Farinha de Coco",
+    "Peixe ao Curry Thai com Leite de Coco",
+    "Salada Niçoise com Atum Fresco",
+    "Bacalhau com Natas Levinho",
+    "Moqueca de Peixe Baiana",               // 178
+    "Espetinho de Camarão Grelhado",
+    "Filé de Tilápia com Molho de Maracujá",
+    "Arroz Negro com Frutos do Mar",
+    "Camarão com Cream Cheese Light",
+    "Torta de Atum com Legumes",             // 183
+    "Salmão com Crosta de Gergelim",
+    "Peixinho da Horta ao Forno",
+    "Bowl de Atum com Quinoa e Pepino",
+    "Peixe ao Forno com Tomate e Manjericão",
+    "Camarão ao Leite de Coco e Açafrão",   // 188
+    "Strogonoff de Camarão Light",
+    "Filé de Merluza com Molho de Alcaparras",
+    "Sushi Bowl Sênior (Sem Glúten)",
+    "Bacalhau ao Pil-Pil Simplificado",
+    "Carpaccio de Salmão com Alcaparras",   // 193
+    "Dourada Assada com Alho e Azeite",
+    "Camarão Defumado com Rúcula",
+    "Espaguete ao Vôngole",
+    "Peixe Cozido com Molho Verde",
+    "Tiradito de Peixe Branco",              // 198
+    "Anchova Grelhada com Chimichurri",
+    "Caldo de Peixe com Legumes"             // 200
+];
+book4Locked.forEach((name, i) => {
+    recipes.push({ id: i + 153, bookId: 4, title: name, locked: true });
+});
+
+// ── Book 5: Full sample recipes (IDs 201–202) ────────────────────────────────
+recipes.push({
+    id: 201, bookId: 5, prepTime: "20 minutos",
+    title: "Refogado de Couve com Alho e Limão",
+    ingredients: ["1 maço de couve manteiga fatiada fininha", "4 dentes de alho fatiados", "Suco de 1/2 limão", "3 colheres de azeite extra virgem", "Sal e pimenta-do-reino a gosto"],
+    utensils: ["Frigideira grande ou wok", "Faca afiada", "Tábua de corte", "Pinça culinária", "Tigela para servir"],
+    steps: [
+        "Lave as folhas de couve uma a uma em água corrente, esfregando suavemente para remover qualquer resíduo.",
+        "Empilhe as folhas e dobre-as ao meio no sentido do comprimento para facilitar o corte.",
+        "Com a faca bem afiada, fatie a couve em tiras bem finhas, como um chiffonade. Quanto mais fina, melhor!",
+        "Descasque os dentes de alho e fatie-os em lâminas bem finas para que dourem uniformemente.",
+        "Aqueça a frigideira em fogo médio-alto e adicione o azeite. Espere aquec er antes de colocar o alho.",
+        "Adicione as lâminas de alho e refogue por 1 minuto, mexendo sempre, até ficarem douradas e perfumadas.",
+        "Atenção: alho queimado amarga! Assim que dourar, adicione a couve fatiada de uma vez.",
+        "Misture rapidamente com a pinça ou colher por 2 a 3 minutos em fogo alto para a couve ficar al dente.",
+        "A couve deve ficar verde viva, levemente murchinha mas ainda com textura e crocância.",
+        "Tempere com sal e pimenta. Desligue o fogo e esprema o limão por cima imediatamente.",
+        "O ácido do limão realça o verde e equilibra o amargor natural da couve — um truque de cozinha italiana!",
+        "Sirva imediatamente como acompanhamento. A couve é uma das maiores aliadas da longevidade saudável!"
+    ]
+});
+recipes.push({
+    id: 202, bookId: 5, prepTime: "50 minutos",
+    title: "Ratatouille de Forno com Ervas Frescas",
+    ingredients: ["1 abobrinha verde", "1 abobrinha italiana", "2 tomates médios", "1 berinjela pequena", "Molho de tomate caseiro (1 xícara)", "Azeite extra virgem", "Tomilho e alecrim frescos"],
+    utensils: ["Assadeira redonda ou oval", "Mandoline ou faca afiada", "Pincel culinário", "Papel manteiga", "Espátula"],
+    steps: [
+        "Pré-aqueça o forno a 190°C. Forre a assadeira com papel manteiga levemente untado com azeite.",
+        "Com a mandoline ou faca bem afiada, fatie todos os legumes em rodelas de 3mm de espessura uniformes.",
+        "Espalhe o molho de tomate caseiro pela assadeira em uma camada fina e uniforme — essa é a base de sabor.",
+        "Comece a montar o ratatouille sobrepondo as rodelas em sequência: abobrinha, tomate, berinjela...",
+        "Repita o padrão colorido, criando um visual em espiral ou em linhas sobrepostas que é de encher os olhos.",
+        "A beleza do ratatouille está justamente na organização — cada fatia fica levemente por cima da anterior.",
+        "Pincele generosamente cada camada de legumes com azeite extra virgem para manter a suculência.",
+        "Espalhe os raminhos de tomilho e alecrim entre as fatias de legumes para perfumar durante o forno.",
+        "Tempere com sal, pimenta e um fio extra de azeite por cima de tudo antes de cobrir com papel manteiga.",
+        "Cubra com papel manteiga e leve ao forno por 30 minutos. Depois, retire o papel e asse mais 15 minutos.",
+        "Os legumes devem estar macios e levemente caramelizados nas bordas — esse é o ponto perfeito.",
+        "Sirva quente como prato principal ou acompanhamento. Uma obra de arte na cozinha sênior!"
+    ]
+});
+
+// ── Book 5: Locked recipe stubs (IDs 203–250) ────────────────────────────────
+const book5Locked = [
+    "Sopa de Cebola Gratinada ao Forno",
+    "Brócolis Assado com Alho e Parmesão",
+    "Curry de Grão-de-Bico com Espinafre",
+    "Nhoque de Batata-Doce ao Molho de Sálvia",
+    "Quiche de Alho-Poró e Ricota",          // 208
+    "Lasanha de Berinjela e Tomate",
+    "Creme de Cenoura com Gengibre e Coco",
+    "Espaguete de Abobrinha ao Pesto de Manjericão",
+    "Tabule de Couscous com Hortelã e Pepino",
+    "Salada de Lentilha com Beterraba Assada",// 213
+    "Bolinhos de Espinafre e Ricota no Forno",
+    "Torta Salgada de Alho-Poró e Tomate Seco",
+    "Sopa de Ervilha Fresca com Hortelã",
+    "Shakshuka de Forno com Ervas",
+    "Arroz de Couve-Flor com Açafrão",       // 218
+    "Creme de Abóbora com Gengibre e Limão",
+    "Salada Quente de Raízes Assadas",
+    "Hambúrguer de Beterraba e Grão-de-Bico",
+    "Pimentões Recheados com Quinoa e Ervas",
+    "Macarrão Integral ao Pesto de Rúcula",   // 223
+    "Suflê de Queijo com Brócolis",
+    "Berinjela Recheada com Tofu e Tomate",
+    "Torta de Espinafre com Massa Integral",
+    "Crocante de Couve-Flor ao Curry",
+    "Chili de Feijão e Legumes",             // 228
+    "Wrap de Alface com Grão-de-Bico Temperado",
+    "Bowl de Beterraba com Iogurte e Nozes",
+    "Creme de Alho-Poró com Batata-Baroa",
+    "Escarola Refogada com Limão Siciliano",
+    "Tortilha Espanhola de Legumes",          // 233
+    "Pepino Recheado com Queijo Cottage",
+    "Sopa de Feijão Verde com Hortelã",
+    "Rolinhos de Cenoura Assada com Tahine",
+    "Abobrinha Recheada com Arroz e Ervas",
+    "Caprese de Tomate e Manjericão",         // 238
+    "Salteado de Vagens com Amêndoa Laminada",
+    "Creme de Beterraba com Iogurte Grego",
+    "Risoto de Aspargos com Parmesão",
+    "Polenta Cremosa com Cogumelos Salteados",
+    "Tortinha de Espinafre e Queijo Feta",    // 243
+    "Sopa de Tomate com Manjericão Fresco",
+    "Cogumelos Recheados com Queijo e Ervas",
+    "Brócolis ao Vapor com Molho de Tahine",
+    "Salada de Radicchio com Laranja e Nozes",
+    "Espargos Grelhados com Ovo Pochê",       // 248
+    "Terrine de Legumes ao Forno",
+    "Sopa Kremlin de Vegetais da Horta"       // 250
+];
+book5Locked.forEach((name, i) => {
+    recipes.push({ id: i + 203, bookId: 5, title: name, locked: true });
 });

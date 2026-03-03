@@ -18,6 +18,7 @@ function submitVote(theme) {
     toggleModal();
 }
 
+
 /* ── Funnel helpers ─────────────────────────────────────────────────────────── */
 function getPositionInBook(id) {
     const book = getBookByRecipeId(id);
@@ -26,16 +27,39 @@ function getPositionInBook(id) {
 }
 
 function isLocked(id) {
+    // 5 free recipes per book; from recipe 6 onward the paywall kicks in
     return getPositionInBook(id) > 5;
 }
 
 /* ── Navigation ─────────────────────────────────────────────────────────────── */
-function loadRecipesFeed() {
-    loadRecipe(1);
-}
+function loadRecipesFeed() { loadBooksShowcase(); }
+function handleRecipeClick(id) { loadRecipe(id); }
+function handleBookClick(bookId) { loadRecipe(BOOKS[bookId].idRange[0]); }
 
-function handleRecipeClick(id) {
-    loadRecipe(id);
+/* ── Books Showcase Vitrine ─────────────────────────────────────────────────── */
+function loadBooksShowcase() {
+    const viewer = document.getElementById('content-viewer');
+    const wrapper = document.createElement('div');
+    wrapper.className = 'recipe-card content-unroll';
+    wrapper.innerHTML = `
+        <div style="text-align:center; margin-bottom:36px;">
+            <span style="display:inline-block; background:#f1f8f1; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; padding:4px 14px; border-radius:20px; margin-bottom:14px;">Biblioteca SeniorHub</span>
+            <h1 style="font-size:28px; font-weight:800; color:#374151; margin-bottom:8px;">Escolha o seu Livro de Receitas</h1>
+            <p style="color:var(--text-muted); font-size:15px;">5 coleções exclusivas com receitas detalhadas</p>
+        </div>
+        <div class="books-showcase">
+            ${Object.entries(BOOKS).map(([num, book]) => `
+                <button class="book-showcase-btn" onclick="handleBookClick(${num})">
+                    <div class="book-info">
+                        <div class="book-num">Livro ${num}</div>
+                        <div class="book-title">${book.title}</div>
+                    </div>
+                    <i class="ph ph-caret-right" style="font-size:22px; color:var(--sage-green); flex-shrink:0;"></i>
+                </button>
+            `).join('')}
+        </div>
+    `;
+    swapContent(viewer, wrapper);
 }
 
 /* ── Book Summary View ──────────────────────────────────────────────────────── */
@@ -49,6 +73,9 @@ function loadBookSummary(bookId) {
     const wrapper = document.createElement('div');
     wrapper.className = 'recipe-card content-unroll';
     wrapper.innerHTML = `
+        <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+                  color:var(--sage-green); margin-bottom:16px; cursor:pointer;"
+           onclick="loadBooksShowcase()">← Vitrine de Livros</p>
         <h1 class="recipe-title" style="font-size:26px; margin-bottom:6px;">${book.title}</h1>
         <p style="text-align:center; color:var(--text-muted); font-size:14px; margin-bottom:32px;">
             50 receitas — clique em qualquer título para explorar
@@ -77,62 +104,21 @@ function loadBookSummary(bookId) {
 
 /* ── Recipe Detail View ─────────────────────────────────────────────────────── */
 function loadRecipe(id) {
-    const recipe = recipes.find(r => r.id === id);
     const viewer = document.getElementById('content-viewer');
     const wrapper = document.createElement('div');
     wrapper.className = 'recipe-card content-unroll';
 
-    wrapper.innerHTML = isLocked(id)
-        ? renderPaywallHTML(getBookByRecipeId(id))
-        : renderRecipeHTML(recipe);
+    if (isLocked(id)) {
+        // Recipe 6+ of a book — show per-book paywall
+        wrapper.innerHTML = renderPaywallHTML(getBookByRecipeId(id));
+    } else {
+        const recipe = recipes.find(r => r.id === id);
+        wrapper.innerHTML = renderRecipeHTML(recipe);
+    }
 
     swapContent(viewer, wrapper);
 }
 
-/* ── Locked Recipe: title visible + elegant engagement card ─────────────────── */
-function renderLockedPreviewHTML(recipe) {
-    const book = getBookByRecipeId(recipe.id);
-    const pos = String(getPositionInBook(recipe.id)).padStart(2, '0');
-
-    return `
-        <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
-                  color:var(--sage-green); margin-bottom:16px; cursor:pointer;"
-           onclick="loadBookSummary(${book.number})">
-            ← ${book.title}
-        </p>
-
-        <h1 class="recipe-title" style="margin-bottom:20px;">${pos}. ${recipe.title}</h1>
-
-        <div style="display:inline-flex; align-items:center; gap:10px; background:#f1f8f1;
-                    border:1px solid var(--sage-green); border-radius:12px;
-                    padding:10px 22px; margin-bottom:36px;
-                    filter:blur(3.5px); user-select:none; pointer-events:none; opacity:.7;">
-            <span style="font-size:18px;">⏱</span>
-            <div>
-                <div style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;
-                            color:var(--sage-green-dark); font-weight:700;">Tempo de Preparo</div>
-                <div style="font-size:18px; font-weight:800; color:var(--text-dark);">XX minutos</div>
-            </div>
-        </div>
-
-        <div class="locked-card">
-            <div class="locked-card__icon">🔒</div>
-            <h3 class="locked-card__title">
-                Esta é uma das 45 relíquias guardadas para nossos membros especiais.
-            </h3>
-            <p class="locked-card__text">
-                Para visualizar o passo a passo completo e ter o livro digital para imprimir,
-                adquira a coleção completa.
-            </p>
-            <a href="#" class="locked-card__btn">
-                Liberar Receita e Baixar PDF — R$ 19,90
-            </a>
-            <p style="font-size:11px; color:var(--text-muted); margin-top:14px;">
-                Acesso imediato · PDF de alta qualidade · Todas as 50 receitas
-            </p>
-        </div>
-    `;
-}
 
 /* ── Swap helper (reusable slide-out + unroll-in) ───────────────────────────── */
 function swapContent(viewer, newEl) {
@@ -148,30 +134,38 @@ function swapContent(viewer, newEl) {
 /* ── Recipe HTML renderer ───────────────────────────────────────────────────── */
 function renderRecipeHTML(recipe) {
     const book = getBookByRecipeId(recipe.id);
-    const posInBook = getPositionInBook(recipe.id);
-    const isLast = posInBook === 5;
+    const nextId = recipe.id + 1;
+    const nextIsLockedByBook = isLocked(nextId) || nextId > book.idRange[1];
+
+    const nextBtn = nextIsLockedByBook
+        ? `<button onclick="handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
+                   style="margin:0; padding:12px 24px; font-size:15px;">Próxima Receita →</button>`
+        : `<button onclick="handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
+                   style="margin:0; padding:12px 24px; font-size:15px;">Próxima Receita →</button>`;
 
     return `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; gap: 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; gap:20px;">
             <div>
                 <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                           color:var(--sage-green); margin-bottom:8px; cursor:pointer;"
-                   onclick="loadBookSummary(${book.number})">
-                    ← ${book.title}
+                   onclick="loadBooksShowcase()">
+                    ← Vitrine de Livros
                 </p>
-                <!-- 1. Recipe title -->
                 <h1 class="recipe-title" style="margin-bottom:0; text-align:left;">${recipe.title}</h1>
             </div>
-            <button onclick="loadBookSummary(${book.number})" style="background:none; border:none; cursor:pointer; color:var(--sage-green); display:flex; align-items:center; gap:6px; font-weight:600; font-size:15px; margin-top:4px;" title="Ver todas as receitas">
-                <i class="ph ph-list-dashes" style="font-size:20px;"></i> Sumário da Coleção
+            <button onclick="loadBookSummary(${book.number})" title="Ver todas as receitas"
+                    style="white-space:nowrap; background:none; border:1.5px solid var(--sage-green);
+                           border-radius:10px; cursor:pointer; color:var(--sage-green); display:flex;
+                           align-items:center; gap:6px; font-weight:600; font-size:13px;
+                           padding:8px 14px; flex-shrink:0; margin-top:4px;">
+                <i class="ph ph-list-dashes" style="font-size:18px;"></i> Sumário da Coleção
             </button>
         </div>
 
-        <!-- 2. Prep time — immediate highlight -->
         <div style="display:inline-flex; align-items:center; gap:10px; background:#f1f8f1;
                     border:1px solid var(--sage-green); border-radius:12px;
                     padding:10px 22px; margin-bottom:36px;">
-            <span style="font-size:18px;">⏱</span>
+            <i class="ph ph-timer" style="font-size:22px; color:var(--sage-green);"></i>
             <div>
                 <div style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;
                             color:var(--sage-green-dark); font-weight:700;">Tempo de Preparo</div>
@@ -179,7 +173,6 @@ function renderRecipeHTML(recipe) {
             </div>
         </div>
 
-        <!-- 3. Ingredients + Utensils grid -->
         <div class="nossa-cozinha-box">
             <div>
                 <h4 class="section-title">Ingredientes Necessários</h4>
@@ -195,7 +188,6 @@ function renderRecipeHTML(recipe) {
             </div>
         </div>
 
-        <!-- 4. Preparation steps -->
         <div class="preparo-section">
             <h3>Modo de Preparo</h3>
             <div class="preparo-steps">
@@ -207,58 +199,75 @@ function renderRecipeHTML(recipe) {
             </div>
         </div>
 
-        <!-- Footer navigation -->
         <div style="display:flex; gap:12px; margin-top:36px; justify-content:center; flex-wrap:wrap;">
-            ${recipe.id > book.idRange[0]
-            ? `<button onclick="handleRecipeClick(${recipe.id - 1})" class="promo-btn" style="margin:0; padding:12px 24px; font-size:15px;">← Receita anterior</button>`
-            : `<button onclick="loadBookSummary(${book.number})" class="promo-btn" style="margin:0; padding:12px 24px; font-size:15px;">← Ver Sumário</button>`
-        }
-            ${isLast
-            ? `<button onclick="handleRecipeClick(${recipe.id + 1})" class="promo-btn"
-                          style="margin:0; padding:12px 24px; font-size:15px; background:var(--sage-green-dark);">
-                       Ver oferta especial →
-                   </button>`
-            : `<button onclick="handleRecipeClick(${recipe.id + 1})" class="promo-btn"
-                          style="margin:0; padding:12px 24px; font-size:15px;">
-                       Próxima receita →
-                   </button>`
-        }
+            <button onclick="loadBooksShowcase()" class="promo-btn"
+                    style="margin:0; padding:12px 24px; font-size:15px; background:#e8f0ea; color:var(--sage-green-dark);">← Vitrine de Livros</button>
+            ${nextBtn}
         </div>
     `;
 }
 
-/* ── Paywall banner ─────────────────────────────────────────────────────────── */
+/* ── Global Paywall (after 5 reads across all books) ────────────────────────── */
+function renderGlobalPaywallHTML() {
+    return `
+        <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+                  color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
+           onclick="loadBooksShowcase()">
+            ← Vitrine de Livros
+        </p>
+        <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
+            <div style="font-size:48px; margin-bottom:16px;">📚</div>
+            <span style="display:inline-block; background:#f1f8f1; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:4px 14px; border-radius:20px; margin-bottom:20px;">Acesso Completo</span>
+            <h2 style="font-size:26px; margin-bottom:20px; line-height:1.35; color:var(--sage-green-dark);">
+                Você explorou suas 5 receitas gratuitas!
+            </h2>
+            <p style="font-size:17px; color:var(--text-muted); max-width:500px; margin:0 auto 12px; line-height:1.7;">
+                Adquira qualquer um dos nossos <strong style="color:var(--sage-green-dark);">5 livros digitais</strong>
+                com <strong style="color:var(--sage-green-dark);">50 receitas cada</strong> em PDF especial para imprimir e colecionar.
+            </p>
+            <div style="font-size:38px; font-weight:900; color:var(--sage-green); margin-bottom:8px;">R$ 19,90</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-bottom:32px;">por livro · acesso imediato · PDF pronto para impressão</div>
+            <a href="#" class="promo-btn" style="background-color:var(--sage-green); color:white; font-size:17px; padding:16px 48px;">
+                Quero meu Livro em PDF →
+            </a>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
+                ✓ Acesso imediato &nbsp;·&nbsp; ✓ PDF alta qualidade &nbsp;·&nbsp; ✓ 50 receitas exclusivas
+            </p>
+        </div>
+    `;
+}
+
+/* ── Per-book Paywall banner (recipe #6+ in each book) ──────────────────────── */
 function renderPaywallHTML(book) {
     const bookTitle = book ? book.title : 'nosso livro completo';
     return `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
-           onclick="loadBookSummary(${book ? book.number : 1})">
-            ← ${bookTitle}
+           onclick="loadBooksShowcase()">
+            ← Vitrine de Livros
         </p>
-
-        <div class="promo-banner" style="margin-top:0; padding:48px 40px;">
-            <div style="font-size:44px; margin-bottom:16px;">🔒</div>
-            <h2 style="font-size:24px; margin-bottom:20px; line-height:1.35;">
-                Gostou dessas amostras?
+        <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
+            <div style="font-size:48px; margin-bottom:16px;">📖</div>
+            <h2 style="font-size:24px; margin-bottom:16px; line-height:1.35; color:var(--sage-green-dark);">
+                Gostou do conteúdo?
             </h2>
-            <p style="font-size:17px; color:var(--text-muted); max-width:480px; margin:0 auto 28px; line-height:1.7;">
-                Adquira o livro completo <strong style="color:var(--sage-green-dark);">"${bookTitle}"</strong>
-                com todas as 50 receitas em um PDF especial para você imprimir e colecionar.
+            <p style="font-size:17px; color:var(--text-muted); max-width:500px; margin:0 auto 28px; line-height:1.8;">
+                Adquira o Livro Completo <strong style="color:var(--text-dark);">"${bookTitle}"</strong>
+                com as <strong style="color:var(--sage-green-dark);">50 receitas em PDF para imprimir</strong>
+                por apenas
             </p>
-            <div style="font-size:36px; font-weight:900; color:var(--sage-green); margin-bottom:28px;">
-                R$ 19,90
-            </div>
-            <a href="#" class="promo-btn" style="background-color:var(--sage-green); color:white;
-                                                  font-size:17px; padding:16px 48px;">
+            <div style="font-size:42px; font-weight:900; color:var(--sage-green); margin-bottom:6px; letter-spacing:-1px;">R$ 19,90</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-bottom:32px;">acesso imediato · PDF de alta qualidade · pronto para impressão</div>
+            <a href="#" class="promo-btn next-recipe-btn" style="font-size:17px; padding:16px 48px; display:inline-block; margin-top:0;">
                 Quero meu Livro em PDF →
             </a>
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
-                Acesso imediato após o pagamento. PDF de alta qualidade, pronto para impressão.
+                ✓ Pagamento seguro &nbsp;·&nbsp; ✓ PDF enviado por e-mail &nbsp;·&nbsp; ✓ 50 receitas completas
             </p>
         </div>
     `;
 }
+
 
 /* ── News Feed ──────────────────────────────────────────────────────────────── */
 const newsItems = [
@@ -328,9 +337,9 @@ function handleNewsClick(newsId) {
 /* ── Advertising Showcase ───────────────────────────────────────────────────── */
 const ads = [
     {
-        title: "Trilogia Completa (PDFs)", price: "R$ 47,90",
+        title: "Biblioteca Completa — 5 Livros PDF", price: "R$ 89,90",
         image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=400",
-        link: "#", btnText: "Comprar Trilogia"
+        link: "#", btnText: "Comprar Coleção"
     },
     {
         title: "Poltrona Relax Premium", price: "R$ 890,00",

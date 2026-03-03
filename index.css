@@ -733,3 +733,79 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #ccc;
 }
+
+/* ── Books Showcase Vitrine ─────────────────────────────────────────────────── */
+.books-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.book-showcase-btn {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s;
+    font-family: var(--font-body);
+}
+
+.book-showcase-btn:hover {
+    border-color: var(--sage-green);
+    box-shadow: 0 6px 24px rgba(132, 169, 140, 0.18);
+    transform: translateY(-2px);
+}
+
+.book-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+    width: 48px;
+    text-align: center;
+}
+
+.book-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.book-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--sage-green);
+    margin-bottom: 2px;
+}
+
+.book-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+
+.book-meta {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ── Next Recipe Button (Sage Green) ────────────────────────────────────────── */
+.next-recipe-btn {
+    background-color: var(--sage-green) !important;
+    color: #fff !important;
+    font-weight: 700;
+    transition: background-color 0.2s, transform 0.18s, box-shadow 0.2s;
+}
+
+.next-recipe-btn:hover {
+    background-color: var(--sage-green-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(132, 169, 140, 0.35);
+}
