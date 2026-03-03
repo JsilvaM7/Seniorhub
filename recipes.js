@@ -1,5 +1,5 @@
 // ── Biblioteca SeniorHub — 5 Livros ─────────────────────────────────────────
-const BOOKS = {
+window.BOOKS = {
     1: { title: "Relíquias da Cozinha: Sabores que Atravessam Gerações", key: 'reliquias' },
     2: { title: "Energia no Prato: Nutrição e Praticidade para o Dia a Dia", key: 'energia' },
     3: { title: "Prazer Sem Culpa: O Lado Doce da Vida com Saúde", key: 'prazersem' },
@@ -478,13 +478,11 @@ book5Locked.forEach((name, i) => {
     recipes.push({ id: i + 203, bookId: 5, title: name, locked: true });
 });
 
-// ── Objeto Biblioteca — ponto único de verdade para todos os livros ───────────
-// Cole o array de cada livro aqui embaixo, dentro da chave correspondente.
-// livroEnergia deve ser colado AQUI (substitua o [] vazio abaixo pelo array).
-const biblioteca = {
-    reliquias: recipes,        // Livro 1 — já populado acima
-    energia: typeof livroEnergia !== 'undefined' ? livroEnergia : [],
-    prazersem: [],             // Livro 3 — a ser adicionado
-    saboresmar: [],             // Livro 4 — a ser adicionado
-    horta: []              // Livro 5 — a ser adicionado
+// ── Montagem da Biblioteca (Acesso pelo app.js) ─────────────────────────
+window.biblioteca = {
+    reliquias: recipes,         // Receitas de teste do Livro 1
+    energia: livroEnergia,      // Receitas geradas do Livro 2
+    prazersem: [],              // Placeholder Livro 3
+    saboresmar: [],             // Placeholder Livro 4
+    horta: []                   // Placeholder Livro 5
 };

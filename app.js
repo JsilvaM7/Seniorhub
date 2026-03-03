@@ -222,14 +222,14 @@ window.loadLoginScreen = function () {
 
         signInWithEmailAndPassword(auth, email, pass)
             .then(() => {
-                // Acesso Mágico! Fade-in da receita que o usuário tentou acessar antes
-                viewer.style.transition = "opacity 0.4s ease";
+                // Acesso Mágico (Efeito Derreter/Fade-in Suave)
+                viewer.style.transition = "opacity 0.8s ease-in-out";
                 viewer.style.opacity = 0;
                 setTimeout(() => {
-                    // isUserLoggedIn já foi syncado pelo onAuthStateChanged
-                    loadRecipe(6); // Carrega a receita original (ou reinicia o funil)
+                    // isUserLoggedIn já true, receita é liberada
+                    loadRecipe(6);
                     viewer.style.opacity = 1;
-                }, 400);
+                }, 800);
             })
             .catch((err) => {
                 btn.innerText = "Entrar e Acessar";
@@ -355,12 +355,8 @@ function renderGlobalPaywallHTML() {
             <a href="#" class="promo-btn" style="background-color:var(--sage-green); color:white; font-size:17px; padding:16px 48px;">
                 Quero meu Livro em PDF →
             </a>
+            <p style="margin-top:20px; font-size:14px; color:var(--text-muted);">Já é membro? <a href="#" id="open-login" onclick="event.preventDefault(); window.loadLoginScreen()" style="color:var(--sage-green); font-weight:700; text-decoration:underline;">Acesse sua conta aqui</a></p>
             
-            <div style="margin-top:20px;">
-                <a href="#" onclick="event.preventDefault(); window.loadLoginScreen()" style="color:var(--sage-green); font-size:15px; text-decoration:underline; font-weight:600;">
-                    Já sou aluno? Acessar minha conta
-                </a>
-            </div>
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
                 ✓ Acesso imediato &nbsp;·&nbsp; ✓ PDF alta qualidade &nbsp;·&nbsp; ✓ 50 receitas exclusivas
             </p>
@@ -392,12 +388,8 @@ function renderPaywallHTML(book) {
             <a href="#" class="promo-btn next-recipe-btn" style="font-size:17px; padding:16px 48px; display:inline-block; margin-top:0;">
                 Quero meu Livro em PDF →
             </a>
+            <p style="margin-top:20px; font-size:14px; color:var(--text-muted);">Já é membro? <a href="#" id="open-login" onclick="event.preventDefault(); window.loadLoginScreen()" style="color:var(--sage-green); font-weight:700; text-decoration:underline;">Acesse sua conta aqui</a></p>
             
-            <div style="margin-top:20px;">
-                <a href="#" onclick="event.preventDefault(); window.loadLoginScreen()" style="color:var(--sage-green); font-size:15px; text-decoration:underline; font-weight:600;">
-                    Já sou aluno? Acessar minha conta
-                </a>
-            </div>
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
                 ✓ Pagamento seguro &nbsp;·&nbsp; ✓ PDF enviado por e-mail &nbsp;·&nbsp; ✓ 50 receitas completas
             </p>
