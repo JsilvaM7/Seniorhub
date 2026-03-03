@@ -1,20 +1,20 @@
 // ── Biblioteca SeniorHub — 5 Livros ─────────────────────────────────────────
 const BOOKS = {
-    1: { title: "Relíquias da Cozinha: Sabores que Atravessam Gerações", idRange: [1, 50] },
-    2: { title: "Energia no Prato: Nutrição e Praticidade para o Dia a Dia", idRange: [51, 100] },
-    3: { title: "Prazer Sem Culpa: O Lado Doce da Vida com Saúde", idRange: [101, 150] },
-    4: { title: "Sabores do Mar: Leveza e Nutrição para a Longevidade", idRange: [151, 200] },
-    5: { title: "Horta no Prato: O Melhor dos Vegetais na Cozinha Sênior", idRange: [201, 250] }
+    1: { title: "Relíquias da Cozinha: Sabores que Atravessam Gerações", key: 'reliquias' },
+    2: { title: "Energia no Prato: Nutrição e Praticidade para o Dia a Dia", key: 'energia' },
+    3: { title: "Prazer Sem Culpa: O Lado Doce da Vida com Saúde", key: 'prazersem' },
+    4: { title: "Sabores do Mar: Leveza e Nutrição para a Longevidade", key: 'saboresmar' },
+    5: { title: "Horta no Prato: O Melhor dos Vegetais na Cozinha Sênior", key: 'horta' }
 };
 
-function getBookByRecipeId(id) {
+// Retorna { bookNum, bookKey, title } a partir da chave e do id local
+function getBookByKey(bookKey) {
     for (const [num, book] of Object.entries(BOOKS)) {
-        if (id >= book.idRange[0] && id <= book.idRange[1]) {
-            return { number: parseInt(num), ...book };
-        }
+        if (book.key === bookKey) return { number: parseInt(num), ...book };
     }
     return null;
 }
+
 
 // ── Book 1: Full sample recipes (IDs 1–5) ──────────────────────────────────
 const recipes = [
@@ -477,3 +477,14 @@ const book5Locked = [
 book5Locked.forEach((name, i) => {
     recipes.push({ id: i + 203, bookId: 5, title: name, locked: true });
 });
+
+// ── Objeto Biblioteca — ponto único de verdade para todos os livros ───────────
+// Cole o array de cada livro aqui embaixo, dentro da chave correspondente.
+// livroEnergia deve ser colado AQUI (substitua o [] vazio abaixo pelo array).
+const biblioteca = {
+    reliquias: recipes,        // Livro 1 — já populado acima
+    energia: typeof livroEnergia !== 'undefined' ? livroEnergia : [],
+    prazersem: [],             // Livro 3 — a ser adicionado
+    saboresmar: [],             // Livro 4 — a ser adicionado
+    horta: []              // Livro 5 — a ser adicionado
+};

@@ -12,7 +12,7 @@
 
 <body>
     <header class="header">
-        <a href="#" class="logo">SeniorHub</a>
+        <a href="#" class="logo" onclick="event.preventDefault(); loadNewsFeed();">SeniorHub</a>
         <div class="search-container">
             <input type="text" class="search-bar" placeholder="Pesquisar por receitas, exercícios ou dicas...">
         </div>
@@ -24,25 +24,25 @@
             <nav>
                 <ul class="sidebar-nav">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link" onclick="location.reload()">
+                        <a href="#" class="sidebar-link" onclick="event.preventDefault(); loadNewsFeed();">
                             <i class="ph ph-house" style="font-size: 22px;"></i>
                             Início
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link" onclick="loadRecipesFeed()">
+                        <a href="#" class="sidebar-link" onclick="event.preventDefault(); loadRecipesFeed();">
                             <i class="ph ph-apple-logo" style="font-size: 22px;"></i>
                             Receitas
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a href="#" class="sidebar-link" onclick="event.preventDefault();">
                             <i class="ph ph-barbell" style="font-size: 22px;"></i>
                             Exercícios em Casa
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a href="#" class="sidebar-link" onclick="event.preventDefault();">
                             <i class="ph ph-airplane-tilt" style="font-size: 22px;"></i>
                             Guia de Viagens
                         </a>
@@ -127,8 +127,10 @@
         </div>
     </div>
 
+    <script src="livroEnergia.js"></script>
     <script src="recipes.js"></script>
     <script src="app.js"></script>
+
 </body>
 
 </html>

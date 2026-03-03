@@ -17,30 +17,38 @@ function submitVote(theme) {
     alert(`Voto registrado para: ${theme}! Obrigado por participar.`);
     toggleModal();
 }
-
+/* ── State Tracking ─────────────────────────────────────────────────────────── */
+let livroAtual = null; // Guarda a chave do livro aberto (ex: 'energia')
 
 /* ── Funnel helpers ─────────────────────────────────────────────────────────── */
-function getPositionInBook(id) {
-    const book = getBookByRecipeId(id);
-    if (!book) return id;
-    return id - book.idRange[0] + 1;
-}
-
 function isLocked(id) {
     // 5 free recipes per book; from recipe 6 onward the paywall kicks in
-    return getPositionInBook(id) > 5;
+    return id > 5;
 }
 
 /* ── Navigation ─────────────────────────────────────────────────────────────── */
-function loadRecipesFeed() { loadBooksShowcase(); }
-function handleRecipeClick(id) { loadRecipe(id); }
-function handleBookClick(bookId) { loadRecipe(BOOKS[bookId].idRange[0]); }
+function loadRecipesFeed() {
+    livroAtual = null; // Reseta o estado
+    loadBooksShowcase();
+}
+
+function handleRecipeClick(id) {
+    loadRecipe(id);
+}
+
+function handleBookClick(bookNum) {
+    const bookInfo = BOOKS[bookNum];
+    if (bookInfo && bookInfo.key) {
+        livroAtual = bookInfo.key;
+        loadRecipe(1); // Abre sempre a receita 1 do livro clicado
+    }
+}
 
 /* ── Books Showcase Vitrine ─────────────────────────────────────────────────── */
 function loadBooksShowcase() {
     const viewer = document.getElementById('content-viewer');
     const wrapper = document.createElement('div');
-    wrapper.className = 'recipe-card content-unroll';
+    wrapper.className = 'recipe-card';
     wrapper.innerHTML = `
         <div style="text-align:center; margin-bottom:36px;">
             <span style="display:inline-block; background:#f1f8f1; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; padding:4px 14px; border-radius:20px; margin-bottom:14px;">Biblioteca SeniorHub</span>
@@ -63,20 +71,20 @@ function loadBooksShowcase() {
 }
 
 /* ── Book Summary View ──────────────────────────────────────────────────────── */
-function loadBookSummary(bookId) {
+function loadBookSummary() {
+    if (!livroAtual) return;
+
     const viewer = document.getElementById('content-viewer');
-    const book = BOOKS[bookId];
-    const [start, end] = book.idRange;
-    const bookRecipes = recipes.filter(r => r.id >= start && r.id <= end)
-        .sort((a, b) => a.id - b.id);
+    const bookMeta = Object.values(BOOKS).find(b => b.key === livroAtual);
+    const bookArr = biblioteca[livroAtual] || [];
 
     const wrapper = document.createElement('div');
-    wrapper.className = 'recipe-card content-unroll';
+    wrapper.className = 'recipe-card';
     wrapper.innerHTML = `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:16px; cursor:pointer;"
-           onclick="loadBooksShowcase()">← Vitrine de Livros</p>
-        <h1 class="recipe-title" style="font-size:26px; margin-bottom:6px;">${book.title}</h1>
+           onclick="event.preventDefault(); loadBooksShowcase()">← Vitrine de Livros</p>
+        <h1 class="recipe-title" style="font-size:26px; margin-bottom:6px;">${bookMeta ? bookMeta.title : 'Sumário'}</h1>
         <p style="text-align:center; color:var(--text-muted); font-size:14px; margin-bottom:32px;">
             50 receitas — clique em qualquer título para explorar
         </p>
@@ -87,10 +95,10 @@ function loadBookSummary(bookId) {
                 Sumário da Coleção
             </h2>
             <ol class="recipe-summary-grid">
-                ${bookRecipes.map(r => {
-        const pos = String(getPositionInBook(r.id)).padStart(2, '0');
+                ${bookArr.map(r => {
+        const pos = String(r.id).padStart(2, '0');
         return `<li class="summary-item">
-                        <a class="summary-link" onclick="handleRecipeClick(${r.id}); return false;" href="#">
+                        <a class="summary-link" onclick="handleRecipeClick(${r.id}); event.preventDefault(); return false;" href="#">
                             <span class="summary-num">${pos}.</span>${r.title}
                         </a>
                     </li>`;
@@ -104,16 +112,26 @@ function loadBookSummary(bookId) {
 
 /* ── Recipe Detail View ─────────────────────────────────────────────────────── */
 function loadRecipe(id) {
+    if (!livroAtual) return;
+
     const viewer = document.getElementById('content-viewer');
     const wrapper = document.createElement('div');
-    wrapper.className = 'recipe-card content-unroll';
+    wrapper.className = 'recipe-card';
+
+    const bookMeta = Object.values(BOOKS).find(b => b.key === livroAtual);
 
     if (isLocked(id)) {
-        // Recipe 6+ of a book — show per-book paywall
-        wrapper.innerHTML = renderPaywallHTML(getBookByRecipeId(id));
+        // Receita 6+ do livro em questão
+        wrapper.innerHTML = renderPaywallHTML(bookMeta);
     } else {
-        const recipe = recipes.find(r => r.id === id);
-        wrapper.innerHTML = renderRecipeHTML(recipe);
+        const bookArr = biblioteca[livroAtual] || [];
+        const recipe = bookArr.find(r => r.id === id);
+
+        if (!recipe) {
+            wrapper.innerHTML = `<p style="padding:40px; text-align:center; color:var(--text-muted)">Receita não encontrada neste livro.</p>`;
+        } else {
+            wrapper.innerHTML = renderRecipeHTML(recipe, bookMeta);
+        }
     }
 
     swapContent(viewer, wrapper);
@@ -122,25 +140,30 @@ function loadRecipe(id) {
 
 /* ── Swap helper (reusable slide-out + unroll-in) ───────────────────────────── */
 function swapContent(viewer, newEl) {
-    const current = viewer.querySelector('.recipe-card') || viewer.querySelector('.slide-in-right');
-    if (current) {
-        current.classList.add('slide-out-left');
-        setTimeout(() => { current.remove(); viewer.appendChild(newEl); }, 420);
-    } else {
-        viewer.appendChild(newEl);
-    }
+    // Scrola a tela para o topo do conteúdo de forma suave, mas rápida
+    window.scrollTo({
+        top: Math.max(0, viewer.offsetTop - 80),
+        behavior: 'smooth'
+    });
+
+    // Limpa imediatamente o conteúdo do viewer e injeta o novo de forma estática
+    viewer.innerHTML = '';
+    viewer.appendChild(newEl);
 }
 
 /* ── Recipe HTML renderer ───────────────────────────────────────────────────── */
-function renderRecipeHTML(recipe) {
-    const book = getBookByRecipeId(recipe.id);
+// bookMeta passados para montar os botões de navegação corretos.
+function renderRecipeHTML(recipe, bookMeta) {
+    // Suporte aos dois schemas de campo (Livro 1: prepTime/steps; Livro 2+: time/instructions)
+    const tempo = recipe.prepTime || recipe.time || '—';
+    const passos = recipe.steps || recipe.instructions || [];
     const nextId = recipe.id + 1;
-    const nextIsLockedByBook = isLocked(nextId) || nextId > book.idRange[1];
+    const totalNoLivro = (biblioteca[livroAtual] || []).length;
+    const nextIsLast = nextId > totalNoLivro;
 
-    const nextBtn = nextIsLockedByBook
-        ? `<button onclick="handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
-                   style="margin:0; padding:12px 24px; font-size:15px;">Próxima Receita →</button>`
-        : `<button onclick="handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
+    const nextBtn = nextIsLast
+        ? ''  // já é a última receita do livro
+        : `<button onclick="event.preventDefault(); handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
                    style="margin:0; padding:12px 24px; font-size:15px;">Próxima Receita →</button>`;
 
     return `
@@ -148,12 +171,12 @@ function renderRecipeHTML(recipe) {
             <div>
                 <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                           color:var(--sage-green); margin-bottom:8px; cursor:pointer;"
-                   onclick="loadBooksShowcase()">
+                   onclick="event.preventDefault(); loadBooksShowcase()">
                     ← Vitrine de Livros
                 </p>
                 <h1 class="recipe-title" style="margin-bottom:0; text-align:left;">${recipe.title}</h1>
             </div>
-            <button onclick="loadBookSummary(${book.number})" title="Ver todas as receitas"
+            <button onclick="event.preventDefault(); loadBookSummary()" title="Ver todas as receitas"
                     style="white-space:nowrap; background:none; border:1.5px solid var(--sage-green);
                            border-radius:10px; cursor:pointer; color:var(--sage-green); display:flex;
                            align-items:center; gap:6px; font-weight:600; font-size:13px;
@@ -169,7 +192,7 @@ function renderRecipeHTML(recipe) {
             <div>
                 <div style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;
                             color:var(--sage-green-dark); font-weight:700;">Tempo de Preparo</div>
-                <div style="font-size:18px; font-weight:800; color:var(--text-dark);">${recipe.prepTime}</div>
+                <div style="font-size:18px; font-weight:800; color:var(--text-dark);">${tempo}</div>
             </div>
         </div>
 
@@ -191,7 +214,7 @@ function renderRecipeHTML(recipe) {
         <div class="preparo-section">
             <h3>Modo de Preparo</h3>
             <div class="preparo-steps">
-                ${recipe.steps.map((step, i) => `
+                ${passos.map((step, i) => `
                     <div class="step-card">
                         <p class="step-text"><strong>Passo ${i + 1}:</strong> ${step}</p>
                     </div>
@@ -200,7 +223,7 @@ function renderRecipeHTML(recipe) {
         </div>
 
         <div style="display:flex; gap:12px; margin-top:36px; justify-content:center; flex-wrap:wrap;">
-            <button onclick="loadBooksShowcase()" class="promo-btn"
+            <button onclick="event.preventDefault(); loadBooksShowcase()" class="promo-btn"
                     style="margin:0; padding:12px 24px; font-size:15px; background:#e8f0ea; color:var(--sage-green-dark);">← Vitrine de Livros</button>
             ${nextBtn}
         </div>
@@ -212,7 +235,7 @@ function renderGlobalPaywallHTML() {
     return `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
-           onclick="loadBooksShowcase()">
+           onclick="event.preventDefault(); loadBooksShowcase()">
             ← Vitrine de Livros
         </p>
         <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
@@ -243,7 +266,7 @@ function renderPaywallHTML(book) {
     return `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
-           onclick="loadBooksShowcase()">
+           onclick="event.preventDefault(); loadBooksShowcase()">
             ← Vitrine de Livros
         </p>
         <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
