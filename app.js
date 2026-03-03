@@ -70,7 +70,10 @@ function handleRecipeClick(id) {
 }
 
 function handleBookClick(bookNum) {
-    const bookInfo = BOOKS[bookNum];
+    const viewer = document.getElementById('content-viewer');
+    if (viewer) viewer.innerHTML = '';
+
+    const bookInfo = window.BOOKS[bookNum];
     if (bookInfo && bookInfo.key) {
         livroAtual = bookInfo.key;
         loadRecipe(1); // Abre sempre a receita 1 do livro clicado
@@ -89,8 +92,8 @@ function loadBooksShowcase() {
             <p style="color:var(--text-muted); font-size:15px;">5 coleções exclusivas com receitas detalhadas</p>
         </div>
         <div class="books-showcase">
-            ${Object.entries(BOOKS).map(([num, book]) => `
-                <button class="book-showcase-btn" onclick="handleBookClick(${num})">
+            ${Object.entries(window.BOOKS).map(([num, book]) => `
+                <button class="book-showcase-btn" onclick="window.handleBookClick(${num})">
                     <div class="book-info">
                         <div class="book-num">Livro ${num}</div>
                         <div class="book-title">${book.title}</div>
@@ -108,15 +111,15 @@ function loadBookSummary() {
     if (!livroAtual) return;
 
     const viewer = document.getElementById('content-viewer');
-    const bookMeta = Object.values(BOOKS).find(b => b.key === livroAtual);
-    const bookArr = biblioteca[livroAtual] || [];
+    const bookMeta = Object.values(window.BOOKS).find(b => b.key === livroAtual);
+    const bookArr = window.biblioteca[livroAtual] || [];
 
     const wrapper = document.createElement('div');
     wrapper.className = 'recipe-card';
     wrapper.innerHTML = `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:16px; cursor:pointer;"
-           onclick="event.preventDefault(); loadBooksShowcase()">← Vitrine de Livros</p>
+           onclick="event.preventDefault(); window.loadBooksShowcase()">← Vitrine de Livros</p>
         <h1 class="recipe-title" style="font-size:26px; margin-bottom:6px;">${bookMeta ? bookMeta.title : 'Sumário'}</h1>
         <p style="text-align:center; color:var(--text-muted); font-size:14px; margin-bottom:32px;">
             50 receitas — clique em qualquer título para explorar
@@ -131,7 +134,7 @@ function loadBookSummary() {
                 ${bookArr.map(r => {
         const pos = String(r.id).padStart(2, '0');
         return `<li class="summary-item">
-                        <a class="summary-link" onclick="handleRecipeClick(${r.id}); event.preventDefault(); return false;" href="#">
+                        <a class="summary-link" onclick="window.handleRecipeClick(${r.id}); event.preventDefault(); return false;" href="#">
                             <span class="summary-num">${pos}.</span>${r.title}
                         </a>
                     </li>`;
@@ -265,7 +268,7 @@ function renderRecipeHTML(recipe, bookMeta) {
 
     const nextBtn = nextIsLast
         ? ''  // já é a última receita do livro
-        : `<button onclick="event.preventDefault(); handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
+        : `<button onclick="event.preventDefault(); window.handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
                    style="margin:0; padding:12px 24px; font-size:15px;">Próxima Receita →</button>`;
 
     return `
@@ -273,12 +276,12 @@ function renderRecipeHTML(recipe, bookMeta) {
             <div>
                 <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                           color:var(--sage-green); margin-bottom:8px; cursor:pointer;"
-                   onclick="event.preventDefault(); loadBooksShowcase()">
+                   onclick="event.preventDefault(); window.loadBooksShowcase()">
                     ← Vitrine de Livros
                 </p>
                 <h1 class="recipe-title" style="margin-bottom:0; text-align:left;">${recipe.title}</h1>
             </div>
-            <button onclick="event.preventDefault(); loadBookSummary()" title="Ver todas as receitas"
+            <button onclick="event.preventDefault(); window.loadBookSummary()" title="Ver todas as receitas"
                     style="white-space:nowrap; background:none; border:1.5px solid var(--sage-green);
                            border-radius:10px; cursor:pointer; color:var(--sage-green); display:flex;
                            align-items:center; gap:6px; font-weight:600; font-size:13px;
@@ -325,7 +328,7 @@ function renderRecipeHTML(recipe, bookMeta) {
         </div>
 
         <div style="display:flex; gap:12px; margin-top:36px; justify-content:center; flex-wrap:wrap;">
-            <button onclick="event.preventDefault(); loadBooksShowcase()" class="promo-btn"
+            <button onclick="event.preventDefault(); window.loadBooksShowcase()" class="promo-btn"
                     style="margin:0; padding:12px 24px; font-size:15px; background:#e8f0ea; color:var(--sage-green-dark);">← Vitrine de Livros</button>
             ${nextBtn}
         </div>
@@ -337,7 +340,7 @@ function renderGlobalPaywallHTML() {
     return `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
-           onclick="event.preventDefault(); loadBooksShowcase()">
+           onclick="event.preventDefault(); window.loadBooksShowcase()">
             ← Vitrine de Livros
         </p>
         <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
@@ -370,7 +373,7 @@ function renderPaywallHTML(book) {
     return `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
-           onclick="event.preventDefault(); loadBooksShowcase()">
+           onclick="event.preventDefault(); window.loadBooksShowcase()">
             ← Vitrine de Livros
         </p>
         <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
