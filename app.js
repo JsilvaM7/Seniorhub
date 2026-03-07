@@ -69,13 +69,12 @@ function handleRecipeClick(id) {
     loadRecipe(id);
 }
 
-function handleBookClick(bookNum) {
+function handleBookClick(bookKey) {
     const viewer = document.getElementById('content-viewer');
     if (viewer) viewer.innerHTML = '';
 
-    const bookInfo = window.BOOKS[bookNum];
-    if (bookInfo && bookInfo.key) {
-        livroAtual = bookInfo.key;
+    if (bookKey) {
+        livroAtual = bookKey;
         loadRecipe(1); // Abre sempre a receita 1 do livro clicado
     }
 }
@@ -93,7 +92,7 @@ function loadBooksShowcase() {
         </div>
         <div class="books-showcase">
             ${Object.entries(window.BOOKS).map(([num, book]) => `
-                <button class="book-showcase-btn" onclick="window.handleBookClick(${num})">
+                <button class="book-showcase-btn" onclick="window.handleBookClick('${book.key}')">
                     <div class="book-info">
                         <div class="book-num">Livro ${num}</div>
                         <div class="book-title">${book.title}</div>
