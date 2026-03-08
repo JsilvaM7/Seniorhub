@@ -480,9 +480,9 @@ book5Locked.forEach((name, i) => {
 
 // ── Montagem da Biblioteca (Acesso pelo app.js) ─────────────────────────
 window.biblioteca = {
-    reliquias: recipes,         // Receitas de teste do Livro 1
-    energia: livroEnergia,      // Receitas geradas do Livro 2
-    prazersem: [],              // Placeholder Livro 3
-    saboresmar: [],             // Placeholder Livro 4
-    horta: []                   // Placeholder Livro 5
+    reliquias: recipes.filter(r => r.bookId === 1),
+    energia: recipes.filter(r => r.bookId === 2),
+    prazersem: recipes.filter(r => r.bookId === 3),
+    saboresmar: recipes.filter(r => r.bookId === 4),
+    horta: recipes.filter(r => r.bookId === 5)
 };

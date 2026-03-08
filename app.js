@@ -153,13 +153,13 @@ function loadRecipe(id) {
     const wrapper = document.createElement('div');
     wrapper.className = 'recipe-card';
 
-    const bookMeta = Object.values(BOOKS).find(b => b.key === livroAtual);
+    const bookMeta = Object.values(window.BOOKS).find(b => b.key === livroAtual);
 
     if (isLocked(id)) {
         // Receita 6+ do livro em questão
         wrapper.innerHTML = renderPaywallHTML(bookMeta);
     } else {
-        const bookArr = biblioteca[livroAtual] || [];
+        const bookArr = window.biblioteca[livroAtual] || [];
         const recipe = bookArr.find(r => r.id === id);
 
         if (!recipe) {
@@ -262,7 +262,7 @@ function renderRecipeHTML(recipe, bookMeta) {
     const tempo = recipe.prepTime || recipe.time || '—';
     const passos = recipe.steps || recipe.instructions || [];
     const nextId = recipe.id + 1;
-    const totalNoLivro = (biblioteca[livroAtual] || []).length;
+    const totalNoLivro = (window.biblioteca[livroAtual] || []).length;
     const nextIsLast = nextId > totalNoLivro;
 
     const nextBtn = nextIsLast
