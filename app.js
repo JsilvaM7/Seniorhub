@@ -70,6 +70,7 @@ function handleRecipeClick(id) {
 }
 
 function handleBookClick(bookKey) {
+    console.log('Abrindo livro:', bookKey); // Debug: verificar chave recebida
     const viewer = document.getElementById('content-viewer');
     if (viewer) viewer.innerHTML = '';
 
@@ -529,3 +530,11 @@ window.loadRecipesFeed = function () {
     if (viewer) viewer.innerHTML = '';
     loadBooksShowcase();
 };
+
+// ── Debug: Confirmar que os dados chegaram ao browser ──────────────────────
+// Remova estas linhas quando confirmar que está tudo a funcionar.
+document.addEventListener('DOMContentLoaded', () => {
+    console.dir(window.biblioteca);
+    console.log('[livro2 receitas carregadas]:', window.biblioteca?.livro2?.length ?? 'NÃO ENCONTRADO');
+});
+

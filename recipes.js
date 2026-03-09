@@ -1,4 +1,7 @@
 // ── Biblioteca SeniorHub — 5 Livros ─────────────────────────────────────────
+// Ponto 3: Impede que window.biblioteca seja apagado acidentalmente
+window.biblioteca = window.biblioteca || {};
+
 window.BOOKS = {
     1: { title: "Relíquias da Cozinha: Sabores que Atravessam Gerações", key: 'reliquias' },
     2: { title: "Energia no Prato: Nutrição e Praticidade para o Dia a Dia", key: 'livro2' },
