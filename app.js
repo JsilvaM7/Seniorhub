@@ -112,6 +112,7 @@ function loadBookSummary() {
 
 /* ── Recipe Detail View ─────────────────────────────────────────────────────── */
 function loadRecipe(id) {
+    id = parseInt(id, 10);
     if (!livroAtual) return;
 
     const viewer = document.getElementById('content-viewer');
