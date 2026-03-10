@@ -22,8 +22,11 @@ let livroAtual = null; // Guarda a chave do livro aberto (ex: 'energia')
 
 /* ── Funnel helpers ─────────────────────────────────────────────────────────── */
 function isLocked(id) {
-    // 5 free recipes per book; from recipe 6 onward the paywall kicks in
-    return id > 5;
+    // 5 free recipes per book; check index position within the book (not raw ID)
+    if (!livroAtual) return false;
+    const bookArr = window.biblioteca[livroAtual] || [];
+    const idx = bookArr.findIndex(r => r.id === id);
+    return idx >= 5; // index 5+ means it's the 6th recipe or beyond
 }
 
 /* ── Navigation ─────────────────────────────────────────────────────────────── */
@@ -37,10 +40,12 @@ function handleRecipeClick(id) {
 }
 
 function handleBookClick(bookNum) {
-    const bookInfo = BOOKS[bookNum];
+    const bookInfo = window.BOOKS[bookNum];
     if (bookInfo && bookInfo.key) {
         livroAtual = bookInfo.key;
-        loadRecipe(1); // Abre sempre a receita 1 do livro clicado
+        const bookArr = window.biblioteca[bookInfo.key] || [];
+        const firstId = bookArr.length > 0 ? bookArr[0].id : 1;
+        loadRecipe(firstId); // Abre a primeira receita real do livro clicado
     }
 }
 
@@ -56,8 +61,8 @@ function loadBooksShowcase() {
             <p style="color:var(--text-muted); font-size:15px;">5 coleções exclusivas com receitas detalhadas</p>
         </div>
         <div class="books-showcase">
-            ${Object.entries(BOOKS).map(([num, book]) => `
-                <button class="book-showcase-btn" onclick="handleBookClick(${num})">
+            ${Object.entries(window.BOOKS).map(([num, book]) => `
+                <button class="book-showcase-btn" onclick="window.handleBookClick(${num})">
                     <div class="book-info">
                         <div class="book-num">Livro ${num}</div>
                         <div class="book-title">${book.title}</div>
@@ -75,8 +80,8 @@ function loadBookSummary() {
     if (!livroAtual) return;
 
     const viewer = document.getElementById('content-viewer');
-    const bookMeta = Object.values(BOOKS).find(b => b.key === livroAtual);
-    const bookArr = biblioteca[livroAtual] || [];
+    const bookMeta = Object.values(window.BOOKS).find(b => b.key === livroAtual);
+    const bookArr = window.biblioteca[livroAtual] || [];
 
     const wrapper = document.createElement('div');
     wrapper.className = 'recipe-card';
@@ -95,8 +100,8 @@ function loadBookSummary() {
                 Sumário da Coleção
             </h2>
             <ol class="recipe-summary-grid">
-                ${bookArr.map(r => {
-        const pos = String(r.id).padStart(2, '0');
+                ${bookArr.map((r, idx) => {
+        const pos = String(idx + 1).padStart(2, '0');
         return `<li class="summary-item">
                         <a class="summary-link" onclick="handleRecipeClick(${r.id}); event.preventDefault(); return false;" href="#">
                             <span class="summary-num">${pos}.</span>${r.title}
@@ -119,20 +124,17 @@ function loadRecipe(id) {
     const wrapper = document.createElement('div');
     wrapper.className = 'recipe-card';
 
-    const bookMeta = Object.values(BOOKS).find(b => b.key === livroAtual);
+    const bookMeta = Object.values(window.BOOKS).find(b => b.key === livroAtual);
+    const bookArr = window.biblioteca[livroAtual] || [];
+    const recipe = bookArr.find(r => r.id === id);
 
-    if (isLocked(id)) {
-        // Receita 6+ do livro em questão
+    // Mostra paywall se (a) é a 6ª+ receita pela posição, OU (b) a receita é um stub bloqueado
+    if (isLocked(id) || (recipe && recipe.locked)) {
         wrapper.innerHTML = renderPaywallHTML(bookMeta);
+    } else if (!recipe) {
+        wrapper.innerHTML = `<p style="padding:40px; text-align:center; color:var(--text-muted)">Receita não encontrada neste livro.</p>`;
     } else {
-        const bookArr = biblioteca[livroAtual] || [];
-        const recipe = bookArr.find(r => r.id === id);
-
-        if (!recipe) {
-            wrapper.innerHTML = `<p style="padding:40px; text-align:center; color:var(--text-muted)">Receita não encontrada neste livro.</p>`;
-        } else {
-            wrapper.innerHTML = renderRecipeHTML(recipe, bookMeta);
-        }
+        wrapper.innerHTML = renderRecipeHTML(recipe, bookMeta);
     }
 
     swapContent(viewer, wrapper);
@@ -158,11 +160,12 @@ function renderRecipeHTML(recipe, bookMeta) {
     // Suporte aos dois schemas de campo (Livro 1: prepTime/steps; Livro 2+: time/instructions)
     const tempo = recipe.prepTime || recipe.time || '—';
     const passos = recipe.steps || recipe.instructions || [];
-    const nextId = recipe.id + 1;
-    const totalNoLivro = (biblioteca[livroAtual] || []).length;
-    const nextIsLast = nextId > totalNoLivro;
+    const bookArr = window.biblioteca[livroAtual] || [];
+    const currentIdx = bookArr.findIndex(r => r.id === recipe.id);
+    const nextRecipe = currentIdx >= 0 ? bookArr[currentIdx + 1] : null;
+    const nextId = nextRecipe ? nextRecipe.id : null;
 
-    const nextBtn = nextIsLast
+    const nextBtn = !nextId
         ? ''  // já é a última receita do livro
         : `<button onclick="event.preventDefault(); handleRecipeClick(${nextId})" class="promo-btn next-recipe-btn"
                    style="margin:0; padding:12px 24px; font-size:15px;">Próxima Receita →</button>`;
@@ -406,3 +409,15 @@ function renderAd() {
         </div>
     `;
 }
+
+/* ── Global exports (required for inline onclick attributes in HTML) ─────── */
+window.handleBookClick = handleBookClick;
+window.loadRecipesFeed = loadRecipesFeed;
+window.loadRecipe = loadRecipe;
+window.loadBooksShowcase = loadBooksShowcase;
+window.loadBookSummary = loadBookSummary;
+window.handleRecipeClick = handleRecipeClick;
+window.handleNewsClick = handleNewsClick;
+window.toggleModal = toggleModal;
+window.submitVote = submitVote;
+window.loadNewsFeed = loadNewsFeed;
