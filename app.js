@@ -410,7 +410,151 @@ function renderAd() {
     `;
 }
 
+/* ── Conforto do Lar — Top 10 Tópicos de Afiliados ─────────────────────── */
+window.LOJA_TOPICOS = [
+    {
+        emoji: '🛏️',
+        titulo: 'Dormir Sem Dores',
+        beneficio: 'Travesseiros Cervicais e Almofadas de Gel para noites tranquilas',
+        link: 'https://www.amazon.com.br/s?k=travesseiro+cervical+ortopedico&tag=seniorhub-20'
+    },
+    {
+        emoji: '🚿',
+        titulo: 'Segurança no Banheiro',
+        beneficio: 'Barras de Apoio e Tapetes Antiderrapantes que previnem quedas',
+        link: 'https://www.amazon.com.br/s?k=barra+de+apoio+banheiro&tag=seniorhub-20'
+    },
+    {
+        emoji: '💆',
+        titulo: 'Alívio Muscular',
+        beneficio: 'Massageadores de Pescoço, Pés e Lombar para descansar de verdade',
+        link: 'https://www.amazon.com.br/s?k=massageador+pescoco+e+costas&tag=seniorhub-20'
+    },
+    {
+        emoji: '🍳',
+        titulo: 'Cozinha Sem Esforço',
+        beneficio: 'Abridores de Potes e Utensílios Ergonômicos para mãos seguras',
+        link: 'https://www.amazon.com.br/s?k=abridor+de+potes+ergonomico&tag=seniorhub-20'
+    },
+    {
+        emoji: '💡',
+        titulo: 'Iluminação Inteligente',
+        beneficio: 'Luminárias com Sensor de Movimento para corredores e banheiros',
+        link: 'https://www.amazon.com.br/s?k=luminaria+sensor+movimento&tag=seniorhub-20'
+    },
+    {
+        emoji: '🪑',
+        titulo: 'Postura e Assento',
+        beneficio: 'Almofadas Terapêuticas e Encostos Ortopédicos para longas horas',
+        link: 'https://www.amazon.com.br/s?k=almofada+gel+assento&tag=seniorhub-20'
+    },
+    {
+        emoji: '❤️',
+        titulo: 'Saúde sob Controle',
+        beneficio: 'Medidores de Pressão e Oxímetros de Fácil Leitura para monitorar sem sair de casa',
+        link: 'https://www.amazon.com.br/s?k=medidor+pressao+digital+bra%C3%A7o&tag=seniorhub-20'
+    },
+    {
+        emoji: '💊',
+        titulo: 'Organização de Remédios',
+        beneficio: 'Porta-comprimidos Inteligentes e com Alarme para nunca esquecer uma dose',
+        link: 'https://www.amazon.com.br/s?k=porta+comprimidos+semanal&tag=seniorhub-20'
+    },
+    {
+        emoji: '🦵',
+        titulo: 'Pernas e Circulação',
+        beneficio: 'Meias de Compressão e Exercitadores de Pernas contra inchaço',
+        link: 'https://www.amazon.com.br/s?k=meia+compressao+suave&tag=seniorhub-20'
+    },
+    {
+        emoji: '📚',
+        titulo: 'Lazer e Leitura',
+        beneficio: 'Kindles, Lupas Eletrônicas e Suportes de Tablet para o seu tempo livre',
+        link: 'https://www.amazon.com.br/s?k=kindle+dispositivo&tag=seniorhub-20'
+    }
+];
+
+function renderLojaConforto() {
+    const viewer = document.getElementById('content-viewer');
+
+    const cards = window.LOJA_TOPICOS.map((t, i) => `
+        <a href="${t.link}" target="_blank" rel="noopener noreferrer"
+           style="text-decoration:none; display:flex; flex-direction:column;
+                  background:#fff; border:1px solid #e4ede6; border-radius:18px;
+                  padding:28px 22px 24px; gap:14px;
+                  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+                  transition:box-shadow .2s,transform .2s;"
+           onmouseover="this.style.boxShadow='0 8px 28px rgba(0,0,0,0.12)'; this.style.transform='translateY(-4px)';"
+           onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';">
+
+            <div style="font-size:46px; line-height:1;">${t.emoji}</div>
+
+            <div style="border-radius:99px; background:var(--sage-green);
+                        color:#fff; font-size:11px; font-weight:800;
+                        letter-spacing:.5px; padding:3px 12px;
+                        display:inline-block; width:fit-content;">
+                TOP ${i + 1}
+            </div>
+
+            <h3 style="font-size:20px; font-weight:900; color:#1a2e1a;
+                       margin:0; line-height:1.25;">
+                ${t.titulo}
+            </h3>
+
+            <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
+                ${t.beneficio}
+            </p>
+
+            <div style="margin-top:4px; background:var(--sage-green); color:#fff;
+                        text-align:center; font-size:14px; font-weight:700;
+                        padding:13px 16px; border-radius:11px;
+                        letter-spacing:.3px;">
+                Ver na Amazon →
+            </div>
+        </a>
+    `).join('');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'recipe-card';
+    wrapper.innerHTML = `
+        <p style="font-size:12px; font-weight:700; text-transform:uppercase;
+                  letter-spacing:.6px; color:var(--sage-green); margin-bottom:20px;
+                  cursor:pointer;"
+           onclick="loadNewsFeed()">← Início</p>
+
+        <div style="margin-bottom:32px;">
+            <span style="display:inline-block; background:#edf5ee; color:var(--sage-green);
+                         font-size:12px; font-weight:700; text-transform:uppercase;
+                         letter-spacing:.5px; padding:4px 14px; border-radius:20px;
+                         margin-bottom:12px;">
+                Seleção Especial 60+
+            </span>
+            <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
+                Conforto do Lar
+            </h1>
+            <p style="font-size:15px; color:#5a7060; margin:0;">
+                Os 10 produtos que mais melhoram a qualidade de vida. Clique para ver as opções na Amazon.
+            </p>
+        </div>
+
+        <div style="display:grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap:18px;">
+            ${cards}
+        </div>
+
+        <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
+                  padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
+            ℹ️ Os links acima são de afiliado Amazon. Ao comprar por aqui, o SeniorHub recebe uma
+            pequena comissão — sem custo extra para você. Ajuda o portal a continuar gratuito! 💚
+        </p>
+    `;
+
+    swapContent(viewer, wrapper);
+}
+
 /* ── Global exports (required for inline onclick attributes in HTML) ─────── */
+
 window.handleBookClick = handleBookClick;
 window.loadRecipesFeed = loadRecipesFeed;
 window.loadRecipe = loadRecipe;
@@ -421,3 +565,4 @@ window.handleNewsClick = handleNewsClick;
 window.toggleModal = toggleModal;
 window.submitVote = submitVote;
 window.loadNewsFeed = loadNewsFeed;
+window.renderLojaConforto = renderLojaConforto;
