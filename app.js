@@ -324,22 +324,83 @@ function parseCSV(text) {
     return rows;
 }
 
+/* ── Mapa de CTAs por Categoria ─────────────────────────────────────────────
+   Para cada categoria (chave em MAIÚSCULO) define:
+     text  → texto do botão
+     url   → link de afiliado/destino padrão (usado quando Link_Noticia está vazio)
+   A coluna Link_Noticia da planilha SEMPRE tem prioridade se preenchida. */
+const CATEGORIA_CTA = {
+    'CRUZEIROS': {
+        text: 'Ver Ofertas de Cruzeiros →',
+        url:  'https://www.decolar.com/cruzeiros/'
+    },
+    'VIAGENS': {
+        text: 'Explorar Destinos →',
+        url:  'https://www.decolar.com/pacotes/'
+    },
+    'CONFORTO': {
+        text: 'Ver na Amazon →',
+        url:  'https://www.amazon.com.br/s?k=conforto+idoso&tag=seniorhub-20'
+    },
+    'SAÚDE': {
+        text: 'Cuidar da Saúde →',
+        url:  'https://www.amazon.com.br/s?k=saude+senior+60+mais&tag=seniorhub-20'
+    },
+    'SAUDE': {  // alias sem acento (tolerância de digitação)
+        text: 'Cuidar da Saúde →',
+        url:  'https://www.amazon.com.br/s?k=saude+senior+60+mais&tag=seniorhub-20'
+    },
+    'RECEITA': {
+        text: 'Adquirir meu Livro de Receitas →',
+        url:  'https://pay.hotmart.com/seniorhub-receitas'  // substitua pelo link real do seu PDF
+    },
+    'RECEITAS': {  // alias plural
+        text: 'Adquirir meu Livro de Receitas →',
+        url:  'https://pay.hotmart.com/seniorhub-receitas'
+    }
+};
+
+/* Resolve o texto e URL do botão CTA com base na categoria e no link da planilha.
+   Regra: Link_Noticia (coluna da planilha) tem PRIORIDADE; fallback = CATEGORIA_CTA. */
+function resolverCTA(categoria, linkNoticia) {
+    const catKey = (categoria || '').trim().toUpperCase();
+    const config = CATEGORIA_CTA[catKey];
+
+    // Se há link explícito na planilha, ele ganha sempre
+    const hasCustomLink = linkNoticia && linkNoticia.trim().startsWith('http');
+    const finalUrl  = hasCustomLink ? linkNoticia.trim() : (config ? config.url  : null);
+    const finalText = config ? config.text : 'Continuar Lendo →';
+
+    return { url: finalUrl, text: finalText };
+}
+
 /* Builds a single news card DOM element from a data object */
 function criarCardNoticia({ categoria, titulo, resumo, linkNoticia, linkImagem }) {
     const card = document.createElement('div');
     card.className = 'news-card feed-dinamico';
-    const isExternal = linkNoticia && linkNoticia.startsWith('http');
+
+    const { url, text } = resolverCTA(categoria, linkNoticia);
+
+    const fallbackImg = 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800';
+    const imgSrc = linkImagem && linkImagem.trim() ? linkImagem.trim() : fallbackImg;
+
+    const ctaHTML = url
+        ? `<a href="${url}" target="_blank" rel="noopener noreferrer"
+              class="clube-btn"
+              style="display:inline-block; font-weight:700;">${text}</a>`
+        : `<a href="#" class="clube-btn"
+              style="display:inline-block; font-weight:700;"
+              onclick="alert('Artigo disponível em breve.'); return false;">${text}</a>`;
+
     card.innerHTML = `
-        <img src="${linkImagem || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800'}"
-             alt="${titulo}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800'">
+        <img src="${imgSrc}"
+             alt="${titulo}" class="news-image"
+             onerror="this.src='${fallbackImg}'">
         <div class="news-content">
             <span class="news-category">${categoria}</span>
             <h2 class="news-header-title">${titulo}</h2>
             <p style="color:var(--text-muted); margin-bottom:24px;">${resumo}</p>
-            ${isExternal
-            ? `<a href="${linkNoticia}" target="_blank" rel="noopener noreferrer" class="clube-btn">Continuar Lendo →</a>`
-            : `<a href="#" class="clube-btn" onclick="alert('Artigo disponível em breve.'); return false;">Continuar Lendo →</a>`
-        }
+            ${ctaHTML}
         </div>
     `;
     return card;
