@@ -297,6 +297,114 @@ function renderPaywallHTML(book) {
 
 
 /* ── News Feed ──────────────────────────────────────────────────────────────── */
+
+const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRNQGosj4jv-wq-YtxUvxvLYRsn31B7zmPDNmUtVJtHLK27Zlj6u078v73fmKQlhwO8dO904kKjt0y-/pub?output=csv';
+
+/* Robust RFC-4180 CSV parser — handles quoted fields, commas inside quotes,
+   and double-quote escaping. Fetch returns UTF-8 text natively, so accented
+   characters (ã, ç, é, etc.) come through correctly without any manual decoding. */
+function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', inQ = false;
+    for (let i = 0; i < text.length; i++) {
+        const c = text[i], n = text[i + 1];
+        if (inQ) {
+            if (c === '"' && n === '"') { field += '"'; i++; }
+            else if (c === '"') { inQ = false; }
+            else { field += c; }
+        } else {
+            if (c === '"') { inQ = true; }
+            else if (c === ',') { row.push(field.trim()); field = ''; }
+            else if (c === '\r' && n === '\n') { row.push(field.trim()); rows.push(row); row = []; field = ''; i++; }
+            else if (c === '\n' || c === '\r') { row.push(field.trim()); rows.push(row); row = []; field = ''; }
+            else { field += c; }
+        }
+    }
+    if (field !== '' || row.length > 0) { row.push(field.trim()); rows.push(row); }
+    return rows;
+}
+
+/* Builds a single news card DOM element from a data object */
+function criarCardNoticia({ categoria, titulo, resumo, linkNoticia, linkImagem }) {
+    const card = document.createElement('div');
+    card.className = 'news-card feed-dinamico';
+    const isExternal = linkNoticia && linkNoticia.startsWith('http');
+    card.innerHTML = `
+        <img src="${linkImagem || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800'}"
+             alt="${titulo}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800'">
+        <div class="news-content">
+            <span class="news-category">${categoria}</span>
+            <h2 class="news-header-title">${titulo}</h2>
+            <p style="color:var(--text-muted); margin-bottom:24px;">${resumo}</p>
+            ${isExternal
+            ? `<a href="${linkNoticia}" target="_blank" rel="noopener noreferrer" class="clube-btn">Continuar Lendo →</a>`
+            : `<a href="#" class="clube-btn" onclick="alert('Artigo disponível em breve.'); return false;">Continuar Lendo →</a>`
+        }
+        </div>
+    `;
+    return card;
+}
+
+/* Fetches and injects the Google Sheets CSV at the TOP of the feed.
+   Called asynchronously after the static feed renders so the page isn't blocked. */
+async function carregarFeedNoticias(feedContainer) {
+    try {
+        const res = await fetch(SHEETS_CSV_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = await res.text();
+
+        const rows = parseCSV(text);
+        if (rows.length < 2) return; // only header or empty
+
+        // Map headers case-insensitively
+        const headers = rows[0].map(h => h.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents for matching
+            .replace(/\s+/g, '_'));
+
+        const col = key => headers.indexOf(key);
+        const iCat = col('categoria');
+        const iTit = col('titulo');
+        const iRes = col('resumo');
+        const iLink = col('link_noticia');
+        const iImg = col('link_imagem');
+
+        // Filter valid rows (non-empty título), newest first (reverse order after header)
+        const dataRows = rows.slice(1)
+            .filter(r => r[iTit] && r[iTit].trim() !== '')
+            .reverse();
+
+        if (dataRows.length === 0) return;
+
+        // Insert a divider label
+        const divider = document.createElement('div');
+        divider.style.cssText = 'font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.7px; color:var(--sage-green); margin-bottom:12px; padding-top:4px;';
+        divider.textContent = '📰 Últimas Notícias';
+        feedContainer.insertBefore(divider, feedContainer.firstChild);
+
+        // Prepend dynamic cards above static ones (reversed so newest is first)
+        dataRows.forEach(r => {
+            const card = criarCardNoticia({
+                categoria: r[iCat] || 'Notícia',
+                titulo: r[iTit] || '',
+                resumo: r[iRes] || '',
+                linkNoticia: r[iLink] || '#',
+                linkImagem: r[iImg] || ''
+            });
+            feedContainer.insertBefore(card, divider.nextSibling);
+        });
+
+        // Remove loading placeholder if present
+        const placeholder = feedContainer.querySelector('.feed-loading');
+        if (placeholder) placeholder.remove();
+
+    } catch (err) {
+        console.warn('[SeniorHub] Feed dinâmico indisponível:', err.message);
+        // Static fallback remains visible — no alert to user
+        const placeholder = feedContainer.querySelector('.feed-loading');
+        if (placeholder) placeholder.remove();
+    }
+}
+
 const newsItems = [
     {
         id: 'n1', category: 'Saúde',
@@ -334,6 +442,14 @@ function loadNewsFeed() {
     const feed = document.createElement('div');
     feed.className = 'slide-in-right';
 
+    // Loading placeholder (removed when CSV arrives or fails)
+    const placeholder = document.createElement('div');
+    placeholder.className = 'feed-loading';
+    placeholder.style.cssText = 'font-size:13px; color:var(--text-muted); padding:8px 0 16px; opacity:.7;';
+    placeholder.textContent = '⏳ Carregando notícias recentes...';
+    feed.appendChild(placeholder);
+
+    // Static fallback cards
     newsItems.forEach(item => {
         const card = document.createElement('div');
         card.className = 'news-card';
@@ -350,15 +466,9 @@ function loadNewsFeed() {
     });
 
     viewer.appendChild(feed);
-}
 
-function handleNewsClick(newsId) {
-    const item = newsItems.find(n => n.id === newsId);
-    if (item.type === 'recipe_teaser') {
-        loadRecipesFeed();
-    } else {
-        alert('Este artigo completo está disponível exclusivamente para membros do Clube SeniorHub!');
-    }
+    // Async: fetch CSV and prepend dynamic cards without blocking the UI
+    carregarFeedNoticias(feed);
 }
 
 /* ── Advertising Showcase ───────────────────────────────────────────────────── */
