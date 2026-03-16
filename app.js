@@ -523,12 +523,6 @@ function renderLojaConforto() {
            onclick="loadNewsFeed()">← Início</p>
 
         <div style="margin-bottom:32px;">
-            <span style="display:inline-block; background:#edf5ee; color:var(--sage-green);
-                         font-size:12px; font-weight:700; text-transform:uppercase;
-                         letter-spacing:.5px; padding:4px 14px; border-radius:20px;
-                         margin-bottom:12px;">
-                Seleção Especial 60+
-            </span>
             <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
                 Conforto do Lar
             </h1>
@@ -627,10 +621,6 @@ function renderExercicios() {
            onclick="loadNewsFeed()">← Início</p>
 
         <div style="margin-bottom:32px;">
-            <span style="display:inline-block; background:#edf5ee; color:var(--sage-green);
-                         font-size:12px; font-weight:700; text-transform:uppercase;
-                         letter-spacing:.5px; padding:4px 14px; border-radius:20px;
-                         margin-bottom:12px;">Saúde Ativa 60+</span>
             <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
                 Exercícios em Casa
             </h1>
@@ -653,6 +643,107 @@ function renderExercicios() {
     swapContent(viewer, wrapper);
 }
 
+/* ── Guia de Viagens — Destinos Decolar ──────────────────────────────── */
+const VIAGENS_DESTINOS = [
+    {
+        emoji: '⛰️',
+        destino: 'Charme em Gramado (RS)',
+        descricao: 'O melhor da Serra Gaúcha: hotéis requintados e o melhor da gastronomia nacional.',
+        link: 'https://www.decolar.com/hoteis/h-251025/hoteis-em-gramado',
+        badge: 'Nacional'
+    },
+    {
+        emoji: '🇵🇹',
+        destino: 'O Melhor de Portugal',
+        descricao: 'Explore Lisboa e Porto com conforto. História, cultura e vinhos em uma viagem inesquecível.',
+        link: 'https://www.decolar.com/pacotes/lis/pacotes-para-lisboa',
+        badge: 'Internacional'
+    },
+    {
+        emoji: '🚢',
+        destino: 'Cruzeiros All-Inclusive',
+        descricao: 'Viaje pelo litoral brasileiro com todo o conforto de um hotel 5 estrelas móvel.',
+        link: 'https://www.decolar.com/cruzeiros/',
+        badge: 'Cruzeiro'
+    },
+    {
+        emoji: '🌴',
+        destino: 'Resorts no Nordeste',
+        descricao: 'Sol e descanso em Maceió ou Porto de Galinhas nos melhores resorts pé na areia.',
+        link: 'https://www.decolar.com/hoteis/mcz/hoteis-em-maceio',
+        badge: 'Nacional'
+    }
+];
+
+function renderViagens() {
+    const viewer = document.getElementById('content-viewer');
+
+    const cards = VIAGENS_DESTINOS.map(d => `
+        <div style="background:#fff; border:1px solid #e4ede6; border-radius:20px;
+                    overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05);
+                    transition:box-shadow .2s, transform .2s; display:flex; flex-direction:column;"
+             onmouseover="this.style.boxShadow='0 8px 28px rgba(0,0,0,0.12)'; this.style.transform='translateY(-4px)';"
+             onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';">
+
+            <!-- Card hero -->
+            <div style="background:linear-gradient(135deg,#1a2e1a 0%,#3a7d44 100%);
+                        padding:28px 24px 20px; display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:46px; line-height:1;">${d.emoji}</div>
+                <span style="display:inline-block; background:rgba(255,255,255,0.2); color:#fff;
+                             font-size:10px; font-weight:800; letter-spacing:.6px;
+                             text-transform:uppercase; padding:3px 12px; border-radius:99px;
+                             width:fit-content;">${d.badge}</span>
+                <h3 style="font-size:20px; font-weight:900; color:#fff; margin:0; line-height:1.25;">
+                    ${d.destino}
+                </h3>
+            </div>
+
+            <!-- Card body -->
+            <div style="padding:20px 24px 24px; display:flex; flex-direction:column; gap:14px; flex:1;">
+                <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
+                    ${d.descricao}
+                </p>
+                <a href="${d.link}" target="_blank" rel="noopener noreferrer"
+                   style="display:block; text-align:center; background:var(--sage-green); color:#fff;
+                          font-size:14px; font-weight:700; padding:13px 16px; border-radius:11px;
+                          text-decoration:none; letter-spacing:.3px;"
+                   onmouseover="this.style.background='#2d6a4f';"
+                   onmouseout="this.style.background='var(--sage-green)';">
+                    Explorar Destino →
+                </a>
+            </div>
+        </div>
+    `).join('');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'recipe-card';
+    wrapper.innerHTML = `
+        <p style="font-size:12px; font-weight:700; text-transform:uppercase;
+                  letter-spacing:.6px; color:var(--sage-green); margin-bottom:20px; cursor:pointer;"
+           onclick="loadNewsFeed()">← Início</p>
+
+        <div style="margin-bottom:32px;">
+            <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
+                Guia de Viagens
+            </h1>
+            <p style="font-size:15px; color:#5a7060; margin:0;">
+                Destinos selecionados para quem viaja com conforto, cultura e tranquilidade.
+            </p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:18px;">
+            ${cards}
+        </div>
+
+        <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
+                  padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
+            ℹ️ Links diretos Decolar. Links de afiliado serão ativados assim que o ID for aprovado.
+        </p>
+    `;
+
+    swapContent(viewer, wrapper);
+}
+
 /* ── Global exports (required for inline onclick attributes in HTML) ─────── */
 
 window.handleBookClick = handleBookClick;
@@ -667,3 +758,4 @@ window.submitVote = submitVote;
 window.loadNewsFeed = loadNewsFeed;
 window.renderLojaConforto = renderLojaConforto;
 window.renderExercicios = renderExercicios;
+window.renderViagens = renderViagens;
