@@ -533,13 +533,15 @@ function renderLojaConforto() {
                 Conforto do Lar
             </h1>
             <p style="font-size:15px; color:#5a7060; margin:0;">
-                Os 10 produtos que mais melhoram a qualidade de vida. Clique para ver as opções na Amazon.
+                Os 10 itens que mais melhoram o conforto e a segurança em casa. Clique para ver na Amazon.
             </p>
         </div>
 
-        <div style="display:grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap:18px;">
+        <p style="font-size:11px; font-weight:800; text-transform:uppercase;
+                  letter-spacing:.7px; color:var(--sage-green); margin-bottom:12px;">
+            🏆 Top 10 Categorias
+        </p>
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:18px;">
             ${cards}
         </div>
 
@@ -547,6 +549,104 @@ function renderLojaConforto() {
                   padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
             ℹ️ Os links acima são de afiliado Amazon. Ao comprar por aqui, o SeniorHub recebe uma
             pequena comissão — sem custo extra para você. Ajuda o portal a continuar gratuito! 💚
+        </p>
+    `;
+
+
+    swapContent(viewer, wrapper);
+}
+
+/* ── Exercícios em Casa — Vitrine de Afiliados ──────────────────────────── */
+const EXERCICIOS_CARDS = [
+    {
+        emoji: '🏋️',
+        titulo: 'Fortalecimento e Mobilidade',
+        descricao: 'Faixas elásticas e halteres leves para fazer em casa.',
+        link: 'https://www.amazon.com.br/s?k=exercicios+idosos+mobilidade&tag=seniorhub-20',
+        btn: 'Ver na Amazon'
+    },
+    {
+        emoji: '🚴',
+        titulo: 'Cardio Sentado (Fisioterapia)',
+        descricao: 'Mini bicicletas e pedais para exercitar as pernas sentado.',
+        link: 'https://www.amazon.com.br/s?k=mini+bicicleta+ergometrica+fisioterapia&tag=seniorhub-20',
+        btn: 'Ver na Amazon'
+    },
+    {
+        emoji: '💪',
+        titulo: 'Proteínas e Músculos',
+        descricao: 'Nutren Senior, Whey Protein e suplementos para massa muscular.',
+        link: 'https://www.amazon.com.br/s?k=nutren+senior+suplemento+proteina&tag=seniorhub-20',
+        btn: 'Ver na Amazon'
+    },
+    {
+        emoji: '🌿',
+        titulo: 'Vitaminas e Imunidade',
+        descricao: 'Ômega 3, Vitamina D e Magnésio para longevidade.',
+        link: 'https://www.amazon.com.br/s?k=vitaminas+senior+50+mais&tag=seniorhub-20',
+        btn: 'Ver na Amazon'
+    }
+];
+
+function renderExercicios() {
+    const viewer = document.getElementById('content-viewer');
+
+    const cards = EXERCICIOS_CARDS.map(c => `
+        <a href="${c.link}" target="_blank" rel="noopener noreferrer"
+           style="text-decoration:none; display:flex; flex-direction:column;
+                  background:#fff; border:1px solid #e4ede6; border-radius:18px;
+                  padding:28px 22px 24px; gap:12px;
+                  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+                  transition:box-shadow .2s,transform .2s;"
+           onmouseover="this.style.boxShadow='0 8px 28px rgba(0,0,0,0.12)'; this.style.transform='translateY(-4px)';"
+           onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';">
+
+            <div style="font-size:44px; line-height:1;">${c.emoji}</div>
+
+            <h3 style="font-size:19px; font-weight:900; color:#1a2e1a; margin:0; line-height:1.25;">
+                ${c.titulo}
+            </h3>
+
+            <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
+                ${c.descricao}
+            </p>
+
+            <div style="margin-top:4px; background:var(--sage-green); color:#fff;
+                        text-align:center; font-size:14px; font-weight:700;
+                        padding:13px 16px; border-radius:11px; letter-spacing:.3px;">
+                ${c.btn} →
+            </div>
+        </a>
+    `).join('');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'recipe-card';
+    wrapper.innerHTML = `
+        <p style="font-size:12px; font-weight:700; text-transform:uppercase;
+                  letter-spacing:.6px; color:var(--sage-green); margin-bottom:20px; cursor:pointer;"
+           onclick="loadNewsFeed()">← Início</p>
+
+        <div style="margin-bottom:32px;">
+            <span style="display:inline-block; background:#edf5ee; color:var(--sage-green);
+                         font-size:12px; font-weight:700; text-transform:uppercase;
+                         letter-spacing:.5px; padding:4px 14px; border-radius:20px;
+                         margin-bottom:12px;">Saúde Ativa 60+</span>
+            <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
+                Exercícios em Casa
+            </h1>
+            <p style="font-size:15px; color:#5a7060; margin:0;">
+                Equipamentos e suplementos para manter o corpo ativo e forte sem sair de casa.
+            </p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:18px;">
+            ${cards}
+        </div>
+
+        <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
+                  padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
+            ℹ️ Links de afiliado Amazon. Ao comprar por aqui, o SeniorHub recebe uma pequena
+            comissão — sem custo extra para você. Obrigado pelo apoio! 💚
         </p>
     `;
 
@@ -566,3 +666,4 @@ window.toggleModal = toggleModal;
 window.submitVote = submitVote;
 window.loadNewsFeed = loadNewsFeed;
 window.renderLojaConforto = renderLojaConforto;
+window.renderExercicios = renderExercicios;
