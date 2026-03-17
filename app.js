@@ -331,12 +331,12 @@ function parseCSV(text) {
    A coluna Link_Noticia da planilha SEMPRE tem prioridade se preenchida. */
 const CATEGORIA_CTA = {
     'CRUZEIROS': {
-        text: 'Ver Ofertas de Cruzeiros →',
-        url:  'https://www.decolar.com/cruzeiros/'
+        text: '🚢 Ver Ofertas de Cruzeiros',
+        url:  'https://b2c-decolar.krooze.com.br/'
     },
     'VIAGENS': {
-        text: 'Explorar Destinos →',
-        url:  'https://www.decolar.com/pacotes/'
+        text: '✈️ Explorar Destinos',
+        url:  'https://www.decolar.com/'
     },
     'CONFORTO': {
         text: 'Ver na Amazon →',
@@ -357,6 +357,18 @@ const CATEGORIA_CTA = {
     'RECEITAS': {  // alias plural
         text: 'Adquirir meu Livro de Receitas →',
         url:  'https://pay.hotmart.com/seniorhub-receitas'
+    },
+    'HOTEL': {
+        text: '🏨 Reservar Hotel Agora',
+        url:  'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fhotel%2Findex.pt-br.html%3Faid%3D2311236'
+    },
+    'HOTEIS': {  // alias sem acento
+        text: '🏨 Reservar Hotel Agora',
+        url:  'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fhotel%2Findex.pt-br.html%3Faid%3D2311236'
+    },
+    'HOT\u00c9IS': {  // alias com acento (HOT\u00c9IS = HOTÉIS)
+        text: '🏨 Reservar Hotel Agora',
+        url:  'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fhotel%2Findex.pt-br.html%3Faid%3D2311236'
     }
 };
 
@@ -834,17 +846,54 @@ const VIAGENS_DESTINOS = [
         emoji: '🚢',
         destino: 'Cruzeiros All-Inclusive',
         descricao: 'Viaje pelo litoral brasileiro com todo o conforto de um hotel 5 estrelas móvel.',
-        link: 'https://www.decolar.com/cruzeiros/',
+        link: 'https://b2c-decolar.krooze.com.br/',
         badge: 'Cruzeiro'
     },
     {
         emoji: '🌴',
         destino: 'Resorts no Nordeste',
         descricao: 'Sol e descanso em Maceió ou Porto de Galinhas nos melhores resorts pé na areia.',
-        link: 'https://www.decolar.com/hoteis/mcz/hoteis-em-maceio',
+        link: 'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fresorts%2Findex.pt-br.html%3Faid%3D2311236',
         badge: 'Nacional'
+    },
+    {
+        emoji: '🏨',
+        destino: 'Hotéis e Pousadas',
+        descricao: 'As melhores hospedagens com cancelamento grátis e selo de confiança SeniorHub.',
+        link: 'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fhotel%2Findex.pt-br.html%3Faid%3D2311236',
+        badge: 'Hotel'
     }
 ];
+
+/* ── Helpers de CTA para o Guia de Viagens ─────────────────────────────────
+   Regras:
+   • badge 'Cruzeiro'             → Krooze (d.link)
+   • destino contém 'Resort'     → BOOKING_RESORTS_URL + '🏨 Ver Melhores Resorts'
+   • badge 'Hotel'               → BOOKING_HOTELS_URL  + '🏨 Reservar Hotel Agora'
+   • Nacional / Internacional     → BOOKING_FLIGHTS_URL + '✈️ Ver Voos na Booking' */
+const BOOKING_FLIGHTS_URL  = 'https://www.booking.com/flights/index.pt-br.html?aid=1784973&label=affnetawin-index_pub-2787542_site-_pname-E-dolphin_plc-_ts-_clkid-18120_1773775041_85af9fcafe88b1b9a81f2d3031f9168f';
+const BOOKING_RESORTS_URL  = 'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fresorts%2Findex.pt-br.html%3Faid%3D2311236';
+const BOOKING_HOTELS_URL   = 'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fhotel%2Findex.pt-br.html%3Faid%3D2311236';
+
+function resolverLinkViagem(d) {
+    const badge   = (d.badge   || '').toUpperCase();
+    const destino = (d.destino || '').toUpperCase();
+    if (badge === 'CRUZEIRO')          return d.link;              // Krooze
+    if (destino.includes('RESORT'))    return BOOKING_RESORTS_URL;  // Booking Resorts afiliado
+    if (badge === 'HOTEL')             return BOOKING_HOTELS_URL;   // Booking Hotels afiliado
+    if (badge === 'NACIONAL' || badge === 'INTERNACIONAL') return BOOKING_FLIGHTS_URL;
+    return d.link; // fallback genérico
+}
+
+function resolverTextoViagem(d) {
+    const badge   = (d.badge   || '').toUpperCase();
+    const destino = (d.destino || '').toUpperCase();
+    if (badge === 'CRUZEIRO')          return '🚢 Ver Ofertas de Cruzeiros';
+    if (destino.includes('RESORT'))    return '🏨 Ver Melhores Resorts';
+    if (badge === 'HOTEL')             return '🏨 Reservar Hotel Agora';
+    if (badge === 'NACIONAL' || badge === 'INTERNACIONAL') return '✈️ Ver Voos na Booking';
+    return '🗺️ Explorar Destino';
+}
 
 function renderViagens() {
     const viewer = document.getElementById('content-viewer');
@@ -874,13 +923,13 @@ function renderViagens() {
                 <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
                     ${d.descricao}
                 </p>
-                <a href="${d.link}" target="_blank" rel="noopener noreferrer"
+                <a href="${resolverLinkViagem(d)}" target="_blank" rel="noopener noreferrer"
                    style="display:block; text-align:center; background:var(--sage-green); color:#fff;
                           font-size:14px; font-weight:700; padding:13px 16px; border-radius:11px;
                           text-decoration:none; letter-spacing:.3px;"
                    onmouseover="this.style.background='#2d6a4f';"
                    onmouseout="this.style.background='var(--sage-green)';">
-                    Explorar Destino →
+                    ${resolverTextoViagem(d)}
                 </a>
             </div>
         </div>
@@ -908,7 +957,7 @@ function renderViagens() {
 
         <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
                   padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
-            ℹ️ Links diretos Decolar. Links de afiliado serão ativados assim que o ID for aprovado.
+            ℹ️ Alguns links são de afiliado (Decolar &amp; Booking). Ao reservar por aqui, o SeniorHub recebe uma pequena comissão — sem custo extra para você. 💚
         </p>
     `;
 
