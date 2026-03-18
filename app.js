@@ -254,8 +254,8 @@ function renderGlobalPaywallHTML() {
             </p>
             <div style="font-size:38px; font-weight:900; color:var(--sage-green); margin-bottom:8px;">R$ 19,90</div>
             <div style="font-size:13px; color:var(--text-muted); margin-bottom:32px;">por livro · acesso imediato · PDF pronto para impressão</div>
-            <a href="#" class="promo-btn" style="background-color:var(--sage-green); color:white; font-size:17px; padding:16px 48px;">
-                Quero meu Livro em PDF →
+            <a href="https://pay.hotmart.com/Y104973165O" target="_blank" rel="noopener noreferrer" class="promo-btn" style="background-color:var(--sage-green); color:white; font-size:17px; padding:16px 48px;">
+                📖 Adquirir Livro 1 em PDF →
             </a>
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
                 ✓ Acesso imediato &nbsp;·&nbsp; ✓ PDF alta qualidade &nbsp;·&nbsp; ✓ 50 receitas exclusivas
@@ -267,6 +267,17 @@ function renderGlobalPaywallHTML() {
 /* ── Per-book Paywall banner (recipe #6+ in each book) ──────────────────────── */
 function renderPaywallHTML(book) {
     const bookTitle = book ? book.title : 'nosso livro completo';
+    const payLink   = (book && book.key && BOOK_PAYMENT_LINKS[book.key])
+        ? BOOK_PAYMENT_LINKS[book.key] : null;
+    const btnHtml   = payLink
+        ? `<a href="${payLink}" target="_blank" rel="noopener noreferrer"
+               class="promo-btn next-recipe-btn"
+               style="font-size:17px; padding:16px 48px; display:inline-block; margin-top:0;">
+               📖 Adquirir este Livro em PDF →</a>`
+        : `<button disabled class="promo-btn"
+               style="font-size:17px; padding:16px 48px; display:inline-block; margin-top:0;
+                      opacity:.45; cursor:not-allowed; background:var(--sage-green); border:none; color:#fff;">
+               Em Breve</button>`;
     return `
         <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
                   color:var(--sage-green); margin-bottom:24px; cursor:pointer;"
@@ -285,9 +296,7 @@ function renderPaywallHTML(book) {
             </p>
             <div style="font-size:42px; font-weight:900; color:var(--sage-green); margin-bottom:6px; letter-spacing:-1px;">R$ 19,90</div>
             <div style="font-size:13px; color:var(--text-muted); margin-bottom:32px;">acesso imediato · PDF de alta qualidade · pronto para impressão</div>
-            <a href="#" class="promo-btn next-recipe-btn" style="font-size:17px; padding:16px 48px; display:inline-block; margin-top:0;">
-                Quero meu Livro em PDF →
-            </a>
+            ${btnHtml}
             <p style="font-size:12px; color:var(--text-muted); margin-top:24px;">
                 ✓ Pagamento seguro &nbsp;·&nbsp; ✓ PDF enviado por e-mail &nbsp;·&nbsp; ✓ 50 receitas completas
             </p>
@@ -351,12 +360,12 @@ const CATEGORIA_CTA = {
         url:  'https://www.amazon.com.br/s?k=saude+senior+60+mais&tag=seniorhub-20'
     },
     'RECEITA': {
-        text: 'Adquirir meu Livro de Receitas →',
-        url:  'https://pay.hotmart.com/seniorhub-receitas'  // substitua pelo link real do seu PDF
+        text: '📖 Adquirir Livro de Receitas →',
+        url:  'https://pay.hotmart.com/Y104973165O'
     },
     'RECEITAS': {  // alias plural
-        text: 'Adquirir meu Livro de Receitas →',
-        url:  'https://pay.hotmart.com/seniorhub-receitas'
+        text: '📖 Adquirir Livro de Receitas →',
+        url:  'https://pay.hotmart.com/Y104973165O'
     },
     'HOTEL': {
         text: '🏨 Reservar Hotel Agora',
@@ -370,6 +379,17 @@ const CATEGORIA_CTA = {
         text: '🏨 Reservar Hotel Agora',
         url:  'https://www.awin1.com/cread.php?awinmid=18120&awinaffid=2787542&ued=https%3A%2F%2Fwww.booking.com%2Fhotel%2Findex.pt-br.html%3Faid%3D2311236'
     }
+};
+
+/* ── Links de Pagamento por Livro (Hotmart) ──────────────────────────────────
+   Chave = book.key conforme window.BOOKS.
+   Adicione o link de cada livro quando for publicado na Hotmart.           */
+const BOOK_PAYMENT_LINKS = {
+    'reliquias': 'https://pay.hotmart.com/Y104973165O'
+    // 'livro2'    : '', // ← adicionar quando publicado
+    // 'prazersem' : '', // ← adicionar quando publicado
+    // 'saboresmar': '', // ← adicionar quando publicado
+    // 'horta'     : ''  // ← adicionar quando publicado
 };
 
 /* Resolve o texto e URL do botão CTA com base na categoria e no link da planilha.
