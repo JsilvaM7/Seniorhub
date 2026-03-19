@@ -361,11 +361,11 @@ const CATEGORIA_CTA = {
     },
     'RECEITA': {
         text: '📖 Adquirir Livro de Receitas →',
-        url:  'https://pay.hotmart.com/Y104973165O'
+        url:  'https://pay.hotmart.com/Y104973165O'  // Livro 1 como destino padrão de noticias de receita
     },
     'RECEITAS': {  // alias plural
         text: '📖 Adquirir Livro de Receitas →',
-        url:  'https://pay.hotmart.com/Y104973165O'
+        url:  'https://pay.hotmart.com/Y104973165O'  // Livro 1 como destino padrão de noticias de receita
     },
     'HOTEL': {
         text: '🏨 Reservar Hotel Agora',
@@ -385,8 +385,8 @@ const CATEGORIA_CTA = {
    Chave = book.key conforme window.BOOKS.
    Adicione o link de cada livro quando for publicado na Hotmart.           */
 const BOOK_PAYMENT_LINKS = {
-    'reliquias': 'https://pay.hotmart.com/Y104973165O'
-    // 'livro2'    : '', // ← adicionar quando publicado
+    'reliquias': 'https://pay.hotmart.com/Y104973165O',  // Livro 1 ✓ ativo
+    'livro2'   : 'https://pay.hotmart.com/U104976011H',  // Livro 2 ✓ ativo
     // 'prazersem' : '', // ← adicionar quando publicado
     // 'saboresmar': '', // ← adicionar quando publicado
     // 'horta'     : ''  // ← adicionar quando publicado
@@ -582,7 +582,7 @@ const ads = [
         link: "#", btnText: "Quero Conforto"
     },
     {
-        title: "Kit Cozinha Prática 60+", price: "R$ 159,90",
+        title: "Kit Cozinha Prática e Ergonômica", price: "R$ 159,90",
         image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=400",
         link: "#", btnText: "Ver Oferta"
     }
