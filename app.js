@@ -387,9 +387,9 @@ const CATEGORIA_CTA = {
 const BOOK_PAYMENT_LINKS = {
     'reliquias': 'https://pay.hotmart.com/Y104973165O',  // Livro 1 ✓ ativo
     'livro2'   : 'https://pay.hotmart.com/U104976011H',  // Livro 2 ✓ ativo
-    // 'prazersem' : '', // ← adicionar quando publicado
-    // 'saboresmar': '', // ← adicionar quando publicado
-    // 'horta'     : ''  // ← adicionar quando publicado
+    'prazersem' : 'https://pay.hotmart.com/S104989388R',  // Livro 3 ✓ ativo
+    'saboresmar': 'https://pay.hotmart.com/C104989538L',  // Livro 4 ✓ ativo
+    'horta'     : 'https://pay.hotmart.com/A104989658F'   // Livro 5 ✓ ativo
 };
 
 /* Resolve o texto e URL do botão CTA com base na categoria e no link da planilha.
