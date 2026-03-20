@@ -578,7 +578,7 @@ const ads = [
         livro: 2,
         title: "Energia no Prato",
         subtitle: "50 receitas para disposição e vitalidade",
-        image: "capas/Livro 2 - Energia no Prato.jpg",
+        image: "capas/livro2.jpg",
         link: "https://pay.hotmart.com/U104976011H",
         btnText: "📖 Adquirir Livro 2 →"
     },
