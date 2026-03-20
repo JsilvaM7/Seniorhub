@@ -570,7 +570,7 @@ const ads = [
         livro: 1,
         title: "Relíquias da Cozinha",
         subtitle: "50 receitas da culinária brasileira tradicional",
-        image: "Livros de receitas fotos Seniorhub/Capa reliquias da cozinha.jpg",
+        image: "capas/Capa reliquias da cozinha.jpg",
         link: "https://pay.hotmart.com/Y104973165O",
         btnText: "📖 Adquirir Livro 1 →"
     },
@@ -578,7 +578,7 @@ const ads = [
         livro: 2,
         title: "Energia no Prato",
         subtitle: "50 receitas para disposição e vitalidade",
-        image: "Livros de receitas fotos Seniorhub/Livro 2 — Energia no Prato.jpg",
+        image: "capas/Livro 2 - Energia no Prato.jpg",
         link: "https://pay.hotmart.com/U104976011H",
         btnText: "📖 Adquirir Livro 2 →"
     },
@@ -586,7 +586,7 @@ const ads = [
         livro: 3,
         title: "Prazer Sem Culpa",
         subtitle: "50 receitas saudáveis e irresistíveis",
-        image: "Livros de receitas fotos Seniorhub/Livro 3 prazer sem culpa.jpg",
+        image: "capas/Livro 3 prazer sem culpa.jpg",
         link: "https://pay.hotmart.com/S104989388R",
         btnText: "📖 Adquirir Livro 3 →"
     },
@@ -594,7 +594,7 @@ const ads = [
         livro: 4,
         title: "Sabores do Mar",
         subtitle: "50 receitas com frutos do mar e peixes",
-        image: "Livros de receitas fotos Seniorhub/Livro 4 Sabores do Mar.jpg",
+        image: "capas/Livro 4 Sabores do Mar.jpg",
         link: "https://pay.hotmart.com/C104989538L",
         btnText: "📖 Adquirir Livro 4 →"
     },
@@ -602,7 +602,7 @@ const ads = [
         livro: 5,
         title: "Horta no Prato",
         subtitle: "50 receitas da horta à mesa com sabor e saúde",
-        image: "Livros de receitas fotos Seniorhub/Livro 5 Horta no prato.jpg",
+        image: "capas/Livro 5 Horta no prato.jpg",
         link: "https://pay.hotmart.com/A104989658F",
         btnText: "📖 Adquirir Livro 5 →"
     }
