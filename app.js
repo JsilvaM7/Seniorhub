@@ -564,50 +564,92 @@ function loadNewsFeed() {
     carregarFeedNoticias(feed);
 }
 
-/* ── Advertising Showcase ───────────────────────────────────────────────────── */
+/* ── Advertising Showcase — Carrossel dos 5 Livros ─────────────────────────── */
 const ads = [
     {
-        title: "Biblioteca Completa — 5 Livros PDF", price: "R$ 89,90",
-        image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=400",
-        link: "#", btnText: "Comprar Coleção"
+        livro: 1,
+        title: "Relíquias da Cozinha",
+        subtitle: "50 receitas da culinária brasileira tradicional",
+        image: "Livros de receitas fotos Seniorhub/Capa reliquias da cozinha.jpg",
+        link: "https://pay.hotmart.com/Y104973165O",
+        btnText: "📖 Adquirir Livro 1 →"
     },
     {
-        title: "Poltrona Relax Premium", price: "R$ 890,00",
-        image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=400",
-        link: "#", btnText: "Ver Detalhes"
+        livro: 2,
+        title: "Energia no Prato",
+        subtitle: "50 receitas para disposição e vitalidade",
+        image: "Livros de receitas fotos Seniorhub/Livro 2 — Energia no Prato.jpg",
+        link: "https://pay.hotmart.com/U104976011H",
+        btnText: "📖 Adquirir Livro 2 →"
     },
     {
-        title: "Massageador de Pés Pro", price: "R$ 249,00",
-        image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=400",
-        link: "#", btnText: "Quero Conforto"
+        livro: 3,
+        title: "Prazer Sem Culpa",
+        subtitle: "50 receitas saudáveis e irresistíveis",
+        image: "Livros de receitas fotos Seniorhub/Livro 3 prazer sem culpa.jpg",
+        link: "https://pay.hotmart.com/S104989388R",
+        btnText: "📖 Adquirir Livro 3 →"
     },
     {
-        title: "Kit Cozinha Prática e Ergonômica", price: "R$ 159,90",
-        image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=400",
-        link: "#", btnText: "Ver Oferta"
+        livro: 4,
+        title: "Sabores do Mar",
+        subtitle: "50 receitas com frutos do mar e peixes",
+        image: "Livros de receitas fotos Seniorhub/Livro 4 Sabores do Mar.jpg",
+        link: "https://pay.hotmart.com/C104989538L",
+        btnText: "📖 Adquirir Livro 4 →"
+    },
+    {
+        livro: 5,
+        title: "Horta no Prato",
+        subtitle: "50 receitas da horta à mesa com sabor e saúde",
+        image: "Livros de receitas fotos Seniorhub/Livro 5 Horta no prato.jpg",
+        link: "https://pay.hotmart.com/A104989658F",
+        btnText: "📖 Adquirir Livro 5 →"
     }
 ];
 
 let currentAdIndex = 0;
+let adIntervalId = null;
 
 function initAdShowcase() {
     renderAd();
-    setInterval(() => {
-        currentAdIndex = (currentAdIndex + 1) % ads.length;
-        renderAd();
-    }, 30000);
+    adIntervalId = setInterval(() => {
+        advanceAd(1);
+    }, 30000); // Alterna a cada 30 segundos
+}
+
+function advanceAd(direction) {
+    currentAdIndex = (currentAdIndex + direction + ads.length) % ads.length;
+    renderAd();
+}
+
+function goToAd(index) {
+    currentAdIndex = index;
+    // Reinicia o timer ao clicar manualmente nos dots
+    if (adIntervalId) clearInterval(adIntervalId);
+    adIntervalId = setInterval(() => advanceAd(1), 30000);
+    renderAd();
 }
 
 function renderAd() {
     const container = document.getElementById('ad-showcase-root');
     const ad = ads[currentAdIndex];
+
+    const dotsHtml = ads.map((_, i) =>
+        `<span class="ad-dot ${i === currentAdIndex ? 'active' : ''}" onclick="goToAd(${i})" title="Livro ${i + 1}"></span>`
+    ).join('');
+
     container.innerHTML = `
-        <div class="ad-showcase fade-in">
-            <img src="${ad.image}" alt="${ad.title}" class="ad-image">
+        <div class="ad-showcase">
+            <div class="ad-badge">Livro ${ad.livro} de ${ads.length}</div>
+            <div class="ad-image-wrapper">
+                <img src="${ad.image}" alt="Capa: ${ad.title}" class="ad-image ad-fade-in">
+            </div>
             <div class="ad-content">
                 <h4 class="ad-title">${ad.title}</h4>
-                <span class="ad-price">${ad.price}</span>
-                <a href="${ad.link}" class="ad-btn">${ad.btnText}</a>
+                <p class="ad-subtitle">${ad.subtitle}</p>
+                <a href="${ad.link}" target="_blank" rel="noopener noreferrer" class="ad-btn">${ad.btnText}</a>
+                <div class="ad-dots">${dotsHtml}</div>
             </div>
         </div>
     `;
