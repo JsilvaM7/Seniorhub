@@ -50,7 +50,7 @@ body {
     top: 0;
     width: 100%;
     z-index: 1000;
-    overflow: hidden; /* prevents any child from causing horizontal overflow */
+    overflow: visible;
 }
 
 .logo {
@@ -807,6 +807,106 @@ body {
     background: #ccc;
 }
 
+/* ── Remove browser focus outline from card anchor links ─────────────────── */
+a:focus {
+    outline: none;
+}
+a:focus-visible {
+    outline: 2px solid var(--sage-green);
+    outline-offset: 2px;
+}
+
+/* ── Search Dropdown ─────────────────────────────────────────────────────── */
+#search-dropdown {
+    display: none;
+    position: fixed;
+    top: 66px;
+    width: 480px;
+    max-width: calc(100vw - 40px);
+    background: #ffffff;
+    border: 1px solid #e8d4a8;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 9999;
+    overflow: hidden;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+#search-dropdown.search-dropdown--visivel {
+    display: block;
+}
+
+.search-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #f5f0e8;
+    transition: background 0.15s;
+}
+
+.search-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.search-dropdown-item:hover,
+.search-dropdown-item--ativo {
+    background: #fdf8f0;
+}
+
+.search-item-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+}
+
+.search-item-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.search-item-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-item-label mark {
+    background: #fff3cd;
+    color: var(--sage-green-dark);
+    border-radius: 3px;
+    padding: 0 2px;
+    font-weight: 800;
+}
+
+.search-item-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.search-item-tipo {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--sage-green);
+    flex-shrink: 0;
+    background: #fdf8f0;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid #e8d4a8;
+}
+
 /* ── Books Showcase Vitrine ─────────────────────────────────────────────────── */
 .books-showcase {
     display: flex;
@@ -1178,4 +1278,4 @@ img {
     .nossa-cozinha-box {
         padding: 16px;
     }
-}
+}

@@ -724,7 +724,7 @@ function renderLojaConforto() {
 
     const cards = window.LOJA_TOPICOS.map((t, i) => `
         <a href="${t.link}" target="_blank" rel="noopener noreferrer"
-           style="text-decoration:none; display:flex; flex-direction:column;
+           style="text-decoration:none; display:flex; flex-direction:column; outline:none;
                   background:#fff; border:1px solid #f0e8d4; border-radius:18px;
                   padding:28px 22px 24px; gap:14px;
                   box-shadow:0 2px 10px rgba(0,0,0,0.05);
@@ -827,7 +827,7 @@ function renderExercicios() {
 
     const cards = EXERCICIOS_CARDS.map(c => `
         <a href="${c.link}" target="_blank" rel="noopener noreferrer"
-           style="text-decoration:none; display:flex; flex-direction:column;
+           style="text-decoration:none; display:flex; flex-direction:column; outline:none;
                   background:#fff; border:1px solid #f0e8d4; border-radius:18px;
                   padding:28px 22px 24px; gap:12px;
                   box-shadow:0 2px 10px rgba(0,0,0,0.05);
@@ -1011,6 +1011,12 @@ function renderViagens() {
     `;
 
     swapContent(viewer, wrapper);
+}
+
+/* ── handleNewsClick (fallback para cards estáticos do feed) ────────────── */
+function handleNewsClick(id) {
+    // Cards estáticos do feed não têm ação específica — vai para o início
+    loadNewsFeed();
 }
 
 /* ── Global exports (required for inline onclick attributes in HTML) ─────── */
