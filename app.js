@@ -56,7 +56,7 @@ function loadBooksShowcase() {
     wrapper.className = 'recipe-card';
     wrapper.innerHTML = `
         <div style="text-align:center; margin-bottom:36px;">
-            <span style="display:inline-block; background:#f1f8f1; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; padding:4px 14px; border-radius:20px; margin-bottom:14px;">Biblioteca SeniorHub</span>
+            <span style="display:inline-block; background:#fdf8f0; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; padding:4px 14px; border-radius:20px; margin-bottom:14px;">Biblioteca SeniorHub</span>
             <h1 style="font-size:28px; font-weight:800; color:#374151; margin-bottom:8px;">Escolha o seu Livro de Receitas</h1>
             <p style="color:var(--text-muted); font-size:15px;">5 coleções exclusivas com receitas detalhadas</p>
         </div>
@@ -189,7 +189,7 @@ function renderRecipeHTML(recipe, bookMeta) {
             </button>
         </div>
 
-        <div style="display:inline-flex; align-items:center; gap:10px; background:#f1f8f1;
+        <div style="display:inline-flex; align-items:center; gap:10px; background:#fdf8f0;
                     border:1px solid var(--sage-green); border-radius:12px;
                     padding:10px 22px; margin-bottom:36px;">
             <i class="ph ph-timer" style="font-size:22px; color:var(--sage-green);"></i>
@@ -228,7 +228,7 @@ function renderRecipeHTML(recipe, bookMeta) {
 
         <div style="display:flex; gap:12px; margin-top:36px; justify-content:center; flex-wrap:wrap;">
             <button onclick="event.preventDefault(); loadBooksShowcase()" class="promo-btn"
-                    style="margin:0; padding:12px 24px; font-size:15px; background:#e8f0ea; color:var(--sage-green-dark);">← Vitrine de Livros</button>
+                    style="margin:0; padding:12px 24px; font-size:15px; background:#fdf8f0; color:var(--sage-green-dark);">← Vitrine de Livros</button>
             ${nextBtn}
         </div>
     `;
@@ -244,7 +244,7 @@ function renderGlobalPaywallHTML() {
         </p>
         <div class="promo-banner" style="margin-top:0; padding:52px 40px;">
             <div style="font-size:48px; margin-bottom:16px;">📚</div>
-            <span style="display:inline-block; background:#f1f8f1; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:4px 14px; border-radius:20px; margin-bottom:20px;">Acesso Completo</span>
+            <span style="display:inline-block; background:#fdf8f0; color:var(--sage-green); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:4px 14px; border-radius:20px; margin-bottom:20px;">Acesso Completo</span>
             <h2 style="font-size:26px; margin-bottom:20px; line-height:1.35; color:var(--sage-green-dark);">
                 Você explorou suas 5 receitas gratuitas!
             </h2>
@@ -725,7 +725,7 @@ function renderLojaConforto() {
     const cards = window.LOJA_TOPICOS.map((t, i) => `
         <a href="${t.link}" target="_blank" rel="noopener noreferrer"
            style="text-decoration:none; display:flex; flex-direction:column;
-                  background:#fff; border:1px solid #e4ede6; border-radius:18px;
+                  background:#fff; border:1px solid #f0e8d4; border-radius:18px;
                   padding:28px 22px 24px; gap:14px;
                   box-shadow:0 2px 10px rgba(0,0,0,0.05);
                   transition:box-shadow .2s,transform .2s;"
@@ -741,18 +741,18 @@ function renderLojaConforto() {
                 TOP ${i + 1}
             </div>
 
-            <h3 style="font-size:20px; font-weight:900; color:#1a2e1a;
+            <h3 style="font-size:20px; font-weight:900; color:#2a1a06;
                        margin:0; line-height:1.25;">
                 ${t.titulo}
             </h3>
 
-            <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
+            <p style="font-size:14px; color:#7a5e32; line-height:1.65; margin:0; flex:1;">
                 ${t.beneficio}
             </p>
 
-            <div style="margin-top:4px; background:var(--sage-green); color:#fff;
-                        text-align:center; font-size:14px; font-weight:700;
-                        padding:13px 16px; border-radius:11px;
+            <div style="margin-top:4px; background:#ffffff; color:#000000;
+                        border:2px solid #C5A059; text-align:center; font-size:14px; font-weight:700;
+                        padding:13px 16px; border-radius:8px;
                         letter-spacing:.3px;">
                 Ver na Amazon →
             </div>
@@ -768,10 +768,10 @@ function renderLojaConforto() {
            onclick="loadNewsFeed()">← Início</p>
 
         <div style="margin-bottom:32px;">
-            <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
+            <h1 style="font-size:28px; font-weight:900; color:#2a1a06; margin:0 0 8px;">
                 Conforto do Lar
             </h1>
-            <p style="font-size:15px; color:#5a7060; margin:0;">
+            <p style="font-size:15px; color:#7a5e32; margin:0;">
                 Os 10 itens que mais melhoram o conforto e a segurança em casa. Clique para ver na Amazon.
             </p>
         </div>
@@ -780,15 +780,10 @@ function renderLojaConforto() {
                   letter-spacing:.7px; color:var(--sage-green); margin-bottom:12px;">
             🏆 Top 10 Categorias
         </p>
-        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:18px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:18px;">
             ${cards}
         </div>
 
-        <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
-                  padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
-            ℹ️ Os links acima são de afiliado Amazon. Ao comprar por aqui, o SeniorHub recebe uma
-            pequena comissão — sem custo extra para você. Ajuda o portal a continuar gratuito! 💚
-        </p>
     `;
 
 
@@ -833,7 +828,7 @@ function renderExercicios() {
     const cards = EXERCICIOS_CARDS.map(c => `
         <a href="${c.link}" target="_blank" rel="noopener noreferrer"
            style="text-decoration:none; display:flex; flex-direction:column;
-                  background:#fff; border:1px solid #e4ede6; border-radius:18px;
+                  background:#fff; border:1px solid #f0e8d4; border-radius:18px;
                   padding:28px 22px 24px; gap:12px;
                   box-shadow:0 2px 10px rgba(0,0,0,0.05);
                   transition:box-shadow .2s,transform .2s;"
@@ -842,17 +837,17 @@ function renderExercicios() {
 
             <div style="font-size:44px; line-height:1;">${c.emoji}</div>
 
-            <h3 style="font-size:19px; font-weight:900; color:#1a2e1a; margin:0; line-height:1.25;">
+            <h3 style="font-size:19px; font-weight:900; color:#2a1a06; margin:0; line-height:1.25;">
                 ${c.titulo}
             </h3>
 
-            <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
+            <p style="font-size:14px; color:#7a5e32; line-height:1.65; margin:0; flex:1;">
                 ${c.descricao}
             </p>
 
-            <div style="margin-top:4px; background:var(--sage-green); color:#fff;
-                        text-align:center; font-size:14px; font-weight:700;
-                        padding:13px 16px; border-radius:11px; letter-spacing:.3px;">
+            <div style="margin-top:4px; background:#ffffff; color:#000000;
+                        border:2px solid #C5A059; text-align:center; font-size:14px; font-weight:700;
+                        padding:13px 16px; border-radius:8px; letter-spacing:.3px;">
                 ${c.btn} →
             </div>
         </a>
@@ -866,23 +861,18 @@ function renderExercicios() {
            onclick="loadNewsFeed()">← Início</p>
 
         <div style="margin-bottom:32px;">
-            <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
+            <h1 style="font-size:28px; font-weight:900; color:#2a1a06; margin:0 0 8px;">
                 Exercícios em Casa
             </h1>
-            <p style="font-size:15px; color:#5a7060; margin:0;">
+            <p style="font-size:15px; color:#7a5e32; margin:0;">
                 Equipamentos e suplementos para manter o corpo ativo e forte sem sair de casa.
             </p>
         </div>
 
-        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:18px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:18px;">
             ${cards}
         </div>
 
-        <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
-                  padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
-            ℹ️ Links de afiliado Amazon. Ao comprar por aqui, o SeniorHub recebe uma pequena
-            comissão — sem custo extra para você. Obrigado pelo apoio! 💚
-        </p>
     `;
 
     swapContent(viewer, wrapper);
@@ -961,14 +951,14 @@ function renderViagens() {
     const viewer = document.getElementById('content-viewer');
 
     const cards = VIAGENS_DESTINOS.map(d => `
-        <div style="background:#fff; border:1px solid #e4ede6; border-radius:20px;
+        <div style="background:#fff; border:1px solid #f0e8d4; border-radius:20px;
                     overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05);
                     transition:box-shadow .2s, transform .2s; display:flex; flex-direction:column;"
              onmouseover="this.style.boxShadow='0 8px 28px rgba(0,0,0,0.12)'; this.style.transform='translateY(-4px)';"
              onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';">
 
             <!-- Card hero -->
-            <div style="background:linear-gradient(135deg,#1a2e1a 0%,#3a7d44 100%);
+            <div style="background:linear-gradient(135deg,#2a1a06 0%,#C5A059 100%);
                         padding:28px 24px 20px; display:flex; flex-direction:column; gap:10px;">
                 <div style="font-size:46px; line-height:1;">${d.emoji}</div>
                 <span style="display:inline-block; background:rgba(255,255,255,0.2); color:#fff;
@@ -982,15 +972,16 @@ function renderViagens() {
 
             <!-- Card body -->
             <div style="padding:20px 24px 24px; display:flex; flex-direction:column; gap:14px; flex:1;">
-                <p style="font-size:14px; color:#5a7060; line-height:1.65; margin:0; flex:1;">
+                <p style="font-size:14px; color:#7a5e32; line-height:1.65; margin:0; flex:1;">
                     ${d.descricao}
                 </p>
                 <a href="${resolverLinkViagem(d)}" target="_blank" rel="noopener noreferrer"
-                   style="display:block; text-align:center; background:var(--sage-green); color:#fff;
-                          font-size:14px; font-weight:700; padding:13px 16px; border-radius:11px;
+                   style="display:block; text-align:center; background:#ffffff; color:#000000;
+                          border:2px solid #C5A059; font-size:14px; font-weight:700;
+                          padding:13px 16px; border-radius:8px;
                           text-decoration:none; letter-spacing:.3px;"
-                   onmouseover="this.style.background='#2d6a4f';"
-                   onmouseout="this.style.background='var(--sage-green)';">
+                   onmouseover="this.style.background='#fdf8f0';"
+                   onmouseout="this.style.background='#ffffff';">
                     ${resolverTextoViagem(d)}
                 </a>
             </div>
@@ -1005,22 +996,18 @@ function renderViagens() {
            onclick="loadNewsFeed()">← Início</p>
 
         <div style="margin-bottom:32px;">
-            <h1 style="font-size:28px; font-weight:900; color:#1a2e1a; margin:0 0 8px;">
+            <h1 style="font-size:28px; font-weight:900; color:#2a1a06; margin:0 0 8px;">
                 Guia de Viagens
             </h1>
-            <p style="font-size:15px; color:#5a7060; margin:0;">
+            <p style="font-size:15px; color:#7a5e32; margin:0;">
                 Destinos selecionados para quem viaja com conforto, cultura e tranquilidade.
             </p>
         </div>
 
-        <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:18px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:18px;">
             ${cards}
         </div>
 
-        <p style="font-size:11px; color:#9ab09c; margin-top:32px; text-align:center;
-                  padding-top:18px; border-top:1px solid #e8eee9; line-height:1.7;">
-            ℹ️ Alguns links são de afiliado (Decolar &amp; Booking). Ao reservar por aqui, o SeniorHub recebe uma pequena comissão — sem custo extra para você. 💚
-        </p>
     `;
 
     swapContent(viewer, wrapper);
