@@ -180,7 +180,7 @@ try {
     if (typeof firebase !== 'undefined') {
         var cfg = {
             apiKey:            "AIzaSyBeSp64NCAhKXdXrPGSqrETYormepqWpiU",
-            authDomain:        "seniorhub-7c725.firebaseapp.com",
+            authDomain:        "seniorhub.e-dolphin.info",
             projectId:         "seniorhub-7c725",
             storageBucket:     "seniorhub-7c725.firebasestorage.app",
             messagingSenderId: "194444472555",
@@ -219,10 +219,15 @@ window.SeniorAuth = {
 
     loginComGoogle: function() {
         if (!fbAuth) { alert('Firebase indisponível.'); return; }
-        /* Salva URL atual para voltar depois do redirect */
-        sessionStorage.setItem('sh_redirect_back', window.location.href);
-        fbAuth.signInWithRedirect(fbProvider).catch(function(e) {
-            alert('Erro ao iniciar login: ' + e.message);
+        /* Popup é mais confiável no Chrome com cookies de terceiros bloqueados */
+        fbAuth.signInWithPopup(fbProvider).then(function(result) {
+            if (result && result.user) {
+                _atualizarUI(result.user);
+            }
+        }).catch(function(e) {
+            if (e.code !== 'auth/popup-closed-by-user') {
+                alert('Erro ao fazer login: ' + e.message);
+            }
         });
     },
 
