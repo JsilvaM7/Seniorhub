@@ -1,5 +1,5 @@
 /* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
-const CLUBE_CHECKOUT_URL = 'https://pay.hotmart.com/Y104973165O'; // ← substitua pelo link mensal
+window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/Y104973165O';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadNewsFeed();
@@ -322,7 +322,7 @@ function renderPaywallHTML(book) {
 
     // Alternativa: assinar o clube para acessar todos os livros
     const ctaClube = isLogged
-        ? `<a href="${CLUBE_CHECKOUT_URL}" target="_blank" rel="noopener noreferrer"
+        ? `<a href="${window.CLUBE_CHECKOUT_URL}" target="_blank" rel="noopener noreferrer"
                style="display:inline-block; margin-top:12px; font-size:14px; color:var(--sage-green-dark);
                       font-weight:700; text-decoration:underline;">
                ⭐ Ou assine o Clube e acesse todos os livros por R$ 20/mês →</a>`

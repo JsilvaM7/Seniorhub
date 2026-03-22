@@ -2,7 +2,7 @@
    SeniorHub — Auth + Sidebar  |  v6.0
    ══════════════════════════════════════════════════════════════════════════════ */
 
-const CLUBE_CHECKOUT_URL = 'https://pay.hotmart.com/Y104973165O';
+window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/Y104973165O';
 let _currentUser = null;
 let fbAuth = null;
 let fbProvider = null;
@@ -156,7 +156,7 @@ function _renderSideBarBody() {
             '<div class="lsb-section">' +
                 '<p class="lsb-label">⭐ Assinar o Clube SeniorHub</p>' +
                 '<p class="lsb-desc">Acesse todos os 5 livros, vote nas receitas e ganhe descontos exclusivos.</p>' +
-                '<a href="' + CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn" onclick="window.fecharSideBar()">' +
+                '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn" onclick="window.fecharSideBar()">' +
                     'Assinar Clube — R$ 20/mês' +
                 '</a>' +
                 '<p class="lsb-fine">✓ Acesso imediato &nbsp;·&nbsp; ✓ Cancele quando quiser</p>' +
@@ -212,7 +212,7 @@ window.renderModalConteudo = function() {
                 '<p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">Faça login com o Google para votar e acessar os benefícios.</p>' +
                 '<button class="lsb-google-btn" style="width:100%;justify-content:center;box-sizing:border-box;" onclick="toggleModal();setTimeout(window.abrirSideBar,300);">Entrar com Google</button>' +
                 '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0e8d4;">' +
-                    '<a href="' + CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn">⭐ Assinar Clube — R$ 20/mês</a>' +
+                    '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn">⭐ Assinar Clube — R$ 20/mês</a>' +
                 '</div>' +
             '</div>';
         return;
