@@ -197,12 +197,7 @@ function renderRecipeHTML(recipe, bookMeta, isSubscriber) {
                         border-radius:20px; border:1px solid #86efac;">
                ✅ Acesso de Assinante
            </span>`
-        : payLink
-            ? `<a href="${payLink}" target="_blank" rel="noopener noreferrer"
-                  style="font-size:12px; color:var(--sage-green); font-weight:600; text-decoration:none;">
-                  📥 Adquirir PDF completo →
-               </a>`
-            : '';
+        : '';
 
     return `
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; gap:20px;">
