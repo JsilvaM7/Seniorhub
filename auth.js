@@ -25,6 +25,12 @@ try {
         fbProvider = new firebase.auth.GoogleAuthProvider();
         fbProvider.setCustomParameters({ prompt: 'select_account' });
 
+        /* Captura resultado do redirect (retorno após login Google) */
+        fbAuth.getRedirectResult().catch(err => {
+            if (err.code && err.code !== 'auth/popup-closed-by-user')
+                console.warn('[Auth redirect error]', err.message);
+        });
+
         /* Observador de estado */
         fbAuth.onAuthStateChanged(user => {
             _currentUser = user;
@@ -46,15 +52,12 @@ window.SeniorAuth = {
 
     loginComGoogle() {
         if (!fbAuth) {
-            alert('Para fazer login, abra o site em um servidor web (não como arquivo local).\n\nUse o Live Server do VS Code ou hospede o site.');
+            alert('Firebase não disponível.');
             return;
         }
-        fbAuth.signInWithPopup(fbProvider).catch(err => {
-            if (err.code === 'auth/operation-not-allowed') {
-                alert('Ative o login com Google no Firebase Console:\nAuthentication → Sign-in method → Google → Ativar');
-            } else if (err.code !== 'auth/popup-closed-by-user') {
-                alert('Erro: ' + err.message);
-            }
+        // Redirect funciona melhor em GitHub Pages e hospedagens estáticas
+        fbAuth.signInWithRedirect(fbProvider).catch(err => {
+            alert('Erro: ' + err.message);
         });
     },
 
