@@ -3,7 +3,7 @@
    Estados distintos: isLoggedIn (autenticado) vs isSubscriber (assinante pago)
    ══════════════════════════════════════════════════════════════════════════════ */
 
-window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/Y104973165O';
+window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
 /* ── Estado global ──────────────────────────────────────────────────────────── */
 var _currentUser   = null;   // objeto Firebase User (ou null)

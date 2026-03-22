@@ -1,5 +1,5 @@
 /* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
-window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/Y104973165O';
+window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadNewsFeed();
