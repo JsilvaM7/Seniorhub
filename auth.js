@@ -1,15 +1,58 @@
 /* ══════════════════════════════════════════════════════════════════════════════
-   SeniorHub — Auth + Sidebar  |  v7.0
+   SeniorHub — Auth + Sidebar  |  v8.0
+   Estados distintos: isLoggedIn (autenticado) vs isSubscriber (assinante pago)
    ══════════════════════════════════════════════════════════════════════════════ */
 
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/Y104973165O';
 
-var _currentUser = null;
-var fbAuth       = null;
-var fbProvider   = null;
+/* ── Estado global ──────────────────────────────────────────────────────────── */
+var _currentUser   = null;   // objeto Firebase User (ou null)
+var _isSubscriber  = false;  // ← false por padrão. Só vira true via webhook Hotmart
+                             //   Em produção: verificar custom claim ou Firestore
+
+var fbAuth     = null;
+var fbProvider = null;
+
+/* ── API pública ────────────────────────────────────────────────────────────── */
+window.SeniorAuth = {
+    /* Usuário logado ou null */
+    getUser()        { return _currentUser; },
+
+    /* true = apenas autenticado com Google */
+    isLoggedIn()     { return !!_currentUser; },
+
+    /* true = assinante ativo que pagou o Clube */
+    isSubscriber()   { return _isSubscriber; },
+
+    /* Alias legado — usa isSubscriber() para lógica de conteúdo */
+    isMember()       { return _isSubscriber; },
+
+    loginComGoogle: function() {
+        if (!fbAuth) { alert('Firebase indisponível.'); return; }
+        fbAuth.signInWithPopup(fbProvider).then(function(result) {
+            if (result && result.user) _atualizarUI(result.user);
+        }).catch(function(e) {
+            if (e.code !== 'auth/popup-closed-by-user')
+                alert('Erro ao fazer login: ' + e.message);
+        });
+    },
+
+    logout: function() {
+        if (fbAuth) fbAuth.signOut().then(function() { _atualizarUI(null); });
+        else _atualizarUI(null);
+    },
+
+    /* Para ativar assinante manualmente (teste no console: SeniorAuth.ativarAssinante()) */
+    ativarAssinante: function() {
+        if (!_currentUser) { alert('Faça login primeiro.'); return; }
+        _isSubscriber = true;
+        _atualizarUI(_currentUser);
+        alert('✅ Modo assinante ativado para teste!');
+    }
+};
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   SIDEBAR — definida PRIMEIRO, disponível antes de tudo
+   SIDEBAR — criada antes de tudo para estar disponível imediatamente
    ══════════════════════════════════════════════════════════════════════════════ */
 function _criarSideBar() {
     if (document.getElementById('login-sidebar')) return;
@@ -44,13 +87,14 @@ window.fecharSideBar = function() {
 };
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   RENDER HEADER — substitui o conteúdo de #auth-slot
+   RENDER HEADER
    ══════════════════════════════════════════════════════════════════════════════ */
 function _renderHeaderBtn() {
     var slot = document.getElementById('auth-slot');
     if (!slot) return;
 
     if (!_currentUser) {
+        /* Não logado → botão Login */
         slot.innerHTML =
             '<button class="login-btn" onclick="window.abrirSideBar()">' +
                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
@@ -60,6 +104,7 @@ function _renderHeaderBtn() {
                 'Login' +
             '</button>';
     } else {
+        /* Logado → foto + nome (sem selo de assinante no header) */
         var nome   = (_currentUser.displayName || 'Usuário').split(' ')[0];
         var avatar = _currentUser.photoURL ||
             'https://ui-avatars.com/api/?name=' + encodeURIComponent(nome) + '&background=C5A059&color=fff&size=64';
@@ -73,7 +118,7 @@ function _renderHeaderBtn() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   RENDER SIDEBAR BODY
+   RENDER SIDEBAR BODY — 3 estados: não logado / logado não-assinante / assinante
    ══════════════════════════════════════════════════════════════════════════════ */
 function _renderSideBarBody() {
     var body = document.getElementById('lsb-body');
@@ -87,6 +132,7 @@ function _renderSideBarBody() {
         '<path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.2 0-11.5-4.2-13.4-9.8l-7.8 6C6.6 42.6 14.6 48 24 48z"/>' +
         '</svg>';
 
+    /* ── Estado 1: Não logado ───────────────────────────────────────────────── */
     if (!_currentUser) {
         body.innerHTML =
             '<div class="lsb-section">' +
@@ -107,28 +153,34 @@ function _renderSideBarBody() {
                 '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn" onclick="window.fecharSideBar()">Assinar Clube — R$ 20/mês</a>' +
                 '<p class="lsb-fine">✓ Acesso imediato &nbsp;·&nbsp; ✓ Cancele quando quiser</p>' +
             '</div>';
-    } else {
-        var nome   = _currentUser.displayName || 'Usuário';
-        var email  = _currentUser.email || '';
-        var avatar = _currentUser.photoURL ||
-            'https://ui-avatars.com/api/?name=' + encodeURIComponent(nome) + '&background=C5A059&color=fff&size=128';
+        return;
+    }
+
+    var nome   = _currentUser.displayName || 'Usuário';
+    var email  = _currentUser.email || '';
+    var avatar = _currentUser.photoURL ||
+        'https://ui-avatars.com/api/?name=' + encodeURIComponent(nome) + '&background=C5A059&color=fff&size=128';
+
+    /* ── Estado 2: Logado mas NÃO assinante ────────────────────────────────── */
+    if (!_isSubscriber) {
         body.innerHTML =
             '<div class="lsb-section lsb-section--user">' +
                 '<img src="' + avatar + '" alt="' + nome + '" class="lsb-avatar">' +
                 '<div>' +
                     '<p class="lsb-nome">' + nome + '</p>' +
                     '<p class="lsb-email">' + email + '</p>' +
-                    '<span class="lsb-badge">✅ Assinante</span>' +
+                    '<span style="display:inline-block;background:#f1f5f9;color:#64748b;' +
+                        'font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;">' +
+                        'Conta Gratuita' +
+                    '</span>' +
                 '</div>' +
             '</div>' +
             '<div style="height:1px;background:#f0e8d4;margin:0 20px;"></div>' +
             '<div class="lsb-section">' +
-                '<p class="lsb-label">🏆 Seus Benefícios</p>' +
-                '<div class="lsb-beneficios">' +
-                    '<div class="lsb-beneficio">📖 Acesso a todos os 5 livros</div>' +
-                    '<div class="lsb-beneficio">🗳️ Votação exclusiva de receitas</div>' +
-                    '<div class="lsb-beneficio">🏷️ Descontos em lojas parceiras</div>' +
-                '</div>' +
+                '<p class="lsb-label">⭐ Torne-se Assinante</p>' +
+                '<p class="lsb-desc">Assine o Clube SeniorHub e acesse todos os 5 livros, vote nas receitas e ganhe descontos exclusivos.</p>' +
+                '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn" onclick="window.fecharSideBar()">Assinar Clube — R$ 20/mês</a>' +
+                '<p class="lsb-fine">✓ Acesso imediato &nbsp;·&nbsp; ✓ Cancele quando quiser</p>' +
             '</div>' +
             '<div style="height:1px;background:#f0e8d4;margin:0 20px;"></div>' +
             '<div class="lsb-section">' +
@@ -140,37 +192,109 @@ function _renderSideBarBody() {
                     '</svg> Sair da conta' +
                 '</button>' +
             '</div>';
+        return;
     }
+
+    /* ── Estado 3: Logado E assinante ──────────────────────────────────────── */
+    body.innerHTML =
+        '<div class="lsb-section lsb-section--user">' +
+            '<img src="' + avatar + '" alt="' + nome + '" class="lsb-avatar">' +
+            '<div>' +
+                '<p class="lsb-nome">' + nome + '</p>' +
+                '<p class="lsb-email">' + email + '</p>' +
+                '<span class="lsb-badge">✅ Assinante Ativo</span>' +
+            '</div>' +
+        '</div>' +
+        '<div style="height:1px;background:#f0e8d4;margin:0 20px;"></div>' +
+        '<div class="lsb-section">' +
+            '<p class="lsb-label">🏆 Seus Benefícios</p>' +
+            '<div class="lsb-beneficios">' +
+                '<div class="lsb-beneficio">📖 Acesso a todos os 5 livros</div>' +
+                '<div class="lsb-beneficio">🗳️ Votação exclusiva de receitas</div>' +
+                '<div class="lsb-beneficio">🏷️ Descontos em lojas parceiras</div>' +
+            '</div>' +
+        '</div>' +
+        '<div style="height:1px;background:#f0e8d4;margin:0 20px;"></div>' +
+        '<div class="lsb-section">' +
+            '<button class="lsb-logout-btn" onclick="window.SeniorAuth.logout(); window.fecharSideBar();">' +
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                    '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>' +
+                    '<polyline points="16 17 21 12 16 7"/>' +
+                    '<line x1="21" y1="12" x2="9" y2="12"/>' +
+                '</svg> Sair da conta' +
+            '</button>' +
+        '</div>';
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   ATUALIZA TUDO — header + sidebar + carrossel + botões de livro
+   MODAL DE VOTAÇÃO — só assinantes votam
+   ══════════════════════════════════════════════════════════════════════════════ */
+window.renderModalConteudo = function() {
+    var body = document.getElementById('modal-body');
+    if (!body) return;
+
+    /* Não logado */
+    if (!_currentUser) {
+        body.innerHTML =
+            '<div style="text-align:center;padding:8px 0 16px;">' +
+                '<div style="font-size:44px;margin-bottom:12px;">🔐</div>' +
+                '<h3 style="font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:10px;">Entre para participar</h3>' +
+                '<p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">Faça login com o Google para acessar os benefícios do Clube.</p>' +
+                '<button class="lsb-google-btn" style="width:100%;justify-content:center;box-sizing:border-box;" ' +
+                    'onclick="if(window.toggleModal)toggleModal();setTimeout(window.abrirSideBar,300);">Entrar com Google</button>' +
+                '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0e8d4;">' +
+                    '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn">⭐ Assinar Clube — R$ 20/mês</a>' +
+                '</div>' +
+            '</div>';
+        return;
+    }
+
+    /* Logado mas não assinante */
+    if (!_isSubscriber) {
+        var primeiroNome = (_currentUser.displayName || 'você').split(' ')[0];
+        body.innerHTML =
+            '<div style="text-align:center;padding:8px 0;">' +
+                '<div style="font-size:36px;margin-bottom:10px;">👋</div>' +
+                '<p style="font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:6px;">Olá, ' + primeiroNome + '!</p>' +
+                '<p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">Você está logado, mas a votação e os benefícios exclusivos são para assinantes do Clube.</p>' +
+            '</div>' +
+            '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn" style="display:block;text-align:center;">⭐ Assinar Clube — R$ 20/mês</a>' +
+            '<p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:10px;">✓ Acesso imediato &nbsp;·&nbsp; ✓ Cancele quando quiser</p>';
+        return;
+    }
+
+    /* Assinante */
+    var nome = (_currentUser.displayName || 'você').split(' ')[0];
+    body.innerHTML =
+        '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px 16px;text-align:center;margin-bottom:20px;color:#166534;font-weight:700;font-size:14px;">✅ Olá, ' + nome + '! Você é assinante ativo.</div>' +
+        '<div style="height:1px;background:#efefef;margin-bottom:16px;"></div>' +
+        '<p style="font-size:14px;font-weight:700;color:var(--sage-green-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">🗳️ Votação do Dia</p>' +
+        '<p style="font-size:14px;color:var(--text-muted);margin-bottom:14px;">O que você quer ver mais na próxima semana?</p>' +
+        '<button class="vote-btn" onclick="submitVote(\'Rec\')">Novas Receitas Detox</button>' +
+        '<button class="vote-btn" onclick="submitVote(\'Alo\')">Exercícios</button>' +
+        '<button class="vote-btn" onclick="submitVote(\'Tec\')">Tecnologia para Casa</button>' +
+        '<button class="vote-btn" onclick="submitVote(\'Via\')">Viagens</button>' +
+        '<p style="font-size:11px;color:var(--text-muted);margin-top:14px;">Seu voto ajuda a construir o portal dos seus sonhos.</p>';
+};
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   ATUALIZA TODA A UI
    ══════════════════════════════════════════════════════════════════════════════ */
 function _atualizarUI(user) {
     _currentUser = user;
+
+    /* Ao sair, zera assinante */
+    if (!user) _isSubscriber = false;
+
+    /* Em produção: verificar Firestore/custom claim aqui para setar _isSubscriber */
+    /* Exemplo: if (user) verificarAssinatura(user.uid).then(v => _isSubscriber = v); */
+
     _renderHeaderBtn();
     _renderSideBarBody();
     if (window.renderModalConteudo) window.renderModalConteudo();
-    if (window.renderAd) window.renderAd();
 
-    /* Muda botões "Adquirir Livro" → "Acessar Conteúdo" para assinantes */
-    if (user) {
-        /* Carrossel lateral */
-        document.querySelectorAll('.ad-btn').forEach(function(btn) {
-            if (btn.tagName === 'A' && btn.href && btn.href.includes('hotmart')) {
-                btn.textContent = '📖 Acessar Conteúdo →';
-                btn.removeAttribute('href');
-                btn.style.cursor = 'pointer';
-                btn.onclick = function() {
-                    if (window.loadRecipesFeed) window.loadRecipesFeed();
-                };
-            }
-        });
-        /* Vitrine de livros — re-renderiza se estiver aberta */
-        if (window._vitrineAberta && window.loadBooksShowcase) {
-            window.loadBooksShowcase();
-        }
-    }
+    /* Carrossel: só muda botão se for assinante */
+    if (window.renderAd) window.renderAd();
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -192,17 +316,11 @@ try {
         fbProvider = new firebase.auth.GoogleAuthProvider();
         fbProvider.setCustomParameters({ prompt: 'select_account' });
 
-        /* ── Passo 1: captura resultado do redirect (volta do Google) ───── */
-        fbAuth.getRedirectResult().then(function(result) {
-            if (result && result.user) {
-                /* Login via redirect acabou de completar */
-                _atualizarUI(result.user);
-            }
-        }).catch(function(e) {
-            console.warn('[Auth redirect]', e.code, e.message);
-        });
+        fbAuth.getRedirectResult().then(function(r) {
+            if (r && r.user) _atualizarUI(r.user);
+        }).catch(function(e) { console.warn('[Auth]', e.message); });
 
-        /* ── Passo 2: observador persistente — dispara em toda página ───── */
+        /* Persiste sessão — dispara sempre que a página carrega */
         fbAuth.onAuthStateChanged(function(user) {
             _atualizarUI(user);
         });
@@ -211,76 +329,12 @@ try {
     console.warn('[SeniorHub Auth]', e.message);
 }
 
-/* ── API pública ────────────────────────────────────────────────────────────── */
-window.SeniorAuth = {
-    getUser()      { return _currentUser; },
-    isSubscriber() { return !!_currentUser; },
-    isMember()     { return !!_currentUser; },
-
-    loginComGoogle: function() {
-        if (!fbAuth) { alert('Firebase indisponível.'); return; }
-        /* Popup é mais confiável no Chrome com cookies de terceiros bloqueados */
-        fbAuth.signInWithPopup(fbProvider).then(function(result) {
-            if (result && result.user) {
-                _atualizarUI(result.user);
-            }
-        }).catch(function(e) {
-            if (e.code !== 'auth/popup-closed-by-user') {
-                alert('Erro ao fazer login: ' + e.message);
-            }
-        });
-    },
-
-    logout: function() {
-        if (fbAuth) {
-            fbAuth.signOut().then(function() {
-                _atualizarUI(null);
-            });
-        } else {
-            _atualizarUI(null);
-        }
-    }
-};
-
-/* ── Modal de votação ───────────────────────────────────────────────────────── */
-window.renderModalConteudo = function() {
-    var body = document.getElementById('modal-body');
-    if (!body) return;
-    if (!_currentUser) {
-        body.innerHTML =
-            '<div style="text-align:center;padding:8px 0 16px;">' +
-                '<div style="font-size:44px;margin-bottom:12px;">🔐</div>' +
-                '<h3 style="font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:10px;">Entre para participar</h3>' +
-                '<p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">Faça login com o Google para votar e acessar os benefícios.</p>' +
-                '<button class="lsb-google-btn" style="width:100%;justify-content:center;box-sizing:border-box;" ' +
-                    'onclick="if(window.toggleModal)toggleModal(); setTimeout(window.abrirSideBar,300);">' +
-                    'Entrar com Google' +
-                '</button>' +
-                '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0e8d4;">' +
-                    '<a href="' + window.CLUBE_CHECKOUT_URL + '" target="_blank" rel="noopener noreferrer" class="lsb-clube-btn">⭐ Assinar Clube — R$ 20/mês</a>' +
-                '</div>' +
-            '</div>';
-        return;
-    }
-    var nome = (_currentUser.displayName || 'você').split(' ')[0];
-    body.innerHTML =
-        '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px 16px;text-align:center;margin-bottom:20px;color:#166534;font-weight:700;font-size:14px;">✅ Olá, ' + nome + '! Você é assinante ativo.</div>' +
-        '<div style="height:1px;background:#efefef;margin-bottom:16px;"></div>' +
-        '<p style="font-size:14px;font-weight:700;color:var(--sage-green-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">🗳️ Votação do Dia</p>' +
-        '<p style="font-size:14px;color:var(--text-muted);margin-bottom:14px;">O que você quer ver mais na próxima semana?</p>' +
-        '<button class="vote-btn" onclick="submitVote(\'Rec\')">Novas Receitas Detox</button>' +
-        '<button class="vote-btn" onclick="submitVote(\'Alo\')">Exercícios</button>' +
-        '<button class="vote-btn" onclick="submitVote(\'Tec\')">Tecnologia para Casa</button>' +
-        '<button class="vote-btn" onclick="submitVote(\'Via\')">Viagens</button>' +
-        '<p style="font-size:11px;color:var(--text-muted);margin-top:14px;">Seu voto ajuda a construir o portal dos seus sonhos.</p>';
-};
-
 /* ══════════════════════════════════════════════════════════════════════════════
-   INIT — renderiza estado inicial (antes do Firebase responder)
+   INIT
    ══════════════════════════════════════════════════════════════════════════════ */
 function _init() {
     _criarSideBar();
-    _renderHeaderBtn();   /* mostra "Login" imediatamente */
+    _renderHeaderBtn();
     if (window.renderModalConteudo) window.renderModalConteudo();
 }
 

@@ -19,7 +19,7 @@ function submitVote(theme) {
     }
     const isSub = window.SeniorAuth && window.SeniorAuth.isSubscriber();
     if (!isSub) {
-        alert('A votação é exclusiva para assinantes do Clube SeniorHub.');
+        // Logado mas não assinante → abre modal explicando
         toggleModal();
         return;
     }
@@ -72,7 +72,7 @@ function loadBooksShowcase() {
         </div>
         <div class="books-showcase">
             ${(() => {
-                const isSub = window.SeniorAuth && window.SeniorAuth.isSubscriber();
+                const isSub = window.SeniorAuth && window.SeniorAuth.isSubscriber(); // só assinante pago
                 return Object.entries(window.BOOKS).map(([num, book]) => `
                 <button class="book-showcase-btn" onclick="window.handleBookClick(${num})">
                     <div class="book-info">
@@ -141,7 +141,7 @@ function loadRecipe(id) {
     const bookArr = window.biblioteca[livroAtual] || [];
     const recipe = bookArr.find(r => r.id === id);
 
-    // Assinante ativo nunca vê paywall — acessa todas as receitas do portal
+    // Só assinante pago acessa receitas bloqueadas (logado ≠ assinante)
     const isSubscriber = window.SeniorAuth && window.SeniorAuth.isSubscriber();
 
     if (!recipe && !isSubscriber) {
@@ -697,8 +697,7 @@ function renderAd() {
         `<span class="ad-dot ${i === currentAdIndex ? 'active' : ''}" onclick="goToAd(${i})" title="Livro ${i + 1}"></span>`
     ).join('');
 
-    // Assinante: botão "Ler no Portal" (abre o livro sem link externo de download)
-    // Não-assinante: botão "Adquirir" apontando para Hotmart individual
+    // Só assinante pago vê "Ler no Portal" — logado sem assinatura vê "Adquirir"
     const adBtnHtml = isSubscriber
         ? `<button onclick="window.handleBookClick(${ad.livro})" class="ad-btn"
                    style="cursor:pointer; border:none; width:100%;">
