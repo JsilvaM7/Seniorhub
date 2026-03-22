@@ -180,7 +180,7 @@ try {
     if (typeof firebase !== 'undefined') {
         var cfg = {
             apiKey:            "AIzaSyBeSp64NCAhKXdXrPGSqrETYormepqWpiU",
-            authDomain:        "seniorhub.e-dolphin.info",
+            authDomain:        "seniorhub-7c725.firebaseapp.com",
             projectId:         "seniorhub-7c725",
             storageBucket:     "seniorhub-7c725.firebasestorage.app",
             messagingSenderId: "194444472555",
