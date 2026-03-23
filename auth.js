@@ -209,7 +209,7 @@ function _renderSideBarBody() {
             '<p class="lsb-label">🏆 Seus Benefícios</p>' +
             '<div class="lsb-beneficios">' +
                 '<div class="lsb-beneficio">📖 Acesso a todos os 5 livros</div>' +
-                '<div class="lsb-beneficio">🗳️ Votação exclusiva de receitas</div>' +
+                '<div class="lsb-beneficio">🗳️ Votação exclusiva de tópicos de notícias</div>' +
                 '<div class="lsb-beneficio">🏷️ Descontos em lojas parceiras</div>' +
             '</div>' +
         '</div>' +
