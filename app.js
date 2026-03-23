@@ -1,4 +1,13 @@
 /* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
+
+/* ── Links Google Drive dos e-books para assinantes ────────────────────────── */
+const EBOOK_LINKS = {
+    1: 'https://drive.google.com/file/d/1gmM8fOlRrWDuptQwIaivytbQeriTOAuc/view?usp=sharing',
+    2: 'https://drive.google.com/file/d/1BgZxiOdUcnRAQVEanJJ3RRW3WVFY-Yin/view?usp=sharing',
+    3: 'https://drive.google.com/file/d/1_cFQQH7e0nZsg8JkD_6Bmbfh1R8C7p84/view?usp=sharing',
+    4: 'https://drive.google.com/file/d/1eAHSCB3E5dsO9ubi2s3_91ZpxJBlT95H/view?usp=sharing',
+    5: 'https://drive.google.com/file/d/1dMJHFfTVykmTXWQtToJUu8Pf2bEi1JXQ/view?usp=sharing'
+};
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -32,11 +41,12 @@ let livroAtual = null; // Guarda a chave do livro aberto (ex: 'energia')
 
 /* ── Funnel helpers ─────────────────────────────────────────────────────────── */
 function isLocked(id) {
-    // 5 free recipes per book; check index position within the book (not raw ID)
+    // Assinante pago tem acesso completo a todas as receitas no site
+    if (window.SeniorAuth && window.SeniorAuth.isSubscriber()) return false;
     if (!livroAtual) return false;
     const bookArr = window.biblioteca[livroAtual] || [];
     const idx = bookArr.findIndex(r => r.id === id);
-    return idx >= 5; // index 5+ means it's the 6th recipe or beyond
+    return idx >= 5; // não-assinante: só 5 receitas grátis por livro
 }
 
 /* ── Navigation ─────────────────────────────────────────────────────────────── */
@@ -72,16 +82,51 @@ function loadBooksShowcase() {
         </div>
         <div class="books-showcase">
             ${(() => {
-                const isSub = window.SeniorAuth && window.SeniorAuth.isSubscriber(); // só assinante pago
-                return Object.entries(window.BOOKS).map(([num, book]) => `
-                <button class="book-showcase-btn" onclick="window.handleBookClick(${num})">
-                    <div class="book-info">
-                        <div class="book-num">Livro ${num}${isSub ? ' <span style="font-size:10px;background:var(--sage-green);color:#fff;padding:1px 7px;border-radius:20px;vertical-align:middle;">Incluso</span>' : ''}</div>
-                        <div class="book-title">${book.title}</div>
-                    </div>
-                    <i class="ph ph-${isSub ? 'book-open' : 'caret-right'}"
-                       style="font-size:22px; color:var(--sage-green); flex-shrink:0;"></i>
-                </button>`).join('');
+                const isSub = window.SeniorAuth && window.SeniorAuth.isSubscriber();
+                return Object.entries(window.BOOKS).map(([num, book]) => {
+                    const driveLink = EBOOK_LINKS[parseInt(num)];
+                    if (isSub) {
+                        return `
+                        <div style="display:flex; align-items:center; gap:12px; width:100%;
+                                    background:#fff; border:1.5px solid var(--sage-green);
+                                    border-radius:16px; padding:16px 20px;
+                                    box-shadow:0 2px 10px rgba(197,160,89,0.12);">
+                            <div class="book-info" style="flex:1; min-width:0;">
+                                <div class="book-num">Livro ${num}
+                                    <span style="font-size:10px;background:var(--sage-green);color:#fff;
+                                                 padding:1px 7px;border-radius:20px;vertical-align:middle;">
+                                        ✅ Incluso
+                                    </span>
+                                </div>
+                                <div class="book-title">${book.title}</div>
+                            </div>
+                            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+                                <button onclick="window.handleBookClick(${num})"
+                                        style="background:var(--sage-green);color:#fff;border:none;
+                                               border-radius:8px;padding:8px 14px;font-size:13px;
+                                               font-weight:700;cursor:pointer;white-space:nowrap;">
+                                    📖 Ler no Site
+                                </button>
+                                <a href="${driveLink}" target="_blank" rel="noopener noreferrer"
+                                   style="background:#fff;color:var(--sage-green-dark);
+                                          border:1.5px solid var(--sage-green);border-radius:8px;
+                                          padding:6px 14px;font-size:12px;font-weight:700;
+                                          text-decoration:none;text-align:center;white-space:nowrap;">
+                                    ⬇️ Baixar PDF
+                                </a>
+                            </div>
+                        </div>`;
+                    } else {
+                        return `
+                        <button class="book-showcase-btn" onclick="window.handleBookClick(${num})">
+                            <div class="book-info">
+                                <div class="book-num">Livro ${num}</div>
+                                <div class="book-title">${book.title}</div>
+                            </div>
+                            <i class="ph ph-caret-right" style="font-size:22px;color:var(--sage-green);flex-shrink:0;"></i>
+                        </button>`;
+                    }
+                }).join('');
             })()}
         </div>
     `;
@@ -693,11 +738,11 @@ function renderAd() {
     ).join('');
 
     // Só assinante pago vê "Ler no Portal" — logado sem assinatura vê "Adquirir"
+    const ebookLink = EBOOK_LINKS[ad.livro];
     const adBtnHtml = isSubscriber
-        ? `<button onclick="window.handleBookClick(${ad.livro})" class="ad-btn"
-                   style="cursor:pointer; border:none; width:100%;">
+        ? `<a href="${ebookLink}" target="_blank" rel="noopener noreferrer" class="ad-btn">
                📖 Ler no Portal →
-           </button>`
+           </a>`
         : `<a href="${ad.link}" target="_blank" rel="noopener noreferrer" class="ad-btn">${ad.btnText}</a>`;
 
     container.innerHTML = `
