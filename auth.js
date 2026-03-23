@@ -6,9 +6,8 @@
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
 /* ── Estado global ──────────────────────────────────────────────────────────── */
-var _currentUser   = null;   // objeto Firebase User (ou null)
-var _isSubscriber  = false;  // ← false por padrão. Só vira true via webhook Hotmart
-                             //   Em produção: verificar custom claim ou Firestore
+var _currentUser  = null;
+var _isSubscriber = false;
 
 var fbAuth     = null;
 var fbProvider = null;
@@ -42,22 +41,12 @@ window.SeniorAuth = {
         else _atualizarUI(null);
     },
 
-    /* Ativa assinante manualmente para teste (console: SeniorAuth.ativarAssinante()) */
+    /* Testa modo assinante no console: SeniorAuth.ativarAssinante() */
     ativarAssinante: function() {
         if (!_currentUser) { alert('Faça login primeiro.'); return; }
         _isSubscriber = true;
         _atualizarUI(_currentUser);
-        alert('✅ Modo assinante ativado localmente para teste!\n\nEm produção, o webhook da Hotmart faz isso automaticamente.');
-    },
-
-    /* Verifica assinatura real via custom claim (chame após login) */
-    verificarAssinatura: function() {
-        if (!_currentUser) return;
-        _currentUser.getIdTokenResult(true).then(function(token) {
-            var era = _isSubscriber;
-            _isSubscriber = token.claims.isSubscriber === true;
-            if (_isSubscriber !== era) _atualizarUI(_currentUser);
-        });
+        alert('✅ Modo assinante ativado para teste!');
     }
 };
 
@@ -333,14 +322,28 @@ try {
         /* Persiste sessão — dispara sempre que a página carrega */
         fbAuth.onAuthStateChanged(function(user) {
             if (!user) {
+                _isSubscriber = false;
                 _atualizarUI(null);
                 return;
             }
-            /* Força refresh do token para pegar custom claims atualizados */
-            user.getIdTokenResult(true).then(function(tokenResult) {
-                /* isSubscriber vem do custom claim setado pelo webhook Hotmart */
-                _isSubscriber = tokenResult.claims.isSubscriber === true;
-                _atualizarUI(user);
+            /* Verifica custom claim isSubscriber (setado pelo webhook Hotmart) */
+            user.getIdTokenResult(true).then(function(token) {
+                _isSubscriber = token.claims.isSubscriber === true;
+
+                /* Se não tem claim, verifica Firestore como fallback */
+                if (!_isSubscriber) {
+                    var db = firebase.firestore();
+                    db.collection('subscribers').doc(user.uid).get()
+                        .then(function(doc) {
+                            if (doc.exists && doc.data().isSubscriber === true) {
+                                _isSubscriber = true;
+                            }
+                            _atualizarUI(user);
+                        })
+                        .catch(function() { _atualizarUI(user); });
+                } else {
+                    _atualizarUI(user);
+                }
             }).catch(function() {
                 _isSubscriber = false;
                 _atualizarUI(user);
