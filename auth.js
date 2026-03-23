@@ -326,24 +326,76 @@ try {
                 _atualizarUI(null);
                 return;
             }
-            /* Verifica custom claim isSubscriber (setado pelo webhook Hotmart) */
+
+            var db = firebase.firestore();
+
+            /* ── Registra e-mail na coleção userEmails (merge = não sobrescreve) ── */
+            db.collection('userEmails').doc(user.email).set({
+                uid:         user.uid,
+                email:       user.email,
+                displayName: user.displayName || '',
+                photoURL:    user.photoURL    || '',
+                lastLogin:   firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }).catch(function(e) {
+                console.warn('[Auth] userEmails write:', e.message);
+            });
+
+            /* ── Verifica custom claim isSubscriber (setado pelo webhook Hotmart) ── */
             user.getIdTokenResult(true).then(function(token) {
                 _isSubscriber = token.claims.isSubscriber === true;
 
-                /* Se não tem claim, verifica Firestore como fallback */
-                if (!_isSubscriber) {
-                    var db = firebase.firestore();
-                    db.collection('subscribers').doc(user.uid).get()
-                        .then(function(doc) {
-                            if (doc.exists && doc.data().isSubscriber === true) {
-                                _isSubscriber = true;
-                            }
-                            _atualizarUI(user);
-                        })
-                        .catch(function() { _atualizarUI(user); });
-                } else {
+                if (_isSubscriber) {
                     _atualizarUI(user);
+                    return;
                 }
+
+                /* Sem claim → verifica coleção subscribers pelo UID */
+                db.collection('subscribers').doc(user.uid).get()
+                    .then(function(doc) {
+                        if (doc.exists && doc.data().isSubscriber === true) {
+                            _isSubscriber = true;
+                            _atualizarUI(user);
+                            return;
+                        }
+
+                        /* ── Verifica pendingSubscribers pelo e-mail (ativação manual) ── */
+                        db.collection('pendingSubscribers').doc(user.email).get()
+                            .then(function(pending) {
+                                if (pending.exists) {
+                                    /* Migra para subscribers com o UID real */
+                                    var dados = pending.data();
+                                    dados.uid          = user.uid;
+                                    dados.email        = user.email;
+                                    dados.isSubscriber = true;
+                                    dados.activatedAt  = firebase.firestore.FieldValue.serverTimestamp();
+                                    dados.activatedBy  = 'pending_migration';
+
+                                    db.collection('subscribers').doc(user.uid).set(dados, { merge: true })
+                                        .then(function() {
+                                            /* Remove o registro pendente para não reprocessar */
+                                            return db.collection('pendingSubscribers').doc(user.email).delete();
+                                        })
+                                        .then(function() {
+                                            console.log('[Auth] Assinante migrado de pendingSubscribers:', user.email);
+                                            _isSubscriber = true;
+                                            _atualizarUI(user);
+                                        })
+                                        .catch(function(e) {
+                                            console.warn('[Auth] Erro na migração:', e.message);
+                                            _atualizarUI(user);
+                                        });
+                                } else {
+                                    /* Nenhum registro encontrado — Conta Gratuita */
+                                    _atualizarUI(user);
+                                }
+                            })
+                            .catch(function(e) {
+                                console.warn('[Auth] pendingSubscribers check:', e.message);
+                                _atualizarUI(user);
+                            });
+                    })
+                    .catch(function() { _atualizarUI(user); });
+
             }).catch(function() {
                 _isSubscriber = false;
                 _atualizarUI(user);
