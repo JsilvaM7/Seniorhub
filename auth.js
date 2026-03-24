@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════════════
-   SeniorHub — Auth + Sidebar  |  v8.0
+   SeniorHub — Auth + Sidebar  |  v9.0
    Estados distintos: isLoggedIn (autenticado) vs isSubscriber (assinante pago)
    ══════════════════════════════════════════════════════════════════════════════ */
 
@@ -14,16 +14,9 @@ var fbProvider = null;
 
 /* ── API pública ────────────────────────────────────────────────────────────── */
 window.SeniorAuth = {
-    /* Usuário logado ou null */
     getUser()        { return _currentUser; },
-
-    /* true = apenas autenticado com Google */
     isLoggedIn()     { return !!_currentUser; },
-
-    /* true = assinante ativo que pagou o Clube */
     isSubscriber()   { return _isSubscriber; },
-
-    /* Alias legado — usa isSubscriber() para lógica de conteúdo */
     isMember()       { return _isSubscriber; },
 
     loginComGoogle: function() {
@@ -41,7 +34,6 @@ window.SeniorAuth = {
         else _atualizarUI(null);
     },
 
-    /* Testa modo assinante no console: SeniorAuth.ativarAssinante() */
     ativarAssinante: function() {
         if (!_currentUser) { alert('Faça login primeiro.'); return; }
         _isSubscriber = true;
@@ -51,7 +43,7 @@ window.SeniorAuth = {
 };
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   SIDEBAR — criada antes de tudo para estar disponível imediatamente
+   SIDEBAR
    ══════════════════════════════════════════════════════════════════════════════ */
 function _criarSideBar() {
     if (document.getElementById('login-sidebar')) return;
@@ -93,7 +85,6 @@ function _renderHeaderBtn() {
     if (!slot) return;
 
     if (!_currentUser) {
-        /* Não logado → botão Login */
         slot.innerHTML =
             '<button class="login-btn" onclick="window.abrirSideBar()">' +
                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
@@ -103,7 +94,6 @@ function _renderHeaderBtn() {
                 'Login' +
             '</button>';
     } else {
-        /* Logado → foto + nome (sem selo de assinante no header) */
         var nome   = (_currentUser.displayName || 'Usuário').split(' ')[0];
         var avatar = _currentUser.photoURL ||
             'https://ui-avatars.com/api/?name=' + encodeURIComponent(nome) + '&background=C5A059&color=fff&size=64';
@@ -117,7 +107,7 @@ function _renderHeaderBtn() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   RENDER SIDEBAR BODY — 3 estados: não logado / logado não-assinante / assinante
+   RENDER SIDEBAR BODY
    ══════════════════════════════════════════════════════════════════════════════ */
 function _renderSideBarBody() {
     var body = document.getElementById('lsb-body');
@@ -131,7 +121,6 @@ function _renderSideBarBody() {
         '<path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.2 0-11.5-4.2-13.4-9.8l-7.8 6C6.6 42.6 14.6 48 24 48z"/>' +
         '</svg>';
 
-    /* ── Estado 1: Não logado ───────────────────────────────────────────────── */
     if (!_currentUser) {
         body.innerHTML =
             '<div class="lsb-section">' +
@@ -160,7 +149,6 @@ function _renderSideBarBody() {
     var avatar = _currentUser.photoURL ||
         'https://ui-avatars.com/api/?name=' + encodeURIComponent(nome) + '&background=C5A059&color=fff&size=128';
 
-    /* ── Estado 2: Logado mas NÃO assinante ────────────────────────────────── */
     if (!_isSubscriber) {
         body.innerHTML =
             '<div class="lsb-section lsb-section--user">' +
@@ -194,7 +182,6 @@ function _renderSideBarBody() {
         return;
     }
 
-    /* ── Estado 3: Logado E assinante ──────────────────────────────────────── */
     body.innerHTML =
         '<div class="lsb-section lsb-section--user">' +
             '<img src="' + avatar + '" alt="' + nome + '" class="lsb-avatar">' +
@@ -226,13 +213,12 @@ function _renderSideBarBody() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   MODAL DE VOTAÇÃO — só assinantes votam
+   MODAL DE VOTAÇÃO
    ══════════════════════════════════════════════════════════════════════════════ */
 window.renderModalConteudo = function() {
     var body = document.getElementById('modal-body');
     if (!body) return;
 
-    /* Não logado */
     if (!_currentUser) {
         body.innerHTML =
             '<div style="text-align:center;padding:8px 0 16px;">' +
@@ -248,7 +234,6 @@ window.renderModalConteudo = function() {
         return;
     }
 
-    /* Logado mas não assinante */
     if (!_isSubscriber) {
         var primeiroNome = (_currentUser.displayName || 'você').split(' ')[0];
         body.innerHTML =
@@ -262,7 +247,6 @@ window.renderModalConteudo = function() {
         return;
     }
 
-    /* Assinante */
     var nome = (_currentUser.displayName || 'você').split(' ')[0];
     body.innerHTML =
         '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px 16px;text-align:center;margin-bottom:20px;color:#166534;font-weight:700;font-size:14px;">✅ Olá, ' + nome + '! Você é assinante ativo.</div>' +
@@ -281,19 +265,89 @@ window.renderModalConteudo = function() {
    ══════════════════════════════════════════════════════════════════════════════ */
 function _atualizarUI(user) {
     _currentUser = user;
-
-    /* Ao sair, zera assinante */
     if (!user) _isSubscriber = false;
-
-    /* Em produção: verificar Firestore/custom claim aqui para setar _isSubscriber */
-    /* Exemplo: if (user) verificarAssinatura(user.uid).then(v => _isSubscriber = v); */
-
     _renderHeaderBtn();
     _renderSideBarBody();
     if (window.renderModalConteudo) window.renderModalConteudo();
-
-    /* Carrossel: só muda botão se for assinante */
     if (window.renderAd) window.renderAd();
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   HELPERS — conversão de e-mail para formatos usados como ID no Firestore
+   Alguns admins antigos salvavam o e-mail com @ e . substituídos por _
+   ══════════════════════════════════════════════════════════════════════════════ */
+function _emailParaDocId(email) {
+    /* Converte "user@gmail.com" → "user_at_gmail_com"  (padrão do admin antigo) */
+    return email.replace('@', '_at_').replace(/\./g, '_');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MIGRAÇÃO DE PENDENTES — tenta os 3 formatos possíveis de ID
+   ══════════════════════════════════════════════════════════════════════════════ */
+function _verificarPendingEMigrar(db, user, onNaoEncontrado) {
+    var emailReal    = user.email;                    /* julioynvest@gmail.com  */
+    var emailLegacy  = _emailParaDocId(user.email);  /* julioynvest_at_gmail_com */
+
+    /* Tenta o formato correto (e-mail) primeiro */
+    db.collection('pendingSubscribers').doc(emailReal).get()
+        .then(function(pending) {
+            if (pending.exists) {
+                _migrarPendente(db, user, pending, emailReal);
+                return;
+            }
+
+            /* Não achou — tenta o formato legado (underscores) */
+            db.collection('pendingSubscribers').doc(emailLegacy).get()
+                .then(function(pendingLegacy) {
+                    if (pendingLegacy.exists) {
+                        console.log('[Auth] Encontrado pendente no formato legado:', emailLegacy);
+                        _migrarPendente(db, user, pendingLegacy, emailLegacy);
+                        return;
+                    }
+
+                    /* Última tentativa: query por campo email */
+                    db.collection('pendingSubscribers')
+                        .where('email', '==', emailReal).limit(1).get()
+                        .then(function(snap) {
+                            if (!snap.empty) {
+                                var doc = snap.docs[0];
+                                console.log('[Auth] Encontrado pendente via query:', doc.id);
+                                _migrarPendente(db, user, doc, doc.id);
+                            } else {
+                                /* Nada encontrado — conta gratuita */
+                                onNaoEncontrado();
+                            }
+                        })
+                        .catch(function() { onNaoEncontrado(); });
+                })
+                .catch(function() { onNaoEncontrado(); });
+        })
+        .catch(function() { onNaoEncontrado(); });
+}
+
+function _migrarPendente(db, user, pendingDoc, docIdParaDeletar) {
+    var dados          = pendingDoc.data();
+    dados.uid          = user.uid;
+    dados.email        = user.email;
+    dados.isSubscriber = true;
+    dados.migratedAt   = firebase.firestore.FieldValue.serverTimestamp();
+    dados.activatedBy  = 'pending_migration';
+
+    db.collection('subscribers').doc(user.uid).set(dados, { merge: true })
+        .then(function() {
+            return db.collection('pendingSubscribers').doc(docIdParaDeletar).delete();
+        })
+        .then(function() {
+            console.log('[Auth] ✅ Assinante migrado com sucesso:', user.email, '→ subscribers/' + user.uid);
+            _isSubscriber = true;
+            _atualizarUI(user);
+        })
+        .catch(function(e) {
+            console.warn('[Auth] Erro na migração:', e.message);
+            /* Mesmo com erro na deleção do pendente, considera assinante */
+            _isSubscriber = true;
+            _atualizarUI(user);
+        });
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -319,7 +373,6 @@ try {
             if (r && r.user) _atualizarUI(r.user);
         }).catch(function(e) { console.warn('[Auth]', e.message); });
 
-        /* Persiste sessão — dispara sempre que a página carrega */
         fbAuth.onAuthStateChanged(function(user) {
             if (!user) {
                 _isSubscriber = false;
@@ -329,7 +382,7 @@ try {
 
             var db = firebase.firestore();
 
-            /* ── Registra e-mail na coleção userEmails (merge = não sobrescreve) ── */
+            /* ── Registra/atualiza userEmails ── */
             db.collection('userEmails').doc(user.email).set({
                 uid:         user.uid,
                 email:       user.email,
@@ -340,7 +393,7 @@ try {
                 console.warn('[Auth] userEmails write:', e.message);
             });
 
-            /* ── Verifica custom claim isSubscriber (setado pelo webhook Hotmart) ── */
+            /* ── 1. Verifica custom claim ── */
             user.getIdTokenResult(true).then(function(token) {
                 _isSubscriber = token.claims.isSubscriber === true;
 
@@ -349,7 +402,7 @@ try {
                     return;
                 }
 
-                /* Sem claim → verifica coleção subscribers pelo UID */
+                /* ── 2. Verifica subscribers/{uid} ── */
                 db.collection('subscribers').doc(user.uid).get()
                     .then(function(doc) {
                         if (doc.exists && doc.data().isSubscriber === true) {
@@ -358,40 +411,37 @@ try {
                             return;
                         }
 
-                        /* ── Verifica pendingSubscribers pelo e-mail (ativação manual) ── */
-                        db.collection('pendingSubscribers').doc(user.email).get()
-                            .then(function(pending) {
-                                if (pending.exists) {
-                                    /* Migra para subscribers com o UID real */
-                                    var dados = pending.data();
-                                    dados.uid          = user.uid;
-                                    dados.email        = user.email;
-                                    dados.isSubscriber = true;
-                                    dados.activatedAt  = firebase.firestore.FieldValue.serverTimestamp();
-                                    dados.activatedBy  = 'pending_migration';
-
-                                    db.collection('subscribers').doc(user.uid).set(dados, { merge: true })
+                        /* ── 3. Verifica subscribers/{email} (doc criado com e-mail como ID) ── */
+                        db.collection('subscribers').doc(user.email).get()
+                            .then(function(docEmail) {
+                                if (docEmail.exists && docEmail.data().isSubscriber === true) {
+                                    /* Migra: cria com UID e remove o antigo com e-mail */
+                                    var d = docEmail.data();
+                                    d.uid = user.uid;
+                                    db.collection('subscribers').doc(user.uid).set(d, { merge: true })
                                         .then(function() {
-                                            /* Remove o registro pendente para não reprocessar */
-                                            return db.collection('pendingSubscribers').doc(user.email).delete();
-                                        })
-                                        .then(function() {
-                                            console.log('[Auth] Assinante migrado de pendingSubscribers:', user.email);
+                                            db.collection('subscribers').doc(user.email).delete();
+                                            console.log('[Auth] ✅ Migrado subscribers/' + user.email + ' → subscribers/' + user.uid);
                                             _isSubscriber = true;
                                             _atualizarUI(user);
                                         })
-                                        .catch(function(e) {
-                                            console.warn('[Auth] Erro na migração:', e.message);
+                                        .catch(function() {
+                                            _isSubscriber = true;
                                             _atualizarUI(user);
                                         });
-                                } else {
-                                    /* Nenhum registro encontrado — Conta Gratuita */
-                                    _atualizarUI(user);
+                                    return;
                                 }
+
+                                /* ── 4. Verifica pendingSubscribers (todos os formatos) ── */
+                                _verificarPendingEMigrar(db, user, function() {
+                                    /* Não encontrou nada — conta gratuita */
+                                    _atualizarUI(user);
+                                });
                             })
-                            .catch(function(e) {
-                                console.warn('[Auth] pendingSubscribers check:', e.message);
-                                _atualizarUI(user);
+                            .catch(function() {
+                                _verificarPendingEMigrar(db, user, function() {
+                                    _atualizarUI(user);
+                                });
                             });
                     })
                     .catch(function() { _atualizarUI(user); });
