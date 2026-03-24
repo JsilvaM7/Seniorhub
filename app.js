@@ -1,6 +1,15 @@
 /* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
+/* ── Links Google Drive — acesso exclusivo de assinantes ───────────────────── */
+const EBOOK_LINKS = {
+    1: 'https://drive.google.com/file/d/1gmM8fOlRrWDuptQwIaivytbQeriTOAuc/view?usp=sharing',
+    2: 'https://drive.google.com/file/d/1BgZxiOdUcnRAQVEanJJ3RRW3WVFY-Yin/view?usp=sharing',
+    3: 'https://drive.google.com/file/d/1_cFQQH7e0nZsg8JkD_6Bmbfh1R8C7p84/view?usp=sharing',
+    4: 'https://drive.google.com/file/d/1eAHSCB3E5dsO9ubi2s3_91ZpxJBlT95H/view?usp=sharing',
+    5: 'https://drive.google.com/file/d/1dMJHFfTVykmTXWQtToJUu8Pf2bEi1JXQ/view?usp=sharing'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     loadNewsFeed();
     initAdShowcase();
@@ -91,12 +100,14 @@ function loadBooksShowcase() {
                                 <div class="book-title">${book.title}</div>
                             </div>
                             <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
-                                <button onclick="window.handleBookClick(${num})"
-                                        style="background:var(--sage-green);color:#fff;border:none;
-                                               border-radius:8px;padding:8px 14px;font-size:13px;
-                                               font-weight:700;cursor:pointer;white-space:nowrap;">
-                                    📖 Ler no Site
-                                </button>
+                                <a href="${EBOOK_LINKS[Number(num)]}"
+                                   target="_blank" rel="noopener noreferrer"
+                                   style="background:var(--sage-green);color:#fff;border:none;
+                                          border-radius:8px;padding:8px 14px;font-size:13px;
+                                          font-weight:700;cursor:pointer;white-space:nowrap;
+                                          text-decoration:none;display:inline-block;">
+                                    📖 Ler no Portal
+                                </a>
                             </div>
                         </div>`;
                     } else {
@@ -720,11 +731,12 @@ function renderAd() {
         `<span class="ad-dot ${i === currentAdIndex ? 'active' : ''}" onclick="goToAd(${i})" title="Livro ${i + 1}"></span>`
     ).join('');
 
-    // Só assinante pago vê "Ler no Portal" — logado sem assinatura vê "Adquirir"
+    // Só assinante pago vê "Ler no Portal" (Drive) — logado sem assinatura vê "Adquirir"
     const adBtnHtml = isSubscriber
-        ? `<button onclick="window.handleBookClick(${ad.livro})" class="ad-btn" style="border:none;cursor:pointer;width:100%;">
-               📖 Ler no Site →
-           </button>`
+        ? `<a href="${EBOOK_LINKS[ad.livro]}" target="_blank" rel="noopener noreferrer"
+               class="ad-btn" style="display:block;text-align:center;text-decoration:none;">
+               📖 Ler no Portal →
+           </a>`
         : `<a href="${ad.link}" target="_blank" rel="noopener noreferrer" class="ad-btn">${ad.btnText}</a>`;
 
     container.innerHTML = `
