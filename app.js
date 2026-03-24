@@ -100,14 +100,12 @@ function loadBooksShowcase() {
                                 <div class="book-title">${book.title}</div>
                             </div>
                             <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
-                                <a href="${EBOOK_LINKS[Number(num)]}"
-                                   target="_blank" rel="noopener noreferrer"
-                                   style="background:var(--sage-green);color:#fff;border:none;
-                                          border-radius:8px;padding:8px 14px;font-size:13px;
-                                          font-weight:700;cursor:pointer;white-space:nowrap;
-                                          text-decoration:none;display:inline-block;">
+                                <button onclick="window.handleBookClick(${num})"
+                                        style="background:var(--sage-green);color:#fff;border:none;
+                                               border-radius:8px;padding:8px 16px;font-size:13px;
+                                               font-weight:700;cursor:pointer;white-space:nowrap;">
                                     📖 Ler no Portal
-                                </a>
+                                </button>
                             </div>
                         </div>`;
                     } else {
@@ -731,12 +729,12 @@ function renderAd() {
         `<span class="ad-dot ${i === currentAdIndex ? 'active' : ''}" onclick="goToAd(${i})" title="Livro ${i + 1}"></span>`
     ).join('');
 
-    // Só assinante pago vê "Ler no Portal" (Drive) — logado sem assinatura vê "Adquirir"
+    // Só assinante pago vê "Ler no Portal" — logado sem assinatura vê "Adquirir"
     const adBtnHtml = isSubscriber
-        ? `<a href="${EBOOK_LINKS[ad.livro]}" target="_blank" rel="noopener noreferrer"
-               class="ad-btn" style="display:block;text-align:center;text-decoration:none;">
+        ? `<button onclick="window.handleBookClick(${ad.livro})" class="ad-btn"
+               style="border:none;cursor:pointer;width:100%;display:block;text-align:center;">
                📖 Ler no Portal →
-           </a>`
+           </button>`
         : `<a href="${ad.link}" target="_blank" rel="noopener noreferrer" class="ad-btn">${ad.btnText}</a>`;
 
     container.innerHTML = `
