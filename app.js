@@ -1,13 +1,13 @@
 /* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
-/* ── Links Google Drive — acesso exclusivo de assinantes ───────────────────── */
+/* ── Links Google Drive — acesso exclusivo de assinantes (/preview = iframe sem barra) ── */
 const EBOOK_LINKS = {
-    1: 'https://drive.google.com/file/d/1gmM8fOlRrWDuptQwIaivytbQeriTOAuc/view?usp=sharing',
-    2: 'https://drive.google.com/file/d/1BgZxiOdUcnRAQVEanJJ3RRW3WVFY-Yin/view?usp=sharing',
-    3: 'https://drive.google.com/file/d/1_cFQQH7e0nZsg8JkD_6Bmbfh1R8C7p84/view?usp=sharing',
-    4: 'https://drive.google.com/file/d/1eAHSCB3E5dsO9ubi2s3_91ZpxJBlT95H/view?usp=sharing',
-    5: 'https://drive.google.com/file/d/1dMJHFfTVykmTXWQtToJUu8Pf2bEi1JXQ/view?usp=sharing'
+    1: 'https://drive.google.com/file/d/1gmM8fOlRrWDuptQwIaivytbQeriTOAuc/preview',
+    2: 'https://drive.google.com/file/d/1BgZxiOdUcnRAQVEanJJ3RRW3WVFY-Yin/preview',
+    3: 'https://drive.google.com/file/d/1_cFQQH7e0nZsg8JkD_6Bmbfh1R8C7p84/preview',
+    4: 'https://drive.google.com/file/d/1eAHSCB3E5dsO9ubi2s3_91ZpxJBlT95H/preview',
+    5: 'https://drive.google.com/file/d/1dMJHFfTVykmTXWQtToJUu8Pf2bEi1JXQ/preview'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,12 +61,66 @@ function handleRecipeClick(id) {
 
 function handleBookClick(bookNum) {
     const bookInfo = window.BOOKS[bookNum];
-    if (bookInfo && bookInfo.key) {
+    if (!bookInfo) return;
+
+    const isSubscriber = window.SeniorAuth && window.SeniorAuth.isSubscriber();
+
+    // Assinante → abre o visualizador PDF integrado via iframe
+    if (isSubscriber && EBOOK_LINKS[bookNum]) {
+        renderPDFViewer(bookNum, bookInfo);
+        return;
+    }
+
+    // Não-assinante → fluxo normal de receitas com paywall na receita 6+
+    if (bookInfo.key) {
         livroAtual = bookInfo.key;
         const bookArr = window.biblioteca[bookInfo.key] || [];
         const firstId = bookArr.length > 0 ? bookArr[0].id : 1;
-        loadRecipe(firstId); // Abre a primeira receita real do livro clicado
+        loadRecipe(firstId);
     }
+}
+
+/* ── Visualizador PDF Integrado (apenas assinantes) ──────────────────────── */
+function renderPDFViewer(bookNum, bookInfo) {
+    const viewer = document.getElementById('content-viewer');
+    const driveUrl = EBOOK_LINKS[bookNum];
+    const title = bookInfo.title || `Livro ${bookNum}`;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'recipe-card';
+    wrapper.style.cssText = 'padding:0; overflow:hidden; display:flex; flex-direction:column; min-height:85vh;';
+    wrapper.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between;
+                    padding:14px 20px; background:#fafaf8;
+                    border-bottom:1.5px solid var(--sage-green); flex-shrink:0;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+                          color:var(--sage-green); margin:0; cursor:pointer;"
+                   onclick="event.preventDefault(); loadBooksShowcase()">← Biblioteca</p>
+                <span style="color:#d1d5db;">|</span>
+                <span style="font-size:14px; font-weight:700; color:#374151;">${title}</span>
+            </div>
+            <span style="display:inline-flex; align-items:center; gap:5px; background:#f0fdf4;
+                         color:#166534; font-weight:700; font-size:12px; padding:4px 12px;
+                         border-radius:20px; border:1px solid #86efac; flex-shrink:0;">
+                ✅ Acesso de Assinante
+            </span>
+        </div>
+        <iframe
+            src="${driveUrl}"
+            allow="autoplay"
+            style="flex:1; width:100%; min-height:78vh; border:none; display:block;"
+            title="${title} — SeniorHub"
+        ></iframe>
+        <div style="padding:10px 20px; text-align:center; border-top:1px solid #e5e7eb;
+                    font-size:12px; color:var(--text-muted); flex-shrink:0; background:#fafaf8;">
+            Role o PDF acima para ler todas as 50 receitas &nbsp;·&nbsp;
+            <span style="cursor:pointer; color:var(--sage-green); font-weight:700;"
+                  onclick="loadBooksShowcase()">Escolher outro livro →</span>
+        </div>
+    `;
+
+    swapContent(viewer, wrapper);
 }
 
 /* ── Books Showcase Vitrine ─────────────────────────────────────────────────── */
