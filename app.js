@@ -1,13 +1,4 @@
 /* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
-
-/* ── Links Google Drive dos e-books para assinantes ────────────────────────── */
-const EBOOK_LINKS = {
-    1: 'https://drive.google.com/file/d/1gmM8fOlRrWDuptQwIaivytbQeriTOAuc/view?usp=sharing',
-    2: 'https://drive.google.com/file/d/1BgZxiOdUcnRAQVEanJJ3RRW3WVFY-Yin/view?usp=sharing',
-    3: 'https://drive.google.com/file/d/1_cFQQH7e0nZsg8JkD_6Bmbfh1R8C7p84/view?usp=sharing',
-    4: 'https://drive.google.com/file/d/1eAHSCB3E5dsO9ubi2s3_91ZpxJBlT95H/view?usp=sharing',
-    5: 'https://drive.google.com/file/d/1dMJHFfTVykmTXWQtToJUu8Pf2bEi1JXQ/view?usp=sharing'
-};
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
 document.addEventListener('DOMContentLoaded', () => {
