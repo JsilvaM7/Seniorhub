@@ -532,8 +532,16 @@ const BOOK_PAYMENT_LINKS = {
     'horta'     : 'https://pay.hotmart.com/A104989658F'   // Livro 5 ✓ ativo
 };
 
+/* Detecta se um link é de compra (Hotmart ou Amazon) */
+function isLinkDeCompra(url) {
+    if (!url) return false;
+    const u = url.trim().toLowerCase();
+    return u.includes('hotmart.com') || u.includes('amazon.com.br') || u.includes('amazon.com');
+}
+
 /* Resolve o texto e URL do botão CTA com base na categoria e no link da planilha.
-   Regra: Link_Noticia (coluna da planilha) tem PRIORIDADE; fallback = CATEGORIA_CTA. */
+   Regra: Link_Noticia (coluna da planilha) tem PRIORIDADE; fallback = CATEGORIA_CTA.
+   Se o link for de compra, o botão diz "Adquirir [CATEGORIA]" em vez de "Continuar Lendo". */
 function resolverCTA(categoria, linkNoticia) {
     const catKey = (categoria || '').trim().toUpperCase();
     const config = CATEGORIA_CTA[catKey];
@@ -541,7 +549,15 @@ function resolverCTA(categoria, linkNoticia) {
     // Se há link explícito na planilha, ele ganha sempre
     const hasCustomLink = linkNoticia && linkNoticia.trim().startsWith('http');
     const finalUrl  = hasCustomLink ? linkNoticia.trim() : (config ? config.url  : null);
-    const finalText = config ? config.text : 'Continuar Lendo →';
+
+    // Botão inteligente: link de compra → "Adquirir [Categoria]"
+    let finalText;
+    if (hasCustomLink && isLinkDeCompra(linkNoticia)) {
+        const nomeCategoria = (categoria || 'Agora').trim();
+        finalText = `Adquirir ${nomeCategoria}`;
+    } else {
+        finalText = config ? config.text : 'Continuar Lendo →';
+    }
 
     return { url: finalUrl, text: finalText };
 }
@@ -571,7 +587,7 @@ function criarCardNoticia({ categoria, titulo, resumo, linkNoticia, linkImagem }
         <div class="news-content">
             <span class="news-category">${categoria}</span>
             <h2 class="news-header-title">${titulo}</h2>
-            <p style="color:var(--text-muted); margin-bottom:24px;">${resumo}</p>
+            <p style="color:var(--text-muted); margin-bottom:24px; white-space:pre-wrap;">${resumo}</p>
             ${ctaHTML}
         </div>
     `;
@@ -601,10 +617,9 @@ async function carregarFeedNoticias(feedContainer) {
         const iLink = col('link_noticia');
         const iImg = col('link_imagem');
 
-        // Filter valid rows (non-empty título), newest first (reverse order after header)
+        // Filter valid rows (non-empty título) — mantém a ordem exata da planilha (linha 2 → última)
         const dataRows = rows.slice(1)
-            .filter(r => r[iTit] && r[iTit].trim() !== '')
-            .reverse();
+            .filter(r => r[iTit] && r[iTit].trim() !== '');
 
         if (dataRows.length === 0) return;
 
@@ -614,7 +629,7 @@ async function carregarFeedNoticias(feedContainer) {
         divider.textContent = '📰 Últimas Notícias';
         feedContainer.insertBefore(divider, feedContainer.firstChild);
 
-        // Prepend dynamic cards above static ones (reversed so newest is first)
+        // Insere os cards na ordem da planilha (primeira linha = primeiro card)
         dataRows.forEach(r => {
             const card = criarCardNoticia({
                 categoria: r[iCat] || 'Notícia',
@@ -623,7 +638,7 @@ async function carregarFeedNoticias(feedContainer) {
                 linkNoticia: r[iLink] || '#',
                 linkImagem: r[iImg] || ''
             });
-            feedContainer.insertBefore(card, divider.nextSibling);
+            feedContainer.appendChild(card);
         });
 
         // Remove loading placeholder if present
