@@ -84,7 +84,6 @@ function loadBooksShowcase() {
             ${(() => {
                 const isSub = window.SeniorAuth && window.SeniorAuth.isSubscriber();
                 return Object.entries(window.BOOKS).map(([num, book]) => {
-                    const driveLink = EBOOK_LINKS[parseInt(num)];
                     if (isSub) {
                         return `
                         <div style="display:flex; align-items:center; gap:12px; width:100%;
@@ -107,13 +106,6 @@ function loadBooksShowcase() {
                                                font-weight:700;cursor:pointer;white-space:nowrap;">
                                     📖 Ler no Site
                                 </button>
-                                <a href="${driveLink}" target="_blank" rel="noopener noreferrer"
-                                   style="background:#fff;color:var(--sage-green-dark);
-                                          border:1.5px solid var(--sage-green);border-radius:8px;
-                                          padding:6px 14px;font-size:12px;font-weight:700;
-                                          text-decoration:none;text-align:center;white-space:nowrap;">
-                                    ⬇️ Baixar PDF
-                                </a>
                             </div>
                         </div>`;
                     } else {
@@ -738,11 +730,10 @@ function renderAd() {
     ).join('');
 
     // Só assinante pago vê "Ler no Portal" — logado sem assinatura vê "Adquirir"
-    const ebookLink = EBOOK_LINKS[ad.livro];
     const adBtnHtml = isSubscriber
-        ? `<a href="${ebookLink}" target="_blank" rel="noopener noreferrer" class="ad-btn">
-               📖 Ler no Portal →
-           </a>`
+        ? `<button onclick="window.handleBookClick(${ad.livro})" class="ad-btn" style="border:none;cursor:pointer;width:100%;">
+               📖 Ler no Site →
+           </button>`
         : `<a href="${ad.link}" target="_blank" rel="noopener noreferrer" class="ad-btn">${ad.btnText}</a>`;
 
     container.innerHTML = `
