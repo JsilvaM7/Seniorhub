@@ -621,13 +621,21 @@ async function carregarFeedNoticias(feedContainer) {
         const dataRows = rows.slice(1)
             .filter(r => r[iTit] && r[iTit].trim() !== '');
 
-        if (dataRows.length === 0) return;
+        if (dataRows.length === 0) {
+            // Planilha vazia: remove placeholder e exibe aviso
+            const pl = feedContainer.querySelector('.feed-loading');
+            if (pl) pl.textContent = 'Nenhuma notícia encontrada na planilha.';
+            return;
+        }
 
-        // Insert a divider label
+        // Limpa o container (remove placeholder e qualquer card antigo)
+        feedContainer.innerHTML = '';
+
+        // Cabeçalho do feed
         const divider = document.createElement('div');
         divider.style.cssText = 'font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.7px; color:var(--sage-green); margin-bottom:12px; padding-top:4px;';
         divider.textContent = '📰 Últimas Notícias';
-        feedContainer.insertBefore(divider, feedContainer.firstChild);
+        feedContainer.appendChild(divider);
 
         // Insere os cards na ordem da planilha (primeira linha = primeiro card)
         dataRows.forEach(r => {
@@ -653,69 +661,22 @@ async function carregarFeedNoticias(feedContainer) {
     }
 }
 
-const newsItems = [
-    {
-        id: 'n1', category: 'Saúde',
-        title: '5 Receitas de Sopas que Fortalecem a Imunidade no Inverno',
-        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=800',
-        description: 'Descubra como ingredientes simples como gengibre e abóbora podem ser seus melhores aliados.',
-        type: 'recipe_teaser'
-    },
-    {
-        id: 'n2', category: 'Exercícios',
-        title: 'Mobilidade em Casa: 3 Exercícios Simples para Começar o Dia',
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800',
-        description: 'Manter as articulações saudáveis é o segredo para uma vida ativa e sem dores.',
-        type: 'article'
-    },
-    {
-        id: 'n3', category: 'Conforto do Lar',
-        title: 'A Nova Era das Poltronas Ergonômicas: Design e Saúde',
-        image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=800',
-        description: 'Conheça as tecnologias que estão transformando o descanso na terceira idade.',
-        type: 'tech'
-    },
-    {
-        id: 'n4', category: 'Viagens',
-        title: 'Destinos de Inverno: Portugal Além de Lisboa e Porto',
-        image: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&q=80&w=800',
-        description: 'Vilarejos históricos e gastronomia acolhedora esperam por você nesta temporada.',
-        type: 'article'
-    }
-];
-
 function loadNewsFeed() {
     const viewer = document.getElementById('content-viewer');
     viewer.innerHTML = '';
     const feed = document.createElement('div');
     feed.className = 'slide-in-right';
 
-    // Loading placeholder (removed when CSV arrives or fails)
+    // Mostra apenas o loading enquanto a planilha é buscada
     const placeholder = document.createElement('div');
     placeholder.className = 'feed-loading';
-    placeholder.style.cssText = 'font-size:13px; color:var(--text-muted); padding:8px 0 16px; opacity:.7;';
-    placeholder.textContent = '⏳ Carregando notícias recentes...';
+    placeholder.style.cssText = 'font-size:14px; color:var(--text-muted); padding:32px 0; text-align:center; opacity:.75;';
+    placeholder.textContent = '⏳ Carregando notícias...';
     feed.appendChild(placeholder);
-
-    // Static fallback cards
-    newsItems.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" class="news-image">
-            <div class="news-content">
-                <span class="news-category">${item.category}</span>
-                <h2 class="news-header-title">${item.title}</h2>
-                <p style="color:var(--text-muted); margin-bottom:24px;">${item.description}</p>
-                <a href="#" class="clube-btn" onclick="handleNewsClick('${item.id}'); return false;">Continuar Lendo →</a>
-            </div>
-        `;
-        feed.appendChild(card);
-    });
 
     viewer.appendChild(feed);
 
-    // Async: fetch CSV and prepend dynamic cards without blocking the UI
+    // Busca exclusivamente da planilha Google Sheets
     carregarFeedNoticias(feed);
 }
 
