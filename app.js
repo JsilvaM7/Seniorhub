@@ -1510,6 +1510,178 @@ const GUIAS_DATA = [
         categoria: 'Sabedoria',
         gratis: false
     },
+    {
+        id: 'g6',
+        titulo: 'O Labirinto das Frequ&ecirc;ncias',
+        descricao: 'O guia secreto para dominar a regula&ccedil;&atilde;o emocional atrav&eacute;s das vibra&ccedil;&otilde;es que sussurram ao cora&ccedil;&atilde;o.',
+        conteudo: `
+            <div style="display:flex;flex-direction:column;gap:36px;">
+
+                <div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:#fdf8f0;border:1.5px solid var(--gold);color:var(--gold-dark);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">I</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#2a1a06;margin:0;">A Chave Mestra: O Som como Governo das Emo&ccedil;&otilde;es</h3>
+                    </div>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">No baile de m&aacute;scaras da exist&ecirc;ncia, a m&uacute;sica n&atilde;o &eacute; apenas entretenimento. &Eacute; o &uacute;nico est&iacute;mulo que atravessa simultaneamente o c&oacute;rtex racional, o sistema l&iacute;mbico emocional e o cerebelo motor &mdash; as tr&ecirc;s grandes arenas do ser humano &mdash; sem pedir permiss&atilde;o a nenhum deles. Uma nota correta no momento certo n&atilde;o acalma o estado emocional: ela o <em>governa</em>.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">O magnetismo oculto entre as notas que os grandes compositores conhecem intuitivamente &eacute; hoje mapeado pela neuroci&ecirc;ncia com precis&atilde;o cir&uacute;rgica. A tens&atilde;o harm&ocirc;nica &mdash; aquela sensa&ccedil;&atilde;o de uma nota que ainda n&atilde;o resolveu, que suspende o tempo &mdash; ativa o c&oacute;rtex parietal e mantenhm o c&eacute;rebro em estado de antecipa&ccedil;&atilde;o prazerosa. A resolu&ccedil;&atilde;o harmÃ´nica &mdash; o acorde que finalmente pousa &mdash; libera dopamina em picos mensur&aacute;veis. O compositor &eacute; um engenheiro da qu&iacute;mica cerebral.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">Para o sÃªnior soberano, esse conhecimento confere um superpoder discreto: a capacidade de <em>desenhar o pr&oacute;prio estado interno</em> com a mesma inten&ccedil;Ã£o com que um arquiteto desenha um ambiente. Voc&ecirc; n&atilde;o espera o humor chegar. Voc&ecirc; convoca o humor que precisa, atrav&eacute;s das frequ&ecirc;ncias que j&aacute; conhece e das que ainda vai descobrir.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0;">O hipocampo &mdash; arquivista da mem&oacute;ria emocional &mdash; &eacute; particularmente sens&iacute;vel &agrave;s melodias que carregam hist&oacute;ria afetiva. Ouvir uma can&ccedil;&atilde;o que esteve presente num momento de grande amor ou de grande superac&atilde;o n&atilde;o &eacute; apenas record&acirc;-lo: &eacute; reativar os circuitos neurais que aquele estado produziu. &Eacute; reinstalar, temporariamente, a vers&atilde;o de voc&ecirc; que viveu aquele momento. A chave mestra est&aacute; na m&uacute;sica. A porta &eacute; voc&ecirc;.</p>
+                </div>
+
+                <div style="background:#fdf8f0;border-radius:16px;padding:28px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:#fdf8f0;border:1.5px solid var(--gold);color:var(--gold-dark);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">II</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#2a1a06;margin:0;">O Enigma dos 432 Hz: Alinhando a Biologia ao Ritmo do Universo</h3>
+                    </div>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">Em 1953, a ISO (Organiza&ccedil;&atilde;o Internacional de Normaliza&ccedil;&atilde;o) padronizou a afina&ccedil;&atilde;o musical mundial em 440 Hz. Antes disso, compositores de Vivaldi a Verdi escreviam em escalas que naturalmente gravitavam em torno dos 432 Hz. A diferen&ccedil;a &eacute; de apenas 8 ciclos por segundo. Mas a percep&ccedil;&atilde;o humana, segundo estudos de acustica perceptiva, registra essa dist&acirc;ncia como a diferen&ccedil;a entre uma sala friamente iluminada por fluorescentes e uma sala aquecida por velas.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 20px;">Os 432 Hz coincidem matematicamente com freq&uuml;&ecirc;ncias encontradas na natureza: o batimento card&iacute;aco em repouso, as ondas do mar em respira&ccedil;&atilde;o lenta, as freq&uuml;&ecirc;ncias eletromagn&eacute;ticas da terra (freq&uuml;&ecirc;ncia de Schumann). Essa ressonÃ¢ncia n&atilde;o &eacute; m&iacute;stica &mdash; &eacute; matem&aacute;tica. O corpo, ao ser exposto a ela de forma sustentada, tende a <em>entrar em sincronicidade</em> com um ritmo que j&aacute; conhece biologicamente.</p>
+                    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+                        <div style="background:#fff;border-radius:12px;padding:18px 22px;border-left:4px solid var(--gold);">
+                            <p style="font-size:15px;font-weight:800;color:#2a1a06;margin:0 0 8px;">O Protocolo da Escuta Soberana em 432 Hz (10 minutos)</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;"><strong>Passo 1:</strong> Encontre no YouTube ou Spotify m&uacute;sicas etiquetadas como &ldquo;432hz&rdquo; (existem vers&otilde;es de MPB, bossa nova e erudita remasterizadas nessa afinaÃ§Ã£o).<br><strong>Passo 2:</strong> Use fones de ouvido de qualidade. Sente-se ou deite-se em posi&ccedil;&atilde;o confort&aacute;vel. Volume: audÃ­vel mas suave.<br><strong>Passo 3:</strong> Feche os olhos e dirija a aten&ccedil;&atilde;o &agrave; regi&atilde;o do peito &mdash; n&atilde;o ao pensamento. Deixe a melodia ressoar no corpo, n&atilde;o na mente.<br><strong>Resultado esperado ap&oacute;s 10 minutos:</strong> redu&ccedil;&atilde;o mensur&aacute;vel da freq&uuml;&ecirc;ncia respirat&oacute;ria, sensa&ccedil;&atilde;o de expans&atilde;o t&oacute;raxica e redu&ccedil;&atilde;o da tens&atilde;o muscular na cervical e ombros.</p>
+                        </div>
+                        <div style="background:#fff;border-radius:12px;padding:18px 22px;border-left:4px solid var(--gold);">
+                            <p style="font-size:15px;font-weight:800;color:#2a1a06;margin:0 0 8px;">A Encontro Clandestino com a Ans iedade</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;">Quando a ansiedade surge &mdash; aquela freq&uuml;&ecirc;ncia irregular que condensa o peito e acelera o pensamento &mdash; a tentativa de suprimi-la com for&ccedil;a de vontade raramente funciona. O que funciona &eacute; substituir uma freq&uuml;&ecirc;ncia por outra. Ative sua m&uacute;sica em 432 Hz. Em menos de 3 minutos, o c&eacute;rebro come&ccedil;a a seguir o ritmo do que ouve &mdash; &eacute; o fen&ocirc;meno do <em>entrainment</em> neural. A ansiedade n&atilde;o &eacute; for&ccedil;ada a partir. &Eacute; substituÃ­da por uma freq&uuml;&ecirc;ncia mais poderosa.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:#fdf8f0;border:1.5px solid var(--gold);color:var(--gold-dark);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">III</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#2a1a06;margin:0;">Portais Brasileiros: A Geometria Sagrada de Caetano, Milton e Jorge Ben</h3>
+                    </div>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 20px;">A m&uacute;sica brasileira, em seus apogeus, &eacute; uma das express&otilde;es art&iacute;sticas mais sofisticadas que a humanidade produziu. N&atilde;o por acaso &mdash; mas porque nasceu da fus&atilde;o de tr&ecirc;s cosmos musicais distintos (europeu, africano e ind&iacute;gena) num mesmo solo, destilada por g&ecirc;nios que compreenderam intuitivamente o que a neuroci&ecirc;ncia levaria d&eacute;cadas para formalizar. Tr&ecirc;s portais, tr&ecirc;s geometrias, tr&ecirc;s fun&ccedil;&otilde;es neurol&oacute;gicas:</p>
+                    <div style="display:flex;flex-direction:column;gap:20px;">
+                        <div style="background:#fff;border:1px solid #f0e8d4;border-radius:16px;padding:24px;border-top:4px solid var(--gold);">
+                            <p style="font-size:17px;font-weight:900;color:#2a1a06;margin:0 0 4px;">Caetano Veloso &mdash; <em>CajuÃ­na</em></p>
+                            <p style="font-size:13px;color:var(--gold-dark);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:0 0 14px;">Portal da Melancolia Soberana</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.85;margin:0;">Caetano construiu em &ldquo;CajuÃ­na&rdquo; algo que poucos compositores conseguem: transformar a saudade em beleza cristalina sem resolv&ecirc;-la. A mel&aacute;ncolia da can&ccedil;&atilde;o n&atilde;o pede para ser consertada &mdash; pede para ser <em>habitada</em>. Neurologicamente, esse &eacute; um estado de processamento emocional profundo: o sistema l&iacute;mbico conclui ciclos afetivos que ficaram abertos. A tristeza que a can&ccedil;&atilde;o evoca n&atilde;o &eacute; negativa &mdash; &eacute; catarse. &Eacute; o choro que limpa. A tens&atilde;o harm&ocirc;nica insolÃºvel de Caetano mant&eacute;m o c&eacute;rebro suspenso num estado meditativo profundo, onde o tempo perde a urgÃªncia e a mente encontra clareza.</p>
+                        </div>
+                        <div style="background:#fff;border:1px solid #f0e8d4;border-radius:16px;padding:24px;border-top:4px solid var(--gold);">
+                            <p style="font-size:17px;font-weight:900;color:#2a1a06;margin:0 0 4px;">Milton Nascimento &mdash; <em>Ponta de Areia</em></p>
+                            <p style="font-size:13px;color:var(--gold-dark);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:0 0 14px;">Portal da Mem&oacute;ria Tel&uacute;rica</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.85;margin:0;">A voz de Milton opera em freq&uuml;&ecirc;ncias que ativam o nervo vago diretamente. Sua extens&atilde;o de falsete &mdash; aquela qualidade de voz que parece vir de outro plano &mdash; n&atilde;o &eacute; apenas t&eacute;cnica vocal; &eacute; um est&iacute;mulo neurol&oacute;gico que induz o sistema nervoso parasssimp&aacute;tico sem esfor&ccedil;o. &ldquo;Ponta de Areia&rdquo;, especificamente, evoca a geograf&iacute;a do interior de Minas Gerais com uma densidade temporal que for&ccedil;a o c&eacute;rebro a desacelerar. O hipocampo, ao receber essa paisagem sonora, ativa mem&oacute;rias de lugares seguros, de inf&acirc;ncias protegidas, de ra&iacute;zes. &Eacute; uma &acirc;ncora de resili&ecirc;ncia disfarc&ccedil;ada de can&ccedil;&atilde;o.</p>
+                        </div>
+                        <div style="background:#fff;border:1px solid #f0e8d4;border-radius:16px;padding:24px;border-top:4px solid var(--gold);">
+                            <p style="font-size:17px;font-weight:900;color:#2a1a06;margin:0 0 4px;">Jorge Ben Jor &mdash; <em>Taj Mahal</em> e <em>Que Pena</em></p>
+                            <p style="font-size:13px;color:var(--gold-dark);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:0 0 14px;">Portal da Vitalidade Solar</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.85;margin:0;">Jorge Ben Jor &eacute; o arquiteto do <em>groove</em> cerebral. Seus ritmos sin&ccedil;opados africanos &mdash; o balanÃ§o perpet&iacute;uo entre o tempo e o contratempo &mdash; for&ccedil;am o cerebelo e os gÃ¢nglios da base a sincronizar. O resultado n&atilde;o &eacute; apenas alegria: &eacute; uma ativa&ccedil;&atilde;o motora global que eleva o humor atrav&eacute;s da dopamina e da norepin&eacute;frina. O corpo quer se mover. E mover-se &eacute; vida. Quando o s&ecirc;nior precisa sair de um estado de inÃ©rcia emocional ou combater o torpor do tÃ©dio, Jorge Ben &eacute; a prescri&ccedil;&atilde;o correta &mdash; sem colaterais, sem prescri&ccedil;&atilde;o m&eacute;dica.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(135deg,#2a1a06 0%,#5a3a10 100%);border-radius:16px;padding:32px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(197,160,89,0.6);color:#e8c97a;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">IV</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#fff;margin:0;">O Poder do Sil&ecirc;ncio: O Encontro Clandestino com o Pr&oacute;prio Ser</h3>
+                    </div>
+                    <p style="font-size:16px;color:#e8d4a8;line-height:1.9;margin:0 0 16px;">H&aacute; um paradoxo que os grandes m&uacute;sicos conhecem e os grandes fil&oacute;sofos documentaram: a m&uacute;sica n&atilde;o existe apenas nas notas. Existe, sobretudo, no sil&ecirc;ncio <em>entre</em> elas. O compositor Claude Debussy afirmou que &ldquo;a m&uacute;sica &eacute; o espa&ccedil;o entre as notas&rdquo;. Neurologicamente, esse espa&ccedil;o &eacute; onde o c&eacute;rebro integra, processa e consolida. &Eacute; onde a emo&ccedil;&atilde;o evocada deposita seu significa do mais profundo.</p>
+                    <p style="font-size:16px;color:#e8d4a8;line-height:1.9;margin:0 0 16px;">O sil&ecirc;ncio intencional &mdash; aquele que se escolhe ap&oacute;s a m&uacute;sica, ou que se cultiva antes dela &mdash; &eacute; o labirinto em que o ser se reencontra. Nele, sem o ru&iacute;do do mundo e sem a constru&ccedil;&atilde;o da linguagem, emergem as verdades que o cotidiano mascara. &Eacute; nesse sil&ecirc;ncio que o s&ecirc;nior soberano ouve com clareza o que j&aacute; sabe &mdash; e decide com sabedoria o que ainda fazer.</p>
+                    <p style="font-size:16px;color:#e8d4a8;line-height:1.9;margin:0 0 24px;">Ao escolher sua trilha sonora com inten&ccedil;&atilde;o, voc&ecirc; n&atilde;o est&aacute; apenas ouvindo. Voc&ecirc; est&aacute; tecendo, nota a nota, o ambiente interno em que seus pensamentos mais elevados nascem. V&ecirc;, &eacute; isso que separa quem &eacute; governado pelas emo&ccedil;&otilde;es de quem as governa: a consci&ecirc;ncia de que o estado interno &eacute; uma escolha &mdash; e a m&uacute;sica correta &eacute; um dos instrumentos mais precisos para exerc&ecirc;-la.</p>
+                    <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px;border-left:4px solid #C5A059;">
+                        <p style="font-size:16px;color:#fff;font-style:italic;line-height:1.85;margin:0;"><strong style="color:#e8c97a;">&ldquo;No labirinto das freq&uuml;&ecirc;ncias, o fio de Ariadne n&atilde;o &eacute; de ouro &mdash; &eacute; de som. Quem o segue com consci&ecirc;ncia sempre encontra o caminho de volta a si mesmo.&rdquo;</strong><br><span style="font-size:13px;color:#c4a87a;margin-top:8px;display:block;">Princ&iacute;pio da Soberania Sonora &mdash; SeniorHub</span></p>
+                    </div>
+                </div>
+
+            </div>`,
+        categoria: 'Sabedoria',
+        gratis: false
+    }
+    {
+        id: 'g7',
+        titulo: 'A Fronteira da Longevidade',
+        descricao: 'O guia pr&aacute;tico para transformar suas viagens em um protocolo de renova&ccedil;&atilde;o celular e expans&atilde;o da alma.',
+        conteudo: `
+            <div style="display:flex;flex-direction:column;gap:36px;">
+
+                <div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:#fdf8f0;border:1.5px solid var(--gold);color:var(--gold-dark);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">I</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#2a1a06;margin:0;">O Inimigo Invis&iacute;vel: Entropia e a Estagna&ccedil;&atilde;o do Ser</h3>
+                    </div>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">A entropia &eacute; a segunda lei da termodin&acirc;mica: sistemas fechados tendem Ã  desordem e ao decl&iacute;nio progressivo. O organismo humano n&atilde;o &eacute; exce&ccedil;&atilde;o. Quando o ambiente &eacute; constante &mdash; os mesmos c&oacute;modos, os mesmos caminhos, as mesmas convers&otilde;es &mdash; o c&eacute;rebro entra em modo de economia de energia. Menos sinapses ativas. Menos dopamina bar&aacute;sal. Menos testosterona e DHEA. Em termos biol&oacute;gicos: o organismo interpreta a aus&ecirc;ncia de novidade como o encerramento da necessidade de se manter agudo.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">A Universidade Edith Cowan, na Austr&aacute;lia, publicou dados que comprovam o que os grandes viajantes da hist&oacute;ria j&aacute; intuÃ­am: a exposi&ccedil;&atilde;o a novos ambientes &mdash; cheiros desconhecidos, idiomas n&atilde;o familiares, arquiteturas que o olho ainda n&atilde;o mapeou &mdash; <strong>retarda a entropia biol&oacute;gica</strong>. N&atilde;o metaforicamente: nos marcadores biol&oacute;gicos de envelhecimento celular, o viajante consistente exibe tel&ocirc;meros mais longos e infla&ccedil;&atilde;o sist&ecirc;mica mais baixa do que seu par sed ent&aacute;rio.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 16px;">A l&oacute;gica &eacute; poderosa: o organismo que percebe novidade interpreta que ainda h&aacute; mundo a conquistar. E os sistemas biol&oacute;gicos que acreditam ter uma miss&atilde;o a cumprir resistem ao decl&iacute;nio com uma consist&ecirc;ncia que nenhum suplemento replica.</p>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0;">Viajar, portanto, n&atilde;o &eacute; escapismo. &Eacute; o antidoto mais sofisticado contra a entropia que a exist&ecirc;ncia humana descobriu. &Eacute; um comando biol&oacute;gico de renova&ccedil;&atilde;o entregue diretamente ao c&eacute;rebro atrav&eacute;s da experi&ecirc;ncia.</p>
+                </div>
+
+                <div style="background:#fdf8f0;border-radius:16px;padding:28px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:#fdf8f0;border:1.5px solid var(--gold);color:var(--gold-dark);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">II</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#2a1a06;margin:0;">Muscula&ccedil;&atilde;o Cerebral: O Impacto Neurobiol&oacute;gico de Novos Horizontes</h3>
+                    </div>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 20px;">Na maturidade, o c&eacute;rebro prefere a efici&ecirc;ncia &agrave; novidade. &Eacute; uma estrat&eacute;gia evolutiva: consolidar os circuitos que funcionam, poupar energia dos caminhos j&aacute; conhecidos. O problema &eacute; que essa efici&ecirc;ncia, sem o est&iacute;mulo do novo, torna-se rigidez. E rigidez neural &eacute; o substrato do declÃ­nio cognitivo.</p>
+                    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:20px;">
+                        <div style="background:#fff;border-radius:12px;padding:20px 22px;border-left:4px solid var(--gold);">
+                            <p style="font-size:15px;font-weight:800;color:#2a1a06;margin:0 0 8px;">Neuroplasticidade Geogr&aacute;fica</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;">Cada novo ambiente for&ccedil;a o hipocampo a construir um mapa espacial inÃ©dito &mdash; um processo chamado de <em>mapeamento cognitivo</em>. Navegar por uma cidade desconhecida, orientar-se por refer&ecirc;ncias visuais ainda n&atilde;o catalogadas, calcular dist&acirc;ncias em outro sistema de medi&ccedil;&atilde;o: tudo isso &eacute; treino de alta intensidade para o c&eacute;rebro. O hipocampo cresce literalmente &mdash; estudos de neuroimagem confirmam aumento de volume em viajantes frequentes acima dos 60 anos.</p>
+                        </div>
+                        <div style="background:#fff;border-radius:12px;padding:20px 22px;border-left:4px solid var(--gold);">
+                            <p style="font-size:15px;font-weight:800;color:#2a1a06;margin:0 0 8px;">Reserva Cognitiva como Estrat&eacute;gia de Imunidade</p>
+                            <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;">O conceito de <em>reserva cognitiva</em> descreve a capacidade do c&eacute;rebro de compensar danos e continuar funcionando com efici&ecirc;ncia. Pessoas com alta reserva cognitiva &mdash; constru&iacute;da atrav&eacute;s de educa&ccedil;&atilde;o, leitura, engajamento social e <strong>experi&ecirc;ncias diversificadas</strong> &mdash; desenvolvem os sintomas do Alzheimer anos ou d&eacute;cadas mais tarde do que seus pares com menor reserva, mesmo com a mesma quantidade de placa amiloide no c&eacute;rebro. Viajar &eacute; um dos investimentos mais potentes nessa reserva.</p>
+                        </div>
+                    </div>
+                    <div style="background:#fff;border-radius:12px;padding:20px 22px;border:1.5px solid var(--gold);">
+                        <p style="font-size:15px;font-weight:800;color:#2a1a06;margin:0 0 10px;">O Checklist do Viajante Soberano (Preparo Mental)</p>
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--gold);font-weight:900;font-size:16px;flex-shrink:0;">&#10003;</span><p style="font-size:14px;color:#374151;line-height:1.7;margin:0;"><strong>Antes de embarcar:</strong> estude 5 palavras no idioma local + 1 prato t&iacute;pico + 1 fato hist&oacute;rico incomum. N&atilde;o para impressionar &mdash; para criar ancoragens cognitivas que dar&atilde;o contexto &agrave; experi&ecirc;ncia.</p></div>
+                            <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--gold);font-weight:900;font-size:16px;flex-shrink:0;">&#10003;</span><p style="font-size:14px;color:#374151;line-height:1.7;margin:0;"><strong>No destino:</strong> reserve pelo menos 2 horas sem roteiro. Caminhe sem mapa. Deixe que a cidade revele sua geometria. &Eacute; nessa desordem controlada que o hipocampo trabalha mais.</p></div>
+                            <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--gold);font-weight:900;font-size:16px;flex-shrink:0;">&#10003;</span><p style="font-size:14px;color:#374151;line-height:1.7;margin:0;"><strong>DiÃ¡rio de Auditoria Cultural:</strong> ao final de cada dia, escreva <em>uma</em> coisa que esse lugar faz diferente do Brasil &mdash; e o que voc&ecirc; aprenderia se adotasse esse padr&atilde;o em sua pr&oacute;pria vida.</p></div>
+                            <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--gold);font-weight:900;font-size:16px;flex-shrink:0;">&#10003;</span><p style="font-size:14px;color:#374151;line-height:1.7;margin:0;"><strong>Interaja com locais:</strong> um caf&eacute; com um morador, uma pergunta a um comerciante, um sorriso trocado com um desconhecido em uma pra&ccedil;a. Esse contato intergeracional e intercultural &eacute; ocitocina e dopamina em dose &uacute;nica.</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:#fdf8f0;border:1.5px solid var(--gold);color:var(--gold-dark);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">III</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#2a1a06;margin:0;">A Alquimia da Jornada: Resili&ecirc;ncia e Contempla&ccedil;&atilde;o em Solo Estrangeiro</h3>
+                    </div>
+                    <p style="font-size:16px;color:#374151;line-height:1.85;margin:0 0 20px;">H&aacute; dois tipos de viajantes no mundo. O <strong>Turista</strong> atravessa o espa&ccedil;o em busca de checkmarks &mdash; fotos que provam presen&ccedil;a, roteiros cumpridos, museus vistoriados. O <strong>Soberano</strong> atravessa o espa&ccedil;o em busca de percep&ccedil;&atilde;o &mdash; de entender como outros seres humanos resolveram os mesmos problemas que ele enfrenta, com recursos diferentes e em contextos diferentes. A diferen&ccedil;a n&atilde;o &eacute; o destino. &Eacute; a <em>postura interrogativa</em>.</p>
+                    <div style="display:flex;flex-direction:column;gap:16px;">
+                        <div style="display:flex;gap:16px;align-items:flex-start;">
+                            <div style="background:var(--gold);color:#fff;font-size:13px;font-weight:900;min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">1</div>
+                            <div>
+                                <p style="font-size:16px;font-weight:800;color:#2a1a06;margin:0 0 6px;">A Arte da Contempla&ccedil;&atilde;o &mdash; a <em>Dolce Vita</em> como Estado de Esp&iacute;rito</p>
+                                <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;">Sentar-se em uma pra&ccedil;a italiana e observar o tempo passar sem culpa. Beber um caf&eacute; em Viena sem o celular sobre a mesa. Assistir ao amanhecer num templo asiatico em sil&ecirc;ncio. Esses n&atilde;o s&atilde;o momentos perdidos &mdash; s&atilde;o momentos de <em>aten&ccedil;&atilde;o restaurativa</em>: um estado comprovado de recupera&ccedil;&atilde;o da reserva cognitiva que a rotina fragment ada sistematicamente drena.</p>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:16px;align-items:flex-start;">
+                            <div style="background:var(--gold);color:#fff;font-size:13px;font-weight:900;min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">2</div>
+                            <div>
+                                <p style="font-size:16px;font-weight:800;color:#2a1a06;margin:0 0 6px;">O Imprevisto como Pal&ecirc;stra de Resili&ecirc;ncia</p>
+                                <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;">Voo cancelado. Hotel diferente do esperado. Men&uacute; inteiramente em idioma desconhecido. Em solo estrangeiro, o imprevisto &eacute; garantido. E &eacute; exatamente isso que o torna t&atilde;o valioso: cada improviso bem resolv ido recalibra o c&eacute;rebro para a flexibilidade. Voc&ecirc; aprende na pr&aacute;tica que sua paz <em>n&atilde;o depende do controle do ambiente</em> &mdash; depende da qualidade da sua resposta a ele.</p>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:16px;align-items:flex-start;">
+                            <div style="background:var(--gold);color:#fff;font-size:13px;font-weight:900;min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">3</div>
+                            <div>
+                                <p style="font-size:16px;font-weight:800;color:#2a1a06;margin:0 0 6px;">Conex&atilde;o Intergeracional &mdash; O Ant&iacute;doto contra o Isolamento</p>
+                                <p style="font-size:15px;color:#374151;line-height:1.8;margin:0;">Interagir com pessoas de outras culturas e gera&ccedil;&otilde;es ativa os circuitos de curiosidade e pertenimento. O sÃªnior que viaja n&atilde;o &eacute; apenas um consumidor de cultura &mdash; &eacute; um embaixador do seu pr&oacute;prio mundo. Cada conversa genuina com um estrangeiro &eacute; uma dose de ocitocina, uma redu&ccedil;&atilde;o do isolamento e uma prova de que o mundo &eacute; vasto, generoso e ainda cheio de surpresas que valem ser encontradas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(135deg,#2a1a06 0%,#5a3a10 100%);border-radius:16px;padding:32px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                        <span style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(197,160,89,0.6);color:#e8c97a;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 14px;border-radius:99px;">IV</span>
+                        <h3 style="font-size:21px;font-weight:900;color:#fff;margin:0;">O Passaporte da Imortalidade: Como o Movimento Gera Vida</h3>
+                    </div>
+                    <p style="font-size:16px;color:#e8d4a8;line-height:1.9;margin:0 0 16px;">O passaporte &eacute; o documento que o Estado emite para que voc&ecirc; atravesse fronteiras. Mas h&aacute; um outro passaporte &mdash; invis&iacute;vel, intransfer&iacute;vel, acumulado ao longo de cada jornada &mdash; que &eacute; o capital de experi&ecirc;ncias que transforma a percep&ccedil;&atilde;o do tempo. Quem viaja com consci&ecirc;ncia envelhece cronologicamente, mas percebe subjetivamente uma vida <em>mais longa</em>, porque o c&eacute;rebro mede o tempo passado pelo n&uacute;mero de mem&oacute;rias novas formadas, n&atilde;o pelo n&uacute;mero de dias transcorridos.</p>
+                    <p style="font-size:16px;color:#e8d4a8;line-height:1.9;margin:0 0 16px;">Um anode rotina cont&eacute;m, em mem&oacute;rias distintas, muito menos do que duas semanas num lugar desconhecido. Isso n&atilde;o &eacute; poes ia &mdash; &eacute; neuropsicologia do tempo subjetivo. O viajante lembra mais, vive mais intensamente e, ao final, sente que viveu <em>mais</em>. Porque viveu.</p>
+                    <p style="font-size:16px;color:#e8d4a8;line-height:1.9;margin:0 0 24px;">O verdadeiro patrim&ocirc;nio de um s&ecirc;nior n&atilde;o est&aacute; nos bens que guarda. Est&aacute; nas mem&oacute;rias que construiu, nos horizontes que cruzou, nas pessoas que encontrou e nos momentos em que ousou ser um estranho num lugar estranho &mdash; e descobriu, invariavelmente, que o mundo acolhe quem chega com abertura e presen&ccedil;a real.</p>
+                    <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:20px 24px;border-left:4px solid #C5A059;">
+                        <p style="font-size:16px;color:#fff;font-style:italic;line-height:1.85;margin:0;"><strong style="color:#e8c97a;">&ldquo;O s&ecirc;nior que viaja n&atilde;o foge da idade &mdash; comanda o tempo. Cada carimbo no passaporte &eacute; uma ordem de renova&ccedil;&atilde;o entregue ao pr&oacute;prio organismo. Mova-se, portanto, com a soberania de quem sabe que o movimento &eacute; vida.&rdquo;</strong><br><span style="font-size:13px;color:#c4a87a;margin-top:8px;display:block;">Princ&iacute;pio da Fronteira da Longevidade &mdash; SeniorHub</span></p>
+                    </div>
+                </div>
+
+            </div>`,
+        categoria: 'Sabedoria',
+        gratis: false
+    }
 ];
 
 /* ── Sidebar: marca o link ativo ────────────────────────────────────────── */
