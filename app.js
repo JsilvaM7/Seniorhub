@@ -1,4 +1,4 @@
-﻿/* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
+/* ── Link do Clube (espelho do auth.js para uso no app.js) ─────────────────── */
 window.CLUBE_CHECKOUT_URL = window.CLUBE_CHECKOUT_URL || 'https://pay.hotmart.com/B105027530C';
 
 /* ── Links Google Drive — acesso exclusivo de assinantes (/preview = iframe sem barra) ── */
@@ -1588,7 +1588,7 @@ const GUIAS_DATA = [
             </div>`,
         categoria: 'Sabedoria',
         gratis: false
-    }
+    },
     {
         id: 'g7',
         titulo: 'A Fronteira da Longevidade',
