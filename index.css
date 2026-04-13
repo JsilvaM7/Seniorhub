@@ -56,11 +56,23 @@ body {
 .logo {
     font-size: 24px;
     font-weight: 700;
-    color: var(--primary-purple);
+    color: #0a0a0a;
+    -webkit-text-stroke: 0.4px #C5A059;
+    text-stroke: 0.4px #C5A059;
+    text-shadow:
+        0 0 1px rgba(197, 160, 89, 0.25),
+        0 1px 3px rgba(0, 0, 0, 0.08);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 12px;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.logo:hover {
+    opacity: 0.85;
+    transform: scale(1.01);
 }
 
 .search-container {
