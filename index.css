@@ -56,23 +56,39 @@ body {
 .logo {
     font-size: 24px;
     font-weight: 700;
-    color: #0a0a0a;
-    -webkit-text-stroke: 0.4px #C5A059;
-    text-stroke: 0.4px #C5A059;
-    text-shadow:
-        0 0 1px rgba(197, 160, 89, 0.25),
-        0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Antique Bronze Gold gradient — esculpido em bronze maciço */
+    background: linear-gradient(
+        160deg,
+        #e8c97a 0%,
+        #c9962a 18%,
+        #f5d98a 34%,
+        #b8831e 50%,
+        #e0b84a 65%,
+        #9a6c14 78%,
+        #d4a832 90%,
+        #c5a050 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Pátina: escurecimento orgânico nas bordas + profundidade física */
+    -webkit-text-stroke: 0.6px rgba(80, 45, 5, 0.55);
+    filter: drop-shadow(0 1px 0px rgba(100, 60, 0, 0.6))
+            drop-shadow(0 2px 4px rgba(80, 40, 0, 0.35))
+            drop-shadow(0 0 8px rgba(197, 160, 50, 0.2));
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 12px;
-    letter-spacing: 0.5px;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    letter-spacing: 1px;
+    transition: filter 0.25s ease, transform 0.25s ease;
 }
 
 .logo:hover {
-    opacity: 0.85;
-    transform: scale(1.01);
+    filter: drop-shadow(0 1px 0px rgba(100, 60, 0, 0.7))
+            drop-shadow(0 3px 8px rgba(197, 160, 50, 0.55))
+            drop-shadow(0 0 14px rgba(230, 190, 70, 0.35));
+    transform: scale(1.015);
 }
 
 .search-container {
